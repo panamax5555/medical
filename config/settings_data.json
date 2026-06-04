@@ -1,4 +1,4 @@
-/*
+﻿/*
  * ------------------------------------------------------------
  * IMPORTANT: The contents of this file are auto-generated.
  *
@@ -22,7 +22,7 @@
     "animations_hover_elements": "none",
 
     "buttons_border_thickness": 1,
-    "buttons_border_opacity": 12,
+    "buttons_border_opacity": 10,
     "buttons_radius": 0,
     "buttons_shadow_opacity": 0,
     "buttons_shadow_horizontal_offset": 0,
@@ -30,7 +30,7 @@
     "buttons_shadow_blur": 0,
 
     "variant_pills_border_thickness": 1,
-    "variant_pills_border_opacity": 18,
+    "variant_pills_border_opacity": 20,
     "variant_pills_radius": 0,
     "variant_pills_shadow_opacity": 0,
     "variant_pills_shadow_horizontal_offset": 0,
@@ -38,7 +38,7 @@
     "variant_pills_shadow_blur": 0,
 
     "inputs_border_thickness": 1,
-    "inputs_border_opacity": 18,
+    "inputs_border_opacity": 20,
     "inputs_radius": 0,
     "inputs_shadow_opacity": 0,
     "inputs_shadow_horizontal_offset": 0,
@@ -98,19 +98,19 @@
     "media_shadow_blur": 0,
 
     "popup_border_thickness": 1,
-    "popup_border_opacity": 14,
+    "popup_border_opacity": 15,
     "popup_corner_radius": 0,
-    "popup_shadow_opacity": 8,
+    "popup_shadow_opacity": 10,
     "popup_shadow_horizontal_offset": 0,
     "popup_shadow_vertical_offset": 8,
-    "popup_shadow_blur": 18,
+    "popup_shadow_blur": 20,
 
     "drawer_border_thickness": 1,
-    "drawer_border_opacity": 12,
+    "drawer_border_opacity": 10,
     "drawer_shadow_opacity": 10,
     "drawer_shadow_horizontal_offset": 0,
     "drawer_shadow_vertical_offset": 0,
-    "drawer_shadow_blur": 24,
+    "drawer_shadow_blur": 25,
 
     "badge_position": "top left",
     "badge_corner_radius": 0,
@@ -118,7 +118,7 @@
     "sold_out_badge_color_scheme": "scheme-3",
 
     "brand_headline": "<strong>Medical-Deal</strong>",
-    "brand_description": "<p>Hygiene-, Pflege- und Praxisbedarf für gewerbliche Kunden, Pflegeeinrichtungen, Praxen und Privatkunden. Klare Produktdaten, transparente Verpackungseinheiten und zuverlässige Lieferung.</p>",
+    "brand_description": "<p>Hygiene-, Pflege- und Praxisbedarf fÃ¼r gewerbliche Kunden, Pflegeeinrichtungen, Praxen und Privatkunden. Klare Produktdaten, transparente Verpackungseinheiten und zuverlÃ¤ssige Lieferung.</p>",
     "brand_image": "{{ shop.brand.logo }}",
     "brand_image_width": 120,
 
@@ -233,7 +233,7 @@
       "animations_hover_elements": "none",
 
       "buttons_border_thickness": 1,
-      "buttons_border_opacity": 12,
+      "buttons_border_opacity": 10,
       "buttons_radius": 0,
       "buttons_shadow_opacity": 0,
       "buttons_shadow_horizontal_offset": 0,
@@ -241,7 +241,7 @@
       "buttons_shadow_blur": 0,
 
       "variant_pills_border_thickness": 1,
-      "variant_pills_border_opacity": 18,
+      "variant_pills_border_opacity": 20,
       "variant_pills_radius": 0,
       "variant_pills_shadow_opacity": 0,
       "variant_pills_shadow_horizontal_offset": 0,
@@ -249,7 +249,7 @@
       "variant_pills_shadow_blur": 0,
 
       "inputs_border_thickness": 1,
-      "inputs_border_opacity": 18,
+      "inputs_border_opacity": 20,
       "inputs_radius": 0,
       "inputs_shadow_opacity": 0,
       "inputs_shadow_horizontal_offset": 0,
@@ -309,19 +309,19 @@
       "media_shadow_blur": 0,
 
       "popup_border_thickness": 1,
-      "popup_border_opacity": 14,
+      "popup_border_opacity": 15,
       "popup_corner_radius": 0,
-      "popup_shadow_opacity": 8,
+      "popup_shadow_opacity": 10,
       "popup_shadow_horizontal_offset": 0,
       "popup_shadow_vertical_offset": 8,
-      "popup_shadow_blur": 18,
+      "popup_shadow_blur": 20,
 
       "drawer_border_thickness": 1,
-      "drawer_border_opacity": 12,
+      "drawer_border_opacity": 10,
       "drawer_shadow_opacity": 10,
       "drawer_shadow_horizontal_offset": 0,
       "drawer_shadow_vertical_offset": 0,
-      "drawer_shadow_blur": 24,
+      "drawer_shadow_blur": 25,
 
       "badge_position": "top left",
       "badge_corner_radius": 0,
@@ -329,7 +329,7 @@
       "sold_out_badge_color_scheme": "scheme-3",
 
       "brand_headline": "<strong>Medical-Deal</strong>",
-      "brand_description": "<p>Hygiene-, Pflege- und Praxisbedarf für gewerbliche Kunden, Pflegeeinrichtungen, Praxen und Privatkunden. Klare Produktdaten, transparente Verpackungseinheiten und zuverlässige Lieferung.</p>",
+      "brand_description": "<p>Hygiene-, Pflege- und Praxisbedarf fÃ¼r gewerbliche Kunden, Pflegeeinrichtungen, Praxen und Privatkunden. Klare Produktdaten, transparente Verpackungseinheiten und zuverlÃ¤ssige Lieferung.</p>",
       "brand_image": "{{ shop.brand.logo }}",
       "brand_image_width": 120,
 
