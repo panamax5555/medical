@@ -3,7 +3,7 @@
 Project: Medical-Deal Dawn Relaunch
 Base theme: Shopify Dawn
 Shop: medical-deal.myshopify.com
-Unpublished Theme ID: 201958162762
+Unpublished Theme ID: 201959539018
 
 ## Goal
 Build a custom Medical-Deal B2B/B2C Shopify theme based on Dawn.
