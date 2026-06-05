@@ -4,8 +4,6 @@
 {%- liquid
   assign highlight_product = section.settings.highlight_product
   assign active_slides = section.blocks | where: 'type', 'promo_slide'
-  assign category_tabs = section.blocks | where: 'type', 'category_tab'
-  assign category_cards = section.blocks | where: 'type', 'category_card'
 -%}
 
 <div class="md-promo-stage" style="
@@ -183,84 +181,6 @@
         {% endif %}
       </div>
     </div>
-
-    {% if category_tabs.size > 0 %}
-      <div class="md-promo-tabs" role="tablist" aria-label="Kategorien">
-        <div class="md-promo-tabs__nav">
-          {% for tab in category_tabs %}
-            <button
-              class="md-promo-tabs__btn"
-              type="button"
-              role="tab"
-              aria-selected="false"
-              aria-controls="md-tab-panel-{{ tab.settings.tab_key | handleize }}"
-              id="md-tab-{{ tab.settings.tab_key | handleize }}"
-              {{ tab.shopify_attributes }}
-            >
-              {{ tab.settings.label | escape }}
-            </button>
-          {% endfor %}
-        </div>
-
-        {% for tab in category_tabs %}
-          {%- assign tab_key = tab.settings.tab_key | downcase -%}
-          <div
-            class="md-promo-tabs__panel"
-            role="tabpanel"
-            id="md-tab-panel-{{ tab_key | handleize }}"
-            aria-labelledby="md-tab-{{ tab_key | handleize }}"
-          >
-            <div class="md-promo-cards-scroll md-promo-cards-scroll--visible">
-              <button class="md-promo-cards-scroll__btn md-promo-cards-scroll__btn--prev" type="button" aria-label="Nach links scrollen">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-              </button>
-              <button class="md-promo-cards-scroll__btn md-promo-cards-scroll__btn--next" type="button" aria-label="Nach rechts scrollen">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-              </button>
-            </div>
-            <div class="md-promo-cards">
-              {% for card in category_cards %}
-                {%- assign card_tab = card.settings.assigned_tab_key | downcase -%}
-                {% if card_tab == tab_key %}
-                  {% if card.settings.link != blank %}
-                    <a
-                      href="{{ card.settings.link }}"
-                      class="md-promo-card"
-                      {{ card.shopify_attributes }}
-                    >
-                  {% else %}
-                    <div
-                      class="md-promo-card md-promo-card--static"
-                      {{ card.shopify_attributes }}
-                    >
-                  {% endif %}
-                    {% if card.settings.image != blank %}
-                      {{
-                        card.settings.image
-                        | image_url: width: 200
-                        | image_tag:
-                          class: 'md-promo-card__image',
-                          widths: '100, 150, 200',
-                          sizes: '(max-width: 749px) 50vw, (max-width: 989px) 33vw, 16vw',
-                          loading: 'lazy',
-                          alt: card.settings.label | default: card.settings.image.alt
-                      }}
-                    {% endif %}
-                    {% if card.settings.label != blank %}
-                      <span class="md-promo-card__label">{{ card.settings.label | escape }}</span>
-                    {% endif %}
-                  {% if card.settings.link != blank %}
-                    </a>
-                  {% else %}
-                    </div>
-                  {% endif %}
-                {% endif %}
-              {% endfor %}
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-    {% endif %}
   </div>
 </div>
 
@@ -409,52 +329,6 @@
           "label": "Button-Link"
         }
       ]
-    },
-    {
-      "type": "category_tab",
-      "name": "Kategorie-Tab",
-      "settings": [
-        {
-          "type": "text",
-          "id": "tab_key",
-          "label": "Tab-Key",
-          "info": "Eindeutiger Schlüssel für die Zuordnung, z. B. 'medizinbedarf'"
-        },
-        {
-          "type": "text",
-          "id": "label",
-          "default": "Tab Label",
-          "label": "Tab-Label"
-        }
-      ]
-    },
-    {
-      "type": "category_card",
-      "name": "Kategorie-Karte",
-      "settings": [
-        {
-          "type": "text",
-          "id": "assigned_tab_key",
-          "label": "Tab-Key",
-          "info": "Tab-Key des übergeordneten Tabs, z. B. 'medizinbedarf'"
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Bild"
-        },
-        {
-          "type": "text",
-          "id": "label",
-          "default": "Kategorie-Label",
-          "label": "Label"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Link"
-        }
-      ]
     }
   ],
   "presets": [
@@ -471,36 +345,7 @@
         "padding_top": 20,
         "padding_bottom": 32
       },
-      "blocks": [
-        {
-          "type": "category_tab",
-          "settings": {
-            "tab_key": "medizinbedarf",
-            "label": "Medizinbedarf"
-          }
-        },
-        {
-          "type": "category_tab",
-          "settings": {
-            "tab_key": "hygiene",
-            "label": "Reinigung & Hygiene"
-          }
-        },
-        {
-          "type": "category_tab",
-          "settings": {
-            "tab_key": "arbeitsschutz",
-            "label": "Arbeitsschutz"
-          }
-        },
-        {
-          "type": "category_tab",
-          "settings": {
-            "tab_key": "pflegebedarf",
-            "label": "Pflegebedarf"
-          }
-        }
-      ]
+      "blocks": []
     }
   ]
 }

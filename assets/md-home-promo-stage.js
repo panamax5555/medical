@@ -1,6 +1,6 @@
 /**
  * Medical-Deal Homepage Promo Stage
- * Vanilla JS: campaign slider + category tabs
+ * Vanilla JS: campaign slider
  */
 (function () {
   'use strict';
@@ -134,57 +134,6 @@
     this.startAutoplay();
   };
 
-  /* Category Tabs
-     ========================================================================== */
-  function MDPromoTabs(el) {
-    this.el = el;
-    this.buttons = el.querySelectorAll('.md-promo-tabs__btn');
-    this.panels = el.querySelectorAll('.md-promo-tabs__panel');
-    if (this.buttons.length === 0) return;
-    this.init();
-  }
-
-  MDPromoTabs.prototype.init = function () {
-    var self = this;
-    this.activateTab(0);
-
-    for (var i = 0; i < this.buttons.length; i++) {
-      this.buttons[i].addEventListener('click', (function (idx) {
-        return function () { self.activateTab(idx); };
-      })(i));
-    }
-  };
-
-  MDPromoTabs.prototype.activateTab = function (index) {
-    for (var i = 0; i < this.buttons.length; i++) {
-      this.buttons[i].classList.toggle('is-active', i === index);
-      this.buttons[i].setAttribute('aria-selected', i === index ? 'true' : 'false');
-    }
-    for (var j = 0; j < this.panels.length; j++) {
-      this.panels[j].classList.toggle('is-active', j === index);
-    }
-  };
-
-  /* Category Cards Scroll Arrows
-     ========================================================================== */
-  function bindCardsScrollArrows() {
-    var panels = document.querySelectorAll('.md-promo-tabs__panel');
-    for (var p = 0; p < panels.length; p++) {
-      var container = panels[p].querySelector('.md-promo-cards');
-      var prevBtn = panels[p].querySelector('.md-promo-cards-scroll__btn--prev');
-      var nextBtn = panels[p].querySelector('.md-promo-cards-scroll__btn--next');
-      if (!container || !prevBtn || !nextBtn) continue;
-
-      prevBtn.addEventListener('click', function (cnt) {
-        return function () { cnt.scrollBy({ left: -240, behavior: 'smooth' }); };
-      }(container));
-
-      nextBtn.addEventListener('click', function (cnt) {
-        return function () { cnt.scrollBy({ left: 240, behavior: 'smooth' }); };
-      }(container));
-    }
-  }
-
   /* Init all
      ========================================================================== */
   function initAll() {
@@ -192,13 +141,6 @@
     for (var i = 0; i < sliders.length; i++) {
       new MDPromoSlider(sliders[i]);
     }
-
-    var tabs = document.querySelectorAll('.md-promo-tabs');
-    for (var t = 0; t < tabs.length; t++) {
-      new MDPromoTabs(tabs[t]);
-    }
-
-    bindCardsScrollArrows();
   }
 
   if (document.readyState === 'loading') {
