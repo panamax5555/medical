@@ -790,6 +790,17 @@
   transition: background 0.1s;
 }
 
+button.md-header-drawer__nav-link {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  font-family: var(--font-body-family);
+  cursor: pointer;
+  text-align: left;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
 .md-header-drawer__nav-link:hover {
   background: var(--md-header-menu-hover-bg);
   color: var(--md-header-link-hover);
@@ -837,6 +848,8 @@
   color: var(--md-header-link-hover);
   cursor: pointer;
   font-family: var(--font-body-family);
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 .md-header-drawer__back svg {
