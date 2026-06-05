@@ -11,9 +11,129 @@
   "sections": {
     "md-home-promo-stage": {
       "type": "md-home-promo-stage",
+      "blocks": {
+        "category_card_YCPLwX": {
+          "type": "category_card",
+          "settings": {
+            "assigned_tab_key": "medizinbedarf",
+            "image": "shopify://shop_images/heatpaxx-koerperwaermer-waermepflaster.jpg",
+            "label": "Praxisbedarf",
+            "link": "shopify://collections/md-praxis-stationsbedarf"
+          }
+        },
+        "category_card_8Rr4UR": {
+          "type": "category_card",
+          "settings": {
+            "assigned_tab_key": "",
+            "label": "Kategorie-Label",
+            "link": ""
+          }
+        },
+        "category_card_Xjk8fM": {
+          "type": "category_card",
+          "settings": {
+            "assigned_tab_key": "",
+            "label": "Kategorie-Label",
+            "link": ""
+          }
+        },
+        "category_tab_rh3fg9": {
+          "type": "category_tab",
+          "name": "medizinbedarf",
+          "settings": {
+            "tab_key": "medizinbedarf",
+            "label": "medizinbedarf"
+          }
+        },
+        "category_tab_hzrFxD": {
+          "type": "category_tab",
+          "name": "hygiene",
+          "settings": {
+            "tab_key": "hygiene",
+            "label": "hygiene"
+          }
+        },
+        "category_tab_iYh6xK": {
+          "type": "category_tab",
+          "name": "schutz",
+          "settings": {
+            "tab_key": "schutz",
+            "label": "schutz"
+          }
+        },
+        "category_tab_AbRHdh": {
+          "type": "category_tab",
+          "name": "pflege",
+          "settings": {
+            "tab_key": "pflege",
+            "label": "pflege"
+          }
+        },
+        "promo_slide_L94zac": {
+          "type": "promo_slide",
+          "settings": {
+            "image": "shopify://shop_images/Maimed-SchutzkittelCoatProtect.png",
+            "image_fit": "contain",
+            "heading": "Verbrauchsartikel für Pflege, Praxis und Betrieb",
+            "text": "Schutzkleidung, Handschuhe, Wundversorgung und Pflegebedarf für den professionellen Einsatz.",
+            "badge": "Schutz & Pflege",
+            "button_label": "Sortiment ansehen",
+            "button_link": "shopify://collections/md-schutzkleidung"
+          }
+        },
+        "promo_slide_iMrMU7": {
+          "type": "promo_slide",
+          "settings": {
+            "image": "shopify://shop_images/BN117NitrilmitHandangezogen.jpg",
+            "image_fit": "contain",
+            "heading": "Praxis-, Pflege- und Hygienebedarf aus einer Hand",
+            "text": "Professioneller Bedarf für Praxen, Pflegeeinrichtungen, Unternehmen und Wiederverkäufer.",
+            "badge": "NEU",
+            "button_label": "Produkte entdecken",
+            "button_link": "/collections/all"
+          }
+        },
+        "promo_slide_XRKKph": {
+          "type": "promo_slide",
+          "settings": {
+            "image": "shopify://shop_images/00941__Medizid_Rapid_Desinfektionstuecher_Dose.jpg",
+            "image_fit": "contain",
+            "heading": "Desinfektion für professionelle Anwender",
+            "text": "Händedesinfektion, Flächendesinfektion und Hygieneprodukte für den täglichen Einsatz.",
+            "badge": "Desinfektion",
+            "button_label": "Desinfektion ansehen",
+            "button_link": "shopify://collections/md-desinfektion"
+          }
+        },
+        "promo_slide_wtzxx4": {
+          "type": "promo_slide",
+          "settings": {
+            "image_fit": "contain",
+            "heading": "Slide-Überschrift",
+            "text": "Slide-Beschreibungstext",
+            "badge": "",
+            "button_label": "Mehr erfahren",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "category_card_YCPLwX",
+        "category_card_8Rr4UR",
+        "category_card_Xjk8fM",
+        "category_tab_rh3fg9",
+        "category_tab_hzrFxD",
+        "category_tab_iYh6xK",
+        "category_tab_AbRHdh",
+        "promo_slide_L94zac",
+        "promo_slide_iMrMU7",
+        "promo_slide_XRKKph",
+        "promo_slide_wtzxx4"
+      ],
       "settings": {
         "show_highlight": true,
         "highlight_title": "Aktionsprodukt",
+        "highlight_product": "",
         "highlight_badge": "Top-Angebot",
         "autoplay": true,
         "autoplay_interval": 5000,
