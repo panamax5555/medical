@@ -13,51 +13,57 @@
   padding-bottom: {{ section.settings.padding_bottom }}px;
 ">
   <div class="md-promo-stage__inner">
-    <div class="md-promo-stage__hero">
-      {% if section.settings.show_highlight and highlight_product != blank %}
+    <div class="md-promo-stage__hero{% unless section.settings.show_highlight and highlight_product != blank %} md-promo-stage__hero--no-highlight{% endunless %}">
+      {% if section.settings.show_highlight %}
         <div class="md-promo-highlight">
           <div class="md-promo-highlight__header">
             {{ section.settings.highlight_title | escape }}
           </div>
-          {% if highlight_product.featured_image != blank %}
-            {{
-              highlight_product.featured_image
-              | image_url: width: 400
-              | image_tag:
-                class: 'md-promo-highlight__image',
-                widths: '200, 300, 400',
-                sizes: '(max-width: 989px) 100vw, 30rem',
-                loading: 'lazy',
-                alt: highlight_product.featured_image.alt | default: highlight_product.title
-            }}
-          {% endif %}
-          <div class="md-promo-highlight__body">
-            {% if section.settings.highlight_badge != blank %}
-              <span class="md-promo-highlight__badge">{{ section.settings.highlight_badge | escape }}</span>
+          {% if highlight_product != blank %}
+            {% if highlight_product.featured_image != blank %}
+              {{
+                highlight_product.featured_image
+                | image_url: width: 400
+                | image_tag:
+                  class: 'md-promo-highlight__image',
+                  widths: '200, 300, 400',
+                  sizes: '(max-width: 989px) 100vw, 30rem',
+                  loading: 'lazy',
+                  alt: highlight_product.featured_image.alt | default: highlight_product.title
+              }}
             {% endif %}
-            <h3 class="md-promo-highlight__title">
-              <a href="{{ highlight_product.url }}" style="text-decoration: none; color: inherit;">
-                {{ highlight_product.title | escape }}
+            <div class="md-promo-highlight__body">
+              {% if section.settings.highlight_badge != blank %}
+                <span class="md-promo-highlight__badge">{{ section.settings.highlight_badge | escape }}</span>
+              {% endif %}
+              <h3 class="md-promo-highlight__title">
+                <a href="{{ highlight_product.url }}" style="text-decoration: none; color: inherit;">
+                  {{ highlight_product.title | escape }}
+                </a>
+              </h3>
+              {% if highlight_product.price > 0 %}
+                <div class="md-promo-highlight__price">
+                  {{ highlight_product.price | money }}
+                </div>
+              {% endif %}
+              {% if highlight_product.available %}
+                <div class="md-promo-highlight__availability">
+                  Auf Lager, sofort lieferbar
+                </div>
+              {% else %}
+                <div class="md-promo-highlight__availability">
+                  Derzeit nicht verfügbar
+                </div>
+              {% endif %}
+              <a href="{{ highlight_product.url }}" class="md-promo-highlight__cta">
+                Zum Produkt
               </a>
-            </h3>
-            {% if highlight_product.price > 0 %}
-              <div class="md-promo-highlight__price">
-                {{ highlight_product.price | money }}
-              </div>
-            {% endif %}
-            {% if highlight_product.available %}
-              <div class="md-promo-highlight__availability">
-                Auf Lager, sofort lieferbar
-              </div>
-            {% else %}
-              <div class="md-promo-highlight__availability">
-                Derzeit nicht verfügbar
-              </div>
-            {% endif %}
-            <a href="{{ highlight_product.url }}" class="md-promo-highlight__cta">
-              Zum Produkt
-            </a>
-          </div>
+            </div>
+          {% else %}
+            <div class="md-promo-highlight__empty">
+              Aktionsprodukt im Theme-Editor auswählen
+            </div>
+          {% endif %}
         </div>
       {% endif %}
 
@@ -204,6 +210,14 @@
             id="md-tab-panel-{{ tab_key | handleize }}"
             aria-labelledby="md-tab-{{ tab_key | handleize }}"
           >
+            <div class="md-promo-cards-scroll md-promo-cards-scroll--visible">
+              <button class="md-promo-cards-scroll__btn md-promo-cards-scroll__btn--prev" type="button" aria-label="Nach links scrollen">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <button class="md-promo-cards-scroll__btn md-promo-cards-scroll__btn--next" type="button" aria-label="Nach rechts scrollen">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
             <div class="md-promo-cards">
               {% for card in category_cards %}
                 {%- assign card_tab = card.settings.assigned_tab_key | downcase -%}

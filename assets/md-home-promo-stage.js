@@ -165,6 +165,26 @@
     }
   };
 
+  /* Category Cards Scroll Arrows
+     ========================================================================== */
+  function bindCardsScrollArrows() {
+    var panels = document.querySelectorAll('.md-promo-tabs__panel');
+    for (var p = 0; p < panels.length; p++) {
+      var container = panels[p].querySelector('.md-promo-cards');
+      var prevBtn = panels[p].querySelector('.md-promo-cards-scroll__btn--prev');
+      var nextBtn = panels[p].querySelector('.md-promo-cards-scroll__btn--next');
+      if (!container || !prevBtn || !nextBtn) continue;
+
+      prevBtn.addEventListener('click', function (cnt) {
+        return function () { cnt.scrollBy({ left: -240, behavior: 'smooth' }); };
+      }(container));
+
+      nextBtn.addEventListener('click', function (cnt) {
+        return function () { cnt.scrollBy({ left: 240, behavior: 'smooth' }); };
+      }(container));
+    }
+  }
+
   /* Init all
      ========================================================================== */
   function initAll() {
@@ -177,6 +197,8 @@
     for (var t = 0; t < tabs.length; t++) {
       new MDPromoTabs(tabs[t]);
     }
+
+    bindCardsScrollArrows();
   }
 
   if (document.readyState === 'loading') {
