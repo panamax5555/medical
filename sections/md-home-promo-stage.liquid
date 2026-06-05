@@ -90,6 +90,7 @@
                         assign slide_priority = 'high'
                       endif
                       assign slide_alt = block.settings.heading | default: block.settings.image.alt
+                      assign slide_img_class = 'md-promo-slider__img md-promo-slider__img--' | append: block.settings.image_fit | default: 'contain'
                     -%}
                     {% if block.settings.button_link != blank %}
                       <a
@@ -102,7 +103,7 @@
                       block.settings.image
                       | image_url: width: 800
                       | image_tag:
-                        class: 'md-promo-slider__img',
+                        class: slide_img_class,
                         widths: '400, 600, 800, 1000',
                         sizes: '(max-width: 749px) 100vw, (max-width: 989px) 65vw, 50vw',
                         loading: slide_loading,
@@ -207,11 +208,18 @@
               {% for card in category_cards %}
                 {%- assign card_tab = card.settings.assigned_tab_key | downcase -%}
                 {% if card_tab == tab_key %}
-                  <a
-                    href="{{ card.settings.link | default: '#' }}"
-                    class="md-promo-card"
-                    {{ card.shopify_attributes }}
-                  >
+                  {% if card.settings.link != blank %}
+                    <a
+                      href="{{ card.settings.link }}"
+                      class="md-promo-card"
+                      {{ card.shopify_attributes }}
+                    >
+                  {% else %}
+                    <div
+                      class="md-promo-card md-promo-card--static"
+                      {{ card.shopify_attributes }}
+                    >
+                  {% endif %}
                     {% if card.settings.image != blank %}
                       {{
                         card.settings.image
@@ -227,7 +235,11 @@
                     {% if card.settings.label != blank %}
                       <span class="md-promo-card__label">{{ card.settings.label | escape }}</span>
                     {% endif %}
-                  </a>
+                  {% if card.settings.link != blank %}
+                    </a>
+                  {% else %}
+                    </div>
+                  {% endif %}
                 {% endif %}
               {% endfor %}
             </div>
