@@ -1,0 +1,446 @@
+{{ 'md-home-promo-stage.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'md-home-promo-stage.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign highlight_product = section.settings.highlight_product
+  assign active_slides = section.blocks | where: 'type', 'promo_slide'
+  assign category_tabs = section.blocks | where: 'type', 'category_tab'
+  assign category_cards = section.blocks | where: 'type', 'category_card'
+-%}
+
+<div class="md-promo-stage" style="
+  padding-top: {{ section.settings.padding_top }}px;
+  padding-bottom: {{ section.settings.padding_bottom }}px;
+">
+  <div class="md-promo-stage__inner">
+    <div class="md-promo-stage__hero">
+      {% if section.settings.show_highlight and highlight_product != blank %}
+        <div class="md-promo-highlight">
+          <div class="md-promo-highlight__header">
+            {{ section.settings.highlight_title | escape }}
+          </div>
+          {% if highlight_product.featured_image != blank %}
+            {{
+              highlight_product.featured_image
+              | image_url: width: 400
+              | image_tag:
+                class: 'md-promo-highlight__image',
+                widths: '200, 300, 400',
+                sizes: '(max-width: 989px) 100vw, 30rem',
+                loading: 'lazy',
+                alt: highlight_product.featured_image.alt | default: highlight_product.title
+            }}
+          {% endif %}
+          <div class="md-promo-highlight__body">
+            {% if section.settings.highlight_badge != blank %}
+              <span class="md-promo-highlight__badge">{{ section.settings.highlight_badge | escape }}</span>
+            {% endif %}
+            <h3 class="md-promo-highlight__title">
+              <a href="{{ highlight_product.url }}" style="text-decoration: none; color: inherit;">
+                {{ highlight_product.title | escape }}
+              </a>
+            </h3>
+            {% if highlight_product.price > 0 %}
+              <div class="md-promo-highlight__price">
+                {{ highlight_product.price | money }}
+              </div>
+            {% endif %}
+            {% if highlight_product.available %}
+              <div class="md-promo-highlight__availability">
+                Auf Lager, sofort lieferbar
+              </div>
+            {% else %}
+              <div class="md-promo-highlight__availability">
+                Derzeit nicht verfügbar
+              </div>
+            {% endif %}
+            <a href="{{ highlight_product.url }}" class="md-promo-highlight__cta">
+              Zum Produkt
+            </a>
+          </div>
+        </div>
+      {% endif %}
+
+      <div
+        class="md-promo-slider{% if active_slides.size == 0 %} md-promo-slider--empty{% endif %}"
+        data-autoplay="{{ section.settings.autoplay }}"
+        data-interval="{{ section.settings.autoplay_interval }}"
+        role="region"
+        aria-label="Kampagnen-Slider"
+        aria-roledescription="carousel"
+      >
+        {% if active_slides.size > 0 %}
+          <div class="md-promo-slider__track">
+            {% for block in active_slides %}
+              <div
+                class="md-promo-slider__slide"
+                data-slide-index="{{ forloop.index0 }}"
+                role="group"
+                aria-roledescription="slide"
+                aria-label="Folie {{ forloop.index }} von {{ active_slides.size }}"
+                {{ block.shopify_attributes }}
+              >
+                <div class="md-promo-slider__image-wrap">
+                  {% if block.settings.image != blank %}
+                    {{
+                      block.settings.image
+                      | image_url: width: 800
+                      | image_tag:
+                        class: 'md-promo-slider__img',
+                        widths: '400, 600, 800, 1000',
+                        sizes: '(max-width: 749px) 100vw, (max-width: 989px) 65vw, 50vw',
+                        loading: forloop.first and section.settings.show_highlight == false ? 'eager' : 'lazy',
+                        fetchpriority: forloop.first and section.settings.show_highlight == false ? 'high' : 'auto',
+                        alt: block.settings.heading | default: block.settings.image.alt
+                    }}
+                  {% endif %}
+                </div>
+                <div class="md-promo-slider__content">
+                  {% if block.settings.badge != blank %}
+                    <span class="md-promo-slider__badge">{{ block.settings.badge | escape }}</span>
+                  {% endif %}
+                  {% if block.settings.heading != blank %}
+                    <h2 class="md-promo-slider__heading">{{ block.settings.heading | escape }}</h2>
+                  {% endif %}
+                  {% if block.settings.text != blank %}
+                    <p class="md-promo-slider__text">{{ block.settings.text | escape }}</p>
+                  {% endif %}
+                  {% if block.settings.button_label != blank and block.settings.button_link != blank %}
+                    <a href="{{ block.settings.button_link }}" class="md-promo-slider__cta">
+                      {{ block.settings.button_label | escape }}
+                    </a>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+
+          {% if section.settings.show_arrows %}
+            <button
+              class="md-promo-slider__arrow md-promo-slider__arrow--prev"
+              type="button"
+              aria-label="Vorherige Folie"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"/>
+              </svg>
+            </button>
+            <button
+              class="md-promo-slider__arrow md-promo-slider__arrow--next"
+              type="button"
+              aria-label="Nächste Folie"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </button>
+          {% endif %}
+
+          {% if section.settings.show_dots and active_slides.size > 1 %}
+            <div class="md-promo-slider__dots" role="tablist" aria-label="Slider-Navigation">
+              {% for block in active_slides %}
+                <button
+                  class="md-promo-slider__dot"
+                  type="button"
+                  role="tab"
+                  data-slide="{{ forloop.index0 }}"
+                  aria-label="Folie {{ forloop.index }}"
+                  aria-selected="false"
+                ></button>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% else %}
+          <div class="md-promo-slider--empty">
+            Füge Promo-Slides im Theme-Editor hinzu
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if category_tabs.size > 0 %}
+      <div class="md-promo-tabs" role="tablist" aria-label="Kategorien">
+        <div class="md-promo-tabs__nav">
+          {% for tab in category_tabs %}
+            <button
+              class="md-promo-tabs__btn"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="md-tab-panel-{{ tab.settings.tab_key | handleize }}"
+              id="md-tab-{{ tab.settings.tab_key | handleize }}"
+              {{ tab.shopify_attributes }}
+            >
+              {{ tab.settings.label | escape }}
+            </button>
+          {% endfor %}
+        </div>
+
+        {% for tab in category_tabs %}
+          {%- assign tab_key = tab.settings.tab_key | downcase -%}
+          <div
+            class="md-promo-tabs__panel"
+            role="tabpanel"
+            id="md-tab-panel-{{ tab_key | handleize }}"
+            aria-labelledby="md-tab-{{ tab_key | handleize }}"
+          >
+            <div class="md-promo-cards">
+              {% for card in category_cards %}
+                {%- assign card_tab = card.settings.assigned_tab_key | downcase -%}
+                {% if card_tab == tab_key %}
+                  <a
+                    href="{{ card.settings.link | default: '#' }}"
+                    class="md-promo-card"
+                    {{ card.shopify_attributes }}
+                  >
+                    {% if card.settings.image != blank %}
+                      {{
+                        card.settings.image
+                        | image_url: width: 200
+                        | image_tag:
+                          class: 'md-promo-card__image',
+                          widths: '100, 150, 200',
+                          sizes: '(max-width: 749px) 50vw, (max-width: 989px) 33vw, 16vw',
+                          loading: 'lazy',
+                          alt: card.settings.label | default: card.settings.image.alt
+                      }}
+                    {% endif %}
+                    {% if card.settings.label != blank %}
+                      <span class="md-promo-card__label">{{ card.settings.label | escape }}</span>
+                    {% endif %}
+                  </a>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Medical-Deal Promo Stage",
+  "class": "md-home-promo-stage-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Highlight-Produkt"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_highlight",
+      "default": true,
+      "label": "Highlight-Produkt anzeigen"
+    },
+    {
+      "type": "text",
+      "id": "highlight_title",
+      "default": "Aktionsprodukt",
+      "label": "Highlight-Kartentitel"
+    },
+    {
+      "type": "product",
+      "id": "highlight_product",
+      "label": "Highlight-Produkt"
+    },
+    {
+      "type": "text",
+      "id": "highlight_badge",
+      "default": "Top-Angebot",
+      "label": "Badge-Text",
+      "info": "Optional: Text-Badge unter dem Titel"
+    },
+    {
+      "type": "header",
+      "content": "Slider"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "default": true,
+      "label": "Auto-Rotation aktivieren"
+    },
+    {
+      "type": "range",
+      "id": "autoplay_interval",
+      "min": 3000,
+      "max": 15000,
+      "step": 1000,
+      "default": 5000,
+      "label": "Auto-Rotation Intervall (ms)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "default": true,
+      "label": "Dots anzeigen"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "default": true,
+      "label": "Pfeile anzeigen"
+    },
+    {
+      "type": "header",
+      "content": "Abstände"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "default": 20,
+      "unit": "px",
+      "label": "Padding oben"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "default": 30,
+      "unit": "px",
+      "label": "Padding unten"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "promo_slide",
+      "name": "Promo-Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Bild"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Slide-Überschrift",
+          "label": "Überschrift"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "default": "Slide-Beschreibungstext",
+          "label": "Beschreibung"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge-Label",
+          "info": "Optional: z. B. 'Neu', 'Aktion'"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Mehr erfahren",
+          "label": "Button-Text"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button-Link"
+        }
+      ]
+    },
+    {
+      "type": "category_tab",
+      "name": "Kategorie-Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_key",
+          "label": "Tab-Key",
+          "info": "Eindeutiger Schlüssel für die Zuordnung, z. B. 'medizinbedarf'"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "default": "Tab Label",
+          "label": "Tab-Label"
+        }
+      ]
+    },
+    {
+      "type": "category_card",
+      "name": "Kategorie-Karte",
+      "settings": [
+        {
+          "type": "text",
+          "id": "assigned_tab_key",
+          "label": "Tab-Key",
+          "info": "Tab-Key des übergeordneten Tabs, z. B. 'medizinbedarf'"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Bild"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "default": "Kategorie-Label",
+          "label": "Label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Medical-Deal Promo Stage",
+      "settings": {
+        "show_highlight": true,
+        "highlight_title": "Aktionsprodukt",
+        "highlight_badge": "Top-Angebot",
+        "autoplay": true,
+        "autoplay_interval": 5000,
+        "show_dots": true,
+        "show_arrows": true,
+        "padding_top": 20,
+        "padding_bottom": 30
+      },
+      "blocks": [
+        {
+          "type": "category_tab",
+          "settings": {
+            "tab_key": "medizinbedarf",
+            "label": "Medizinbedarf"
+          }
+        },
+        {
+          "type": "category_tab",
+          "settings": {
+            "tab_key": "hygiene",
+            "label": "Reinigung & Hygiene"
+          }
+        },
+        {
+          "type": "category_tab",
+          "settings": {
+            "tab_key": "arbeitsschutz",
+            "label": "Arbeitsschutz"
+          }
+        },
+        {
+          "type": "category_tab",
+          "settings": {
+            "tab_key": "pflegebedarf",
+            "label": "Pflegebedarf"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
