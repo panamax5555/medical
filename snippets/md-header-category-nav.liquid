@@ -30,11 +30,40 @@
                 <svg class="md-header-catflyout__rail-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
               </button>
             {% endfor %}
+
+            <div class="md-header-catflyout__quicklinks">
+              {% if section.settings.quicklink_brands_url != blank %}
+                <a href="{{ section.settings.quicklink_brands_url }}" class="md-header-catflyout__quicklink">
+                  {{ section.settings.quicklink_brands_label | default: 'Marken' | escape }}
+                </a>
+              {% endif %}
+              {% if section.settings.quicklink_sale_url != blank %}
+                <a href="{{ section.settings.quicklink_sale_url }}" class="md-header-catflyout__quicklink">
+                  {{ section.settings.quicklink_sale_label | default: 'Sale' | escape }}
+                </a>
+              {% endif %}
+              {% if section.settings.quicklink_new_url != blank %}
+                <a href="{{ section.settings.quicklink_new_url }}" class="md-header-catflyout__quicklink">
+                  {{ section.settings.quicklink_new_label | default: 'Neuheiten' | escape }}
+                </a>
+              {% endif %}
+              {% if section.settings.quicklink_topics_url != blank %}
+                <a href="{{ section.settings.quicklink_topics_url }}" class="md-header-catflyout__quicklink">
+                  {{ section.settings.quicklink_topics_label | default: 'Themen' | escape }}
+                </a>
+              {% endif %}
+            </div>
           </div>
+
           <div class="md-header-catflyout__panel">
             {% for link in cat_menu.links %}
               <div class="md-header-catflyout__panel-content" data-cat-index="{{ forloop.index0 }}">
-                <h3 class="md-header-catflyout__panel-title">{{ link.title | escape }}</h3>
+                <div class="md-header-catflyout__panel-header">
+                  <h3 class="md-header-catflyout__panel-title">{{ link.title | escape }}</h3>
+                  <a href="{{ link.url }}" class="md-header-catflyout__panel-all-link">
+                    Alle anzeigen &rsaquo;
+                  </a>
+                </div>
                 {% if link.links.size > 0 %}
                   <div class="md-header-catflyout__panel-grid">
                     {% for childlink in link.links %}
@@ -43,10 +72,12 @@
                       </a>
                     {% endfor %}
                   </div>
+                {% else %}
+                  <div class="md-header-catflyout__panel-empty">
+                    <p>Keine Unterkategorien vorhanden.</p>
+                    <a href="{{ link.url }}" class="md-header-catflyout__panel-link">Zum Bereich &rsaquo;</a>
+                  </div>
                 {% endif %}
-                <a href="{{ link.url }}" class="md-header-catflyout__panel-all">
-                  Alle anzeigen &rsaquo;
-                </a>
               </div>
             {% endfor %}
           </div>

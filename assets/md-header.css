@@ -404,9 +404,11 @@
 
 .md-header-catflyout__rail {
   background: #f4f6f7;
-  padding: 0.8rem 0;
+  padding: 0.8rem 0 0;
   border-right: 1px solid rgba(0, 0, 0, 0.06);
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .md-header-catflyout__rail-link {
@@ -460,18 +462,37 @@
   display: block;
 }
 
-.md-header-catflyout__panel-title {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--md-header-text);
-  margin: 0 0 1.4rem;
+.md-header-catflyout__panel-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1.4rem;
   padding-bottom: 0.8rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
+.md-header-catflyout__panel-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--md-header-text);
+  margin: 0;
+}
+
+.md-header-catflyout__panel-all-link {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--md-header-link-hover);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.md-header-catflyout__panel-all-link:hover {
+  text-decoration: underline;
+}
+
 .md-header-catflyout__panel-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.2rem 2rem;
 }
 
@@ -488,22 +509,49 @@
   color: var(--md-header-link-hover);
 }
 
-.md-header-catflyout__panel-all {
-  display: inline-block;
-  margin-top: 1.2rem;
+.md-header-catflyout__panel-empty {
+  padding: 1rem 0;
+  color: #6b7f8a;
   font-size: 1.3rem;
-  font-weight: 600;
-  color: var(--md-header-link-hover);
-  text-decoration: none;
 }
 
-.md-header-catflyout__panel-all:hover {
-  text-decoration: underline;
+.md-header-catflyout__panel-empty p {
+  margin: 0 0 0.6rem;
+}
+
+/* Quicklinks in Rail */
+.md-header-catflyout__quicklinks {
+  margin-top: auto;
+  padding: 1.2rem 1.6rem 1.6rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.md-header-catflyout__quicklink {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--md-header-text);
+  text-decoration: none;
+  transition: border-color 0.1s, color 0.1s;
+}
+
+.md-header-catflyout__quicklink:hover {
+  border-color: var(--md-header-link-hover);
+  color: var(--md-header-link-hover);
 }
 
 @media screen and (max-width: 1199px) {
   .md-header-catflyout__inner {
     grid-template-columns: 28rem 1fr;
+  }
+  .md-header-catflyout__panel-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
