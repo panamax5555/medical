@@ -53,96 +53,92 @@
       </div>
 
       {% if section.settings.show_search %}
-        {% render 'md-header-search' %}
+        {% render 'md-header-search', mode: 'desktop' %}
       {% endif %}
 
       {% render 'md-header-icons' %}
     </div>
-  </div>
 
-  {% if section.settings.show_search %}
-    {% render 'md-header-search' %}
-  {% endif %}
+    {% if section.settings.show_search %}
+      {% render 'md-header-search', mode: 'mobile' %}
+    {% endif %}
+  </div>
 
   {% if section.settings.show_category_bar %}
     {% render 'md-header-category-nav' %}
   {% endif %}
-</div>
 
-{% assign menu = section.settings.menu %}
+  {% assign menu = section.settings.menu %}
 
-<div class="md-header-drawer">
-  <div class="md-header-drawer__overlay"></div>
-  <div class="md-header-drawer__panel" role="dialog" aria-modal="true" aria-label="{{ 'sections.header.menu' | t }}">
-    <div class="md-header-drawer__header">
-      <span class="md-header-drawer__title">{{ 'sections.header.menu' | t }}</span>
-      <button class="md-header-drawer__close" type="button" aria-label="{{ 'accessibility.close' | t }}">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
-        </svg>
-      </button>
-    </div>
+  <div class="md-header-drawer">
+    <div class="md-header-drawer__overlay"></div>
+    <div class="md-header-drawer__panel" role="dialog" aria-modal="true" aria-label="{{ 'sections.header.menu' | t }}">
+      <div class="md-header-drawer__header">
+        <span class="md-header-drawer__title">{{ 'sections.header.menu' | t }}</span>
+        <button class="md-header-drawer__close" type="button" aria-label="{{ 'accessibility.close' | t }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+          </svg>
+        </button>
+      </div>
 
-    <nav class="md-header-drawer__nav">
-      <ul class="md-header-drawer__nav-list" role="list">
-        {% if menu.links.size > 0 %}
-          {% for link in menu.links %}
-            <li class="md-header-drawer__nav-item">
-              <a
-                href="{{ link.url }}"
-                class="md-header-drawer__nav-link{% if link.links.size > 0 %} md-header-drawer__nav-link--parent{% endif %}"
-                {% if link.current %}aria-current="page"{% endif %}
-              >
-                {{ link.title | escape }}
-              </a>
+      <nav class="md-header-drawer__nav">
+        <ul class="md-header-drawer__nav-list" role="list">
+          {% if menu.links.size > 0 %}
+            {% for link in menu.links %}
+              <li class="md-header-drawer__nav-item">
+                <a
+                  href="{{ link.url }}"
+                  class="md-header-drawer__nav-link{% if link.links.size > 0 %} md-header-drawer__nav-link--parent{% endif %}"
+                  {% if link.current %}aria-current="page"{% endif %}
+                >
+                  {{ link.title | escape }}
+                </a>
 
-              {% if link.links.size > 0 %}
-                <ul class="md-header-drawer__nav-list" role="list" style="padding-left: 1rem;">
-                  {% for childlink in link.links %}
-                    <li class="md-header-drawer__nav-item">
-                      <a
-                        href="{{ childlink.url }}"
-                        class="md-header-drawer__nav-link"
-                        {% if childlink.current %}aria-current="page"{% endif %}
-                      >
-                        {{ childlink.title | escape }}
-                      </a>
-                    </li>
-                  {% endfor %}
-                </ul>
-              {% endif %}
-            </li>
-          {% endfor %}
-        {% else %}
-          <li class="md-header-drawer__nav-item">
-            <span class="md-header-drawer__nav-link">{{ 'customer.login_page.create_account' | t }}</span>
-          </li>
+                {% if link.links.size > 0 %}
+                  <ul class="md-header-drawer__nav-list" role="list" style="padding-left: 1rem;">
+                    {% for childlink in link.links %}
+                      <li class="md-header-drawer__nav-item">
+                        <a
+                          href="{{ childlink.url }}"
+                          class="md-header-drawer__nav-link"
+                          {% if childlink.current %}aria-current="page"{% endif %}
+                        >
+                          {{ childlink.title | escape }}
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </li>
+            {% endfor %}
+          {% endif %}
+        </ul>
+      </nav>
+
+      <div class="md-header-drawer__footer">
+        {% if shop.customer_accounts_enabled %}
+          <a
+            href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
+            class="md-header-drawer__footer-link"
+            rel="nofollow"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+            </svg>
+            {% if customer %}{{ 'customer.account_fallback' | t }}{% else %}{{ 'customer.log_in' | t }}{% endif %}
+          </a>
         {% endif %}
-      </ul>
-    </nav>
 
-    <div class="md-header-drawer__footer">
-      {% if shop.customer_accounts_enabled %}
-        <a
-          href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
-          class="md-header-drawer__footer-link"
-          rel="nofollow"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-          </svg>
-          {% if customer %}{{ 'customer.account_fallback' | t }}{% else %}{{ 'customer.log_in' | t }}{% endif %}
-        </a>
-      {% endif %}
-
-      {% if section.settings.show_service_link and section.settings.service_link != blank %}
-        <a href="{{ section.settings.service_link }}" class="md-header-drawer__footer-link">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/><line x1="9.09" y1="9" x2="16.16" y2="16.07"/><line x1="15" y1="9" x2="9" y2="15"/>
-          </svg>
-          {{ section.settings.service_label | escape }}
-        </a>
-      {% endif %}
+        {% if section.settings.show_service_link and section.settings.service_link != blank %}
+          <a href="{{ section.settings.service_link }}" class="md-header-drawer__footer-link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="9.09" y1="9" x2="16.16" y2="16.07"/><line x1="15" y1="9" x2="9" y2="15"/>
+            </svg>
+            {{ section.settings.service_label | escape }}
+          </a>
+        {% endif %}
+      </div>
     </div>
   </div>
 </div>

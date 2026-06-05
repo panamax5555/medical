@@ -286,6 +286,12 @@
   min-height: 42px;
 }
 
+/* Category Menu Wrapper */
+.md-header-catmenu {
+  position: relative;
+  flex-shrink: 0;
+}
+
 /* Category Button */
 .md-header-catbtn {
   display: flex;

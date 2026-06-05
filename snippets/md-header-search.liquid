@@ -1,3 +1,4 @@
+{% if mode == 'desktop' %}
 <div class="md-header-search md-header-search--desktop">
   <form action="{{ routes.search_url }}" method="get" role="search" class="md-header-search__form">
     <input
@@ -23,7 +24,9 @@
     </button>
   </form>
 </div>
+{% endif %}
 
+{% if mode == 'mobile' %}
 <div class="md-header-search md-header-search--mobile">
   <form action="{{ routes.search_url }}" method="get" role="search" class="md-header-search__form">
     <input
@@ -48,3 +51,4 @@
     </button>
   </form>
 </div>
+{% endif %}
