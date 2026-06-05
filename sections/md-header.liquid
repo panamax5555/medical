@@ -1,0 +1,332 @@
+{{ 'md-header.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'md-header.js' | asset_url }}" defer="defer"></script>
+
+{% style %}
+  .md-header-section {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+  }
+
+  .shopify-section-header-sticky .md-header-section {
+    top: calc(var(--header-top-offset, 0px));
+  }
+{% endstyle %}
+
+<div class="md-header-section{% if section.settings.sticky_header %} md-header-section--sticky-always{% endif %}">
+  {% if section.settings.show_trustbar %}
+    {% render 'md-header-trustbar' %}
+  {% endif %}
+
+  <div class="md-header-main">
+    <div class="md-header-main__inner">
+      <button
+        class="md-header-hamburger"
+        type="button"
+        aria-label="{{ 'sections.header.menu' | t }}"
+        aria-expanded="false"
+      >
+        <span class="md-header-hamburger__icon">
+          <span></span><span></span><span></span>
+        </span>
+      </button>
+
+      <div class="md-header-logo">
+        <a href="{{ routes.root_url }}" class="md-header-logo__link">
+          {% if section.settings.logo_style == 'image' and settings.logo != blank %}
+            {% assign logo_alt = settings.logo.alt | default: shop.name | escape %}
+            {% assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio %}
+            {{
+              settings.logo
+              | image_url: width: 300
+              | image_tag:
+                class: 'md-header-logo__image',
+                width: settings.logo_width,
+                height: logo_height,
+                alt: logo_alt,
+                preload: true
+            }}
+          {% else %}
+            <span class="md-header-logo__text">{{ shop.name }}</span>
+          {% endif %}
+        </a>
+      </div>
+
+      {% if section.settings.show_search %}
+        {% render 'md-header-search' %}
+      {% endif %}
+
+      {% render 'md-header-icons' %}
+    </div>
+  </div>
+
+  {% if section.settings.show_search %}
+    {% render 'md-header-search' %}
+  {% endif %}
+
+  {% if section.settings.show_category_bar %}
+    {% render 'md-header-category-nav' %}
+  {% endif %}
+</div>
+
+{% assign menu = section.settings.menu %}
+
+<div class="md-header-drawer">
+  <div class="md-header-drawer__overlay"></div>
+  <div class="md-header-drawer__panel" role="dialog" aria-modal="true" aria-label="{{ 'sections.header.menu' | t }}">
+    <div class="md-header-drawer__header">
+      <span class="md-header-drawer__title">{{ 'sections.header.menu' | t }}</span>
+      <button class="md-header-drawer__close" type="button" aria-label="{{ 'accessibility.close' | t }}">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="md-header-drawer__nav">
+      <ul class="md-header-drawer__nav-list" role="list">
+        {% if menu.links.size > 0 %}
+          {% for link in menu.links %}
+            <li class="md-header-drawer__nav-item">
+              <a
+                href="{{ link.url }}"
+                class="md-header-drawer__nav-link{% if link.links.size > 0 %} md-header-drawer__nav-link--parent{% endif %}"
+                {% if link.current %}aria-current="page"{% endif %}
+              >
+                {{ link.title | escape }}
+              </a>
+
+              {% if link.links.size > 0 %}
+                <ul class="md-header-drawer__nav-list" role="list" style="padding-left: 1rem;">
+                  {% for childlink in link.links %}
+                    <li class="md-header-drawer__nav-item">
+                      <a
+                        href="{{ childlink.url }}"
+                        class="md-header-drawer__nav-link"
+                        {% if childlink.current %}aria-current="page"{% endif %}
+                      >
+                        {{ childlink.title | escape }}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </li>
+          {% endfor %}
+        {% else %}
+          <li class="md-header-drawer__nav-item">
+            <span class="md-header-drawer__nav-link">{{ 'customer.login_page.create_account' | t }}</span>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+
+    <div class="md-header-drawer__footer">
+      {% if shop.customer_accounts_enabled %}
+        <a
+          href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
+          class="md-header-drawer__footer-link"
+          rel="nofollow"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+          {% if customer %}{{ 'customer.account_fallback' | t }}{% else %}{{ 'customer.log_in' | t }}{% endif %}
+        </a>
+      {% endif %}
+
+      {% if section.settings.show_service_link and section.settings.service_link != blank %}
+        <a href="{{ section.settings.service_link }}" class="md-header-drawer__footer-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="9.09" y1="9" x2="16.16" y2="16.07"/><line x1="15" y1="9" x2="9" y2="15"/>
+          </svg>
+          {{ section.settings.service_label | escape }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Medical-Deal Header",
+  "class": "md-header-section-wrapper",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "select",
+      "id": "logo_style",
+      "options": [
+        {
+          "value": "image",
+          "label": "Bildlogo"
+        },
+        {
+          "value": "text",
+          "label": "Textlogo"
+        }
+      ],
+      "default": "image",
+      "label": "Logo-Darstellung"
+    },
+    {
+      "type": "header",
+      "content": "Trustbar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trustbar",
+      "default": true,
+      "label": "Trustbar anzeigen"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_trustbar_mobile",
+      "default": false,
+      "label": "Trustbar auf Mobil ausblenden"
+    },
+    {
+      "type": "text",
+      "id": "trustbar_text",
+      "default": "Großhandel für Praxis, Pflege & Hygiene · Kauf auf Rechnung · Schnelle Lieferung",
+      "label": "Trustbar Text"
+    },
+    {
+      "type": "header",
+      "content": "Suche"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "default": true,
+      "label": "Suchleiste anzeigen"
+    },
+    {
+      "type": "header",
+      "content": "Kategorie-Leiste"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_category_bar",
+      "default": true,
+      "label": "Kategorie-Leiste anzeigen"
+    },
+    {
+      "type": "text",
+      "id": "categories_label",
+      "default": "Kategorien",
+      "label": "Kategorien-Button Text"
+    },
+    {
+      "type": "text",
+      "id": "categories_all_label",
+      "default": "Alle Kategorien",
+      "label": "Alle Kategorien Link-Text"
+    },
+    {
+      "type": "header",
+      "content": "Menü"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Menü",
+      "info": "Empfohlen: MD Header DEV"
+    },
+    {
+      "type": "header",
+      "content": "B2B / Privatkunden-Hinweis"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_b2b_hint",
+      "default": true,
+      "label": "B2B / Privatkunden-Hinweis anzeigen"
+    },
+    {
+      "type": "text",
+      "id": "b2b_private_text",
+      "default": "Privatkunden: Preise inkl. MwSt.",
+      "label": "Privatkunden-Text"
+    },
+    {
+      "type": "text",
+      "id": "b2b_business_text",
+      "default": "Geschäftskunden: B2B-Konditionen",
+      "label": "Geschäftskunden-Text"
+    },
+    {
+      "type": "url",
+      "id": "b2b_business_url",
+      "label": "Geschäftskunden-Link (Seite)",
+      "info": "Optional: Link zur Seite 'Geschäftskunde werden'"
+    },
+    {
+      "type": "header",
+      "content": "Service / Kontakt"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_service_link",
+      "default": true,
+      "label": "Service-Link anzeigen"
+    },
+    {
+      "type": "text",
+      "id": "service_label",
+      "default": "Service",
+      "label": "Service-Label"
+    },
+    {
+      "type": "url",
+      "id": "service_link",
+      "label": "Service-Link",
+      "info": "Optional: Link zur Kontakt-/Service-Seite"
+    },
+    {
+      "type": "header",
+      "content": "Sticky Header"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "default": true,
+      "label": "Sticky Header aktivieren"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Medical-Deal Header",
+      "settings": {
+        "logo_style": "image",
+        "show_trustbar": true,
+        "hide_trustbar_mobile": false,
+        "trustbar_text": "Großhandel für Praxis, Pflege & Hygiene · Kauf auf Rechnung · Schnelle Lieferung",
+        "show_search": true,
+        "show_category_bar": true,
+        "categories_label": "Kategorien",
+        "categories_all_label": "Alle Kategorien",
+        "menu": "md-header-dev",
+        "show_b2b_hint": true,
+        "b2b_private_text": "Privatkunden: Preise inkl. MwSt.",
+        "b2b_business_text": "Geschäftskunden: B2B-Konditionen",
+        "b2b_business_url": "",
+        "show_service_link": true,
+        "service_label": "Service",
+        "service_link": "",
+        "sticky_header": true
+      }
+    }
+  ]
+}
+{% endschema %}

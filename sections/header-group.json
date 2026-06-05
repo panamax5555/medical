@@ -35,28 +35,31 @@
         "enable_language_selector": false
       }
     },
-    "header": {
-      "type": "header",
+    "md-header": {
+      "type": "md-header",
       "settings": {
-        "logo_position": "middle-left",
-        "mobile_logo_position": "center",
+        "logo_style": "image",
+        "show_trustbar": true,
+        "hide_trustbar_mobile": false,
+        "trustbar_text": "Großhandel für Praxis, Pflege & Hygiene · Kauf auf Rechnung · Schnelle Lieferung",
+        "show_search": true,
+        "show_category_bar": true,
+        "categories_label": "Kategorien",
+        "categories_all_label": "Alle Kategorien",
         "menu": "md-header-dev",
-        "menu_type_desktop": "dropdown",
-        "sticky_header_type": "on-scroll-up",
-        "show_line_separator": true,
-        "color_scheme": "scheme-1",
-        "menu_color_scheme": "scheme-1",
-        "enable_country_selector": false,
-        "enable_language_selector": false,
-        "enable_customer_avatar": true,
-        "margin_bottom": 0,
-        "padding_top": 12,
-        "padding_bottom": 12
+        "show_b2b_hint": true,
+        "b2b_private_text": "Privatkunden: Preise inkl. MwSt.",
+        "b2b_business_text": "Geschäftskunden: B2B-Konditionen",
+        "b2b_business_url": "",
+        "show_service_link": true,
+        "service_label": "Service",
+        "service_link": "",
+        "sticky_header": true
       }
     }
   },
   "order": [
     "announcement-bar",
-    "header"
+    "md-header"
   ]
 }

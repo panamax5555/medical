@@ -1,0 +1,8 @@
+<div class="md-header-catbar__b2b">
+  <span>{{ section.settings.b2b_private_text | escape }}</span>
+  {% if section.settings.b2b_business_url != blank %}
+    <a href="{{ section.settings.b2b_business_url }}">{{ section.settings.b2b_business_text | escape }}</a>
+  {% else %}
+    <span>{{ section.settings.b2b_business_text | escape }}</span>
+  {% endif %}
+</div>

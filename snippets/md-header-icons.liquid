@@ -1,0 +1,54 @@
+<div class="md-header-icons">
+  {% if shop.customer_accounts_enabled %}
+    <a
+      href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
+      class="md-header-icons__item md-header-icons__item--account"
+      rel="nofollow"
+      aria-label="{% if customer %}{{ 'customer.account_fallback' | t }}{% else %}{{ 'customer.log_in' | t }}{% endif %}"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+      <span class="md-header-icons__label md-header-icons--desktop-label">
+        {% if customer %}{{ 'customer.account_fallback' | t }}{% else %}{{ 'customer.log_in' | t }}{% endif %}
+      </span>
+    </a>
+  {% endif %}
+
+  {% if section.settings.show_service_link %}
+    <a
+      href="{{ section.settings.service_link | default: '#' }}"
+      class="md-header-icons__item md-header-icons__item--service{% if section.settings.service_link == blank %} md-header-hidden-mobile{% endif %}"
+      aria-label="{{ section.settings.service_label | escape }}"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="9.09" y1="9" x2="16.16" y2="16.07"/>
+        <line x1="15" y1="9" x2="9" y2="15"/>
+        <line x1="12" y1="8" x2="12" y2="8.01"/>
+        <line x1="12" y1="12" x2="12" y2="16"/>
+      </svg>
+      <span class="md-header-icons__label md-header-icons--desktop-label">{{ section.settings.service_label | escape }}</span>
+    </a>
+  {% endif %}
+
+  <a
+    href="{{ routes.cart_url }}"
+    class="md-header-icons__item md-header-icons__item--cart"
+    id="md-cart-icon-bubble"
+    aria-label="{{ 'templates.cart.cart' | t }}"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="8" cy="21" r="1"/>
+      <circle cx="19" cy="21" r="1"/>
+      <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+    </svg>
+    <span class="md-header-icons__label md-header-icons--desktop-label">{{ 'templates.cart.cart' | t }}</span>
+    {% if cart.item_count > 0 %}
+      <span class="md-header-icons__cart-count" aria-hidden="true">
+        {% if cart.item_count < 100 %}{{ cart.item_count }}{% endif %}
+      </span>
+    {% endif %}
+  </a>
+</div>
