@@ -13,9 +13,9 @@
         "show_dots": true,
         "show_arrows": true,
         "padding_top": 20,
-        "padding_bottom": 30
-      }
-    },
+"padding_bottom": 32
+    }
+  },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
