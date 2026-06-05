@@ -91,6 +91,13 @@
                       endif
                       assign slide_alt = block.settings.heading | default: block.settings.image.alt
                     -%}
+                    {% if block.settings.button_link != blank %}
+                      <a
+                        href="{{ block.settings.button_link }}"
+                        class="md-promo-slider__image-link"
+                        aria-label="{{ slide_alt | escape }}"
+                      >
+                    {% endif %}
                     {{
                       block.settings.image
                       | image_url: width: 800
@@ -102,6 +109,9 @@
                         fetchpriority: slide_priority,
                         alt: slide_alt
                     }}
+                    {% if block.settings.button_link != blank %}
+                      </a>
+                    {% endif %}
                   {% endif %}
                 </div>
                 <div class="md-promo-slider__content">
@@ -326,6 +336,22 @@
           "type": "image_picker",
           "id": "image",
           "label": "Bild"
+        },
+        {
+          "type": "select",
+          "id": "image_fit",
+          "options": [
+            {
+              "value": "contain",
+              "label": "Einpassen (Contain)"
+            },
+            {
+              "value": "cover",
+              "label": "Füllend (Cover)"
+            }
+          ],
+          "default": "contain",
+          "label": "Bild-Anpassung"
         },
         {
           "type": "text",
