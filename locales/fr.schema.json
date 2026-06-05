@@ -1963,7 +1963,11 @@
               "label": "Jumelage 2"
             },
             "pairing_3": {
-              "label": "Jumelage 3"
+              "label": "Jumelage 3"
+            },
+            "content": {
+              "label": "Content",
+              "info": "Choose the content to display with this icon."
             }
           }
         },

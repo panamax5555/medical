@@ -1,7 +1,6 @@
 /**
  * Medical-Deal Custom Header JavaScript
- * Vanilla JS, no external libraries
- * Handles: mobile drawer, category dropdown
+ * Vanilla JS: mobile drawer drilldown, desktop category flyout
  */
 (function () {
   'use strict';
@@ -15,13 +14,19 @@
 
     this.container = container;
     this.drawer = container.querySelector('.md-header-drawer');
+    this.drawerPanel = container.querySelector('.md-header-drawer__panel');
     this.hamburger = container.querySelector('.md-header-hamburger');
     this.drawerClose = container.querySelector('.md-header-drawer__close');
     this.overlay = container.querySelector('.md-header-drawer__overlay');
+
     this.catBtn = container.querySelector('.md-header-catbtn');
-    this.catDropdown = container.querySelector('.md-header-catdropdown');
+    this.catFlyout = container.querySelector('.md-header-catflyout');
+    this.railLinks = container.querySelectorAll('.md-header-catflyout__rail-link');
+    this.panelContents = container.querySelectorAll('.md-header-catflyout__panel-content');
+
     this.isDrawerOpen = false;
     this.isCatOpen = false;
+    this.activeCatIndex = 0;
     this.previousActiveElement = null;
     this._onKeyDown = null;
     this._onDocClick = null;
@@ -31,6 +36,9 @@
 
   MDHeader.prototype.init = function () {
     this.bindEvents();
+    if (this.railLinks.length > 0) {
+      this.activateCategory(0);
+    }
   };
 
   MDHeader.prototype.bindEvents = function () {
@@ -56,7 +64,7 @@
       });
     }
 
-    if (self.catBtn && self.catDropdown) {
+    if (self.catBtn && self.catFlyout) {
       self.catBtn.addEventListener('click', function (e) {
         e.preventDefault();
         if (self.isDrawerOpen) self.closeDrawer();
@@ -67,12 +75,28 @@
         if (
           self.isCatOpen &&
           !self.catBtn.contains(e.target) &&
-          !self.catDropdown.contains(e.target)
+          !self.catFlyout.contains(e.target)
         ) {
           self.closeCategory();
         }
       };
       document.addEventListener('click', self._onDocClick);
+
+      for (var r = 0; r < self.railLinks.length; r++) {
+        self.railLinks[r].addEventListener('click', function (el) {
+          return function () {
+            var idx = parseInt(el.getAttribute('data-cat-index'), 10);
+            if (!isNaN(idx)) self.activateCategory(idx);
+          };
+        }(self.railLinks[r]));
+
+        self.railLinks[r].addEventListener('mouseenter', function (el) {
+          return function () {
+            var idx = parseInt(el.getAttribute('data-cat-index'), 10);
+            if (!isNaN(idx)) self.activateCategory(idx);
+          };
+        }(self.railLinks[r]));
+      }
     }
 
     self._onKeyDown = function (e) {
@@ -97,17 +121,35 @@
           self.trapFocus(e);
         }
       });
+
+      var drillBtns = self.drawer.querySelectorAll('[data-drilldown-target]');
+      for (var d = 0; d < drillBtns.length; d++) {
+        drillBtns[d].addEventListener('click', function (el) {
+          return function (e) {
+            e.preventDefault();
+            self.openDrilldown(el.getAttribute('data-drilldown-target'));
+          };
+        }(drillBtns[d]));
+      }
+
+      var backBtns = self.drawer.querySelectorAll('.md-header-drawer__back');
+      for (var b = 0; b < backBtns.length; b++) {
+        backBtns[b].addEventListener('click', function () {
+          self.closeDrilldown();
+        });
+      }
     }
   };
 
+  /* Drawer
+     ========================================================================== */
   MDHeader.prototype.openDrawer = function () {
     if (this.isDrawerOpen) return;
     this.isDrawerOpen = true;
     this.previousActiveElement = document.activeElement;
+    if (this.hamburger) this.hamburger.setAttribute('aria-expanded', 'true');
     this.drawer.classList.add('is-open');
-    if (this.hamburger) {
-      this.hamburger.setAttribute('aria-expanded', 'true');
-    }
+    this.openLevel('main');
     document.body.style.overflow = 'hidden';
 
     var self = this;
@@ -120,10 +162,8 @@
   MDHeader.prototype.closeDrawer = function () {
     if (!this.isDrawerOpen) return;
     this.isDrawerOpen = false;
+    if (this.hamburger) this.hamburger.setAttribute('aria-expanded', 'false');
     this.drawer.classList.remove('is-open');
-    if (this.hamburger) {
-      this.hamburger.setAttribute('aria-expanded', 'false');
-    }
     document.body.style.overflow = '';
 
     if (this.previousActiveElement && this.previousActiveElement.focus) {
@@ -132,9 +172,36 @@
     }
   };
 
+  MDHeader.prototype.openDrilldown = function (target) {
+    this.openLevel(target);
+  };
+
+  MDHeader.prototype.closeDrilldown = function () {
+    this.openLevel('main');
+  };
+
+  MDHeader.prototype.openLevel = function (level) {
+    var allLevels = this.drawer.querySelectorAll('.md-header-drawer__level');
+    var targetClass = '.md-header-drawer__level--' + (level === 'main' ? 'main' : 'child[data-drilldown-level="' + level + '"]');
+    var targetEl = this.drawer.querySelector(targetClass);
+
+    for (var i = 0; i < allLevels.length; i++) {
+      allLevels[i].classList.remove('is-active');
+    }
+    if (targetEl) {
+      targetEl.classList.add('is-active');
+      var backBtn = targetEl.querySelector('.md-header-drawer__back');
+      if (backBtn) {
+        requestAnimationFrame(function () { backBtn.focus(); });
+      }
+    }
+  };
+
   MDHeader.prototype.trapFocus = function (e) {
     if (!this.isDrawerOpen) return;
-    var focusableElements = this.drawer.querySelectorAll(FOCUSABLE_SELECTOR);
+    var activeEl = this.drawer.querySelector('.md-header-drawer__level.is-active');
+    if (!activeEl) return;
+    var focusableElements = activeEl.querySelectorAll(FOCUSABLE_SELECTOR);
     if (focusableElements.length === 0) return;
 
     var first = focusableElements[0];
@@ -149,6 +216,8 @@
     }
   };
 
+  /* Category Flyout
+     ========================================================================== */
   MDHeader.prototype.toggleCategory = function () {
     if (this.isCatOpen) {
       this.closeCategory();
@@ -160,17 +229,30 @@
   MDHeader.prototype.openCategory = function () {
     this.isCatOpen = true;
     this.catBtn.classList.add('is-open');
-    this.catDropdown.classList.add('is-open');
     this.catBtn.setAttribute('aria-expanded', 'true');
+    this.catFlyout.classList.add('is-open');
+    this.activateCategory(this.activeCatIndex);
   };
 
   MDHeader.prototype.closeCategory = function () {
     this.isCatOpen = false;
     this.catBtn.classList.remove('is-open');
-    this.catDropdown.classList.remove('is-open');
     this.catBtn.setAttribute('aria-expanded', 'false');
+    this.catFlyout.classList.remove('is-open');
   };
 
+  MDHeader.prototype.activateCategory = function (index) {
+    this.activeCatIndex = index;
+    for (var i = 0; i < this.railLinks.length; i++) {
+      this.railLinks[i].classList.toggle('is-active', i === index);
+    }
+    for (var j = 0; j < this.panelContents.length; j++) {
+      this.panelContents[j].classList.toggle('is-active', j === index);
+    }
+  };
+
+  /* Init
+     ========================================================================== */
   function initAll() {
     var containers = document.querySelectorAll('.md-header-section');
     for (var i = 0; i < containers.length; i++) {

@@ -1965,6 +1965,10 @@
             },
             "pairing_3": {
               "label": "Parowanie 3"
+            },
+            "content": {
+              "label": "Content",
+              "info": "Choose the content to display with this icon."
             }
           }
         },

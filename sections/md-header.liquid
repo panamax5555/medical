@@ -84,62 +84,106 @@
       </div>
 
       <nav class="md-header-drawer__nav">
-        <ul class="md-header-drawer__nav-list" role="list">
-          {% if menu.links.size > 0 %}
-            {% for link in menu.links %}
-              <li class="md-header-drawer__nav-item">
-                <a
-                  href="{{ link.url }}"
-                  class="md-header-drawer__nav-link{% if link.links.size > 0 %} md-header-drawer__nav-link--parent{% endif %}"
-                  {% if link.current %}aria-current="page"{% endif %}
-                >
-                  {{ link.title | escape }}
-                </a>
+        <div class="md-header-drawer__level md-header-drawer__level--main is-active">
+          <ul class="md-header-drawer__nav-list" role="list">
+            {% if menu.links.size > 0 %}
+              {% for link in menu.links %}
+                <li class="md-header-drawer__nav-item">
+                  {% if link.links.size > 0 %}
+                    <button
+                      class="md-header-drawer__nav-link md-header-drawer__nav-link--parent"
+                      type="button"
+                      data-drilldown-target="{{ forloop.index }}"
+                    >
+                      {{ link.title | escape }}
+                    </button>
+                  {% else %}
+                    <a
+                      href="{{ link.url }}"
+                      class="md-header-drawer__nav-link"
+                      {% if link.current %}aria-current="page"{% endif %}
+                    >
+                      {{ link.title | escape }}
+                    </a>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            {% endif %}
+          </ul>
 
-                {% if link.links.size > 0 %}
-                  <ul class="md-header-drawer__nav-list md-header-drawer__nav-list--child" role="list">
-                    {% for childlink in link.links %}
-                      <li class="md-header-drawer__nav-item">
-                        <a
-                          href="{{ childlink.url }}"
-                          class="md-header-drawer__nav-link"
-                          {% if childlink.current %}aria-current="page"{% endif %}
-                        >
-                          {{ childlink.title | escape }}
-                        </a>
-                      </li>
-                    {% endfor %}
-                  </ul>
-                {% endif %}
-              </li>
-            {% endfor %}
-          {% endif %}
-        </ul>
+          <div class="md-header-drawer__specials">
+            <p class="md-header-drawer__specials-title">Highlights</p>
+            <a href="{{ routes.all_products_collection_url }}" class="md-header-drawer__special-link">Alle Produkte</a>
+            {% if section.settings.show_b2b_hint and section.settings.b2b_business_url != blank %}
+              <a href="{{ section.settings.b2b_business_url }}" class="md-header-drawer__special-link">
+                {{ section.settings.b2b_business_text | escape }}
+              </a>
+            {% endif %}
+          </div>
+
+          <div class="md-header-drawer__footer">
+            {% if shop.customer_accounts_enabled %}
+              <a
+                href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
+                class="md-header-drawer__footer-link"
+                rel="nofollow"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+                {% if customer %}{{ 'customer.account_fallback' | t }}{% else %}{{ 'customer.log_in' | t }}{% endif %}
+              </a>
+            {% endif %}
+
+            {% if section.settings.show_service_link and section.settings.service_link != blank %}
+              <a href="{{ section.settings.service_link }}" class="md-header-drawer__footer-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/><line x1="9.09" y1="9" x2="16.16" y2="16.07"/><line x1="15" y1="9" x2="9" y2="15"/>
+                </svg>
+                {{ section.settings.service_label | escape }}
+              </a>
+            {% endif %}
+
+            {% if section.settings.show_b2b_hint %}
+              <span class="md-header-drawer__footer-text">
+                {{ section.settings.b2b_private_text | escape }}
+              </span>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if menu.links.size > 0 %}
+          {% for link in menu.links %}
+            {% if link.links.size > 0 %}
+              <div class="md-header-drawer__level md-header-drawer__level--child" data-drilldown-level="{{ forloop.index }}">
+                <button class="md-header-drawer__back" type="button" aria-label="Zurück">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                  Zurück
+                </button>
+                <p class="md-header-drawer__level-title">{{ link.title | escape }}</p>
+                <ul class="md-header-drawer__nav-list" role="list">
+                  <li class="md-header-drawer__nav-item">
+                    <a href="{{ link.url }}" class="md-header-drawer__nav-link" style="font-weight: 600;">
+                      Alle anzeigen
+                    </a>
+                  </li>
+                  {% for childlink in link.links %}
+                    <li class="md-header-drawer__nav-item">
+                      <a
+                        href="{{ childlink.url }}"
+                        class="md-header-drawer__nav-link"
+                        {% if childlink.current %}aria-current="page"{% endif %}
+                      >
+                        {{ childlink.title | escape }}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
       </nav>
-
-      <div class="md-header-drawer__footer">
-        {% if shop.customer_accounts_enabled %}
-          <a
-            href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
-            class="md-header-drawer__footer-link"
-            rel="nofollow"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-            </svg>
-            {% if customer %}{{ 'customer.account_fallback' | t }}{% else %}{{ 'customer.log_in' | t }}{% endif %}
-          </a>
-        {% endif %}
-
-        {% if section.settings.show_service_link and section.settings.service_link != blank %}
-          <a href="{{ section.settings.service_link }}" class="md-header-drawer__footer-link">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/><line x1="9.09" y1="9" x2="16.16" y2="16.07"/><line x1="15" y1="9" x2="9" y2="15"/>
-            </svg>
-            {{ section.settings.service_label | escape }}
-          </a>
-        {% endif %}
-      </div>
     </div>
   </div>
 </div>

@@ -1963,7 +1963,11 @@
               "label": "Kombination 2"
             },
             "pairing_3": {
-              "label": "Kombination 3"
+              "label": "Kombination 3"
+            },
+            "content": {
+              "label": "Inhalt",
+              "info": "Wähle den Inhalt, der mit diesem Icon angezeigt wird."
             }
           }
         },

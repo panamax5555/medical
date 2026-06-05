@@ -2327,6 +2327,10 @@
             "heading_3": {
               "label": "Heading",
               "default": "Heading"
+            },
+            "content": {
+              "label": "Content",
+              "info": "Choose the content to display with this icon."
             }
           }
         }
