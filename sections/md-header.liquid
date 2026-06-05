@@ -25,6 +25,7 @@
         type="button"
         aria-label="{{ 'sections.header.menu' | t }}"
         aria-expanded="false"
+        aria-controls="md-header-drawer"
       >
         <span class="md-header-hamburger__icon">
           <span></span><span></span><span></span>
@@ -72,7 +73,7 @@
 
   <div class="md-header-drawer">
     <div class="md-header-drawer__overlay"></div>
-    <div class="md-header-drawer__panel" role="dialog" aria-modal="true" aria-label="{{ 'sections.header.menu' | t }}">
+    <div class="md-header-drawer__panel" id="md-header-drawer" role="dialog" aria-modal="true" aria-label="{{ 'sections.header.menu' | t }}">
       <div class="md-header-drawer__header">
         <span class="md-header-drawer__title">{{ 'sections.header.menu' | t }}</span>
         <button class="md-header-drawer__close" type="button" aria-label="{{ 'accessibility.close' | t }}">
@@ -96,7 +97,7 @@
                 </a>
 
                 {% if link.links.size > 0 %}
-                  <ul class="md-header-drawer__nav-list" role="list" style="padding-left: 1rem;">
+                  <ul class="md-header-drawer__nav-list md-header-drawer__nav-list--child" role="list">
                     {% for childlink in link.links %}
                       <li class="md-header-drawer__nav-item">
                         <a

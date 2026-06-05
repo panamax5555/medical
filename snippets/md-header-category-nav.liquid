@@ -5,6 +5,7 @@
         class="md-header-catbtn"
         type="button"
         aria-expanded="false"
+        aria-controls="md-header-category-dropdown"
         aria-label="{{ section.settings.categories_label | escape }}"
       >
         <span class="md-header-catbtn__icon">
@@ -13,31 +14,69 @@
         {{ section.settings.categories_label | escape }}
       </button>
 
-      <div class="md-header-catdropdown">
-        <ul class="md-header-catdropdown__list" role="list">
-          {% assign cat_menu = section.settings.menu %}
-          {% if cat_menu.links.size > 0 %}
-            <li class="md-header-catdropdown__item">
-              <a href="{{ routes.all_products_collection_url }}" class="md-header-catdropdown__link md-header-catdropdown__link--all">
-                {{ section.settings.categories_all_label | escape }}
-              </a>
-            </li>
-            {% for link in cat_menu.links %}
-              <li class="md-header-catdropdown__item">
-                <a href="{{ link.url }}" class="md-header-catdropdown__link">
-                  {{ link.title | escape }}
-                </a>
-              </li>
-            {% endfor %}
-          {% endif %}
-        </ul>
+      <div class="md-header-catdropdown" id="md-header-category-dropdown">
+        {% assign cat_menu = section.settings.menu %}
+        {% if cat_menu.links.size > 0 %}
+          <div class="md-header-catdropdown__inner">
+            <div class="md-header-catdropdown__col md-header-catdropdown__col--left">
+              <ul class="md-header-catdropdown__list" role="list">
+                <li class="md-header-catdropdown__item">
+                  <a href="{{ routes.all_products_collection_url }}" class="md-header-catdropdown__link md-header-catdropdown__link--all">
+                    {{ section.settings.categories_all_label | escape }}
+                  </a>
+                </li>
+                {% assign half = cat_menu.links.size | divided_by: 2 | plus: 1 %}
+                {% for link in cat_menu.links %}
+                  {% if forloop.index <= half %}
+                    <li class="md-header-catdropdown__item">
+                      <a href="{{ link.url }}" class="md-header-catdropdown__link">
+                        {{ link.title | escape }}
+                      </a>
+                      {% if link.links.size > 0 %}
+                        <ul class="md-header-catdropdown__sublist" role="list">
+                          {% for childlink in link.links limit: 4 %}
+                            <li class="md-header-catdropdown__subitem">
+                              <a href="{{ childlink.url }}" class="md-header-catdropdown__sublink">{{ childlink.title | escape }}</a>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
+            <div class="md-header-catdropdown__col md-header-catdropdown__col--right">
+              <ul class="md-header-catdropdown__list" role="list">
+                {% for link in cat_menu.links %}
+                  {% if forloop.index > half %}
+                    <li class="md-header-catdropdown__item">
+                      <a href="{{ link.url }}" class="md-header-catdropdown__link">
+                        {{ link.title | escape }}
+                      </a>
+                      {% if link.links.size > 0 %}
+                        <ul class="md-header-catdropdown__sublist" role="list">
+                          {% for childlink in link.links limit: 4 %}
+                            <li class="md-header-catdropdown__subitem">
+                              <a href="{{ childlink.url }}" class="md-header-catdropdown__sublink">{{ childlink.title | escape }}</a>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        {% endif %}
       </div>
     </div>
 
     <nav class="md-header-catbar__menu">
       {% if cat_menu.links.size > 0 %}
         <ul class="md-header-catbar__nav" role="list">
-          {% for link in cat_menu.links limit: 7 %}
+          {% for link in cat_menu.links limit: 6 %}
             <li class="md-header-catbar__nav-item">
               <a href="{{ link.url }}" class="md-header-catbar__nav-link">
                 {{ link.title | escape }}

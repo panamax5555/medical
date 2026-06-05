@@ -3,7 +3,6 @@
  * Vanilla JS, no external libraries
  * Handles: mobile drawer, category dropdown
  */
-
 (function () {
   'use strict';
 
@@ -11,6 +10,9 @@
     'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
   function MDHeader(container) {
+    if (container.hasAttribute('data-md-header-initialized')) return;
+    container.setAttribute('data-md-header-initialized', 'true');
+
     this.container = container;
     this.drawer = container.querySelector('.md-header-drawer');
     this.hamburger = container.querySelector('.md-header-hamburger');
@@ -37,6 +39,7 @@
     if (self.hamburger) {
       self.hamburger.addEventListener('click', function (e) {
         e.preventDefault();
+        if (self.isCatOpen) self.closeCategory();
         self.openDrawer();
       });
     }
@@ -56,6 +59,7 @@
     if (self.catBtn && self.catDropdown) {
       self.catBtn.addEventListener('click', function (e) {
         e.preventDefault();
+        if (self.isDrawerOpen) self.closeDrawer();
         self.toggleCategory();
       });
 
@@ -75,6 +79,7 @@
       if (e.key === 'Escape') {
         if (self.isDrawerOpen) {
           self.closeDrawer();
+          return;
         }
         if (self.isCatOpen) {
           self.closeCategory();
@@ -177,5 +182,17 @@
     document.addEventListener('DOMContentLoaded', initAll);
   } else {
     initAll();
+  }
+
+  if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+    document.addEventListener('shopify:section:load', function (e) {
+      var section = document.getElementById('shopify-section-' + e.detail.sectionId);
+      if (section) {
+        var containers = section.querySelectorAll('.md-header-section');
+        for (var i = 0; i < containers.length; i++) {
+          new MDHeader(containers[i]);
+        }
+      }
+    });
   }
 })();
