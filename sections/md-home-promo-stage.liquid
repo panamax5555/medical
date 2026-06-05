@@ -82,6 +82,15 @@
               >
                 <div class="md-promo-slider__image-wrap">
                   {% if block.settings.image != blank %}
+                    {%- liquid
+                      assign slide_loading = 'lazy'
+                      assign slide_priority = 'auto'
+                      if forloop.first and section.settings.show_highlight == false
+                        assign slide_loading = 'eager'
+                        assign slide_priority = 'high'
+                      endif
+                      assign slide_alt = block.settings.heading | default: block.settings.image.alt
+                    -%}
                     {{
                       block.settings.image
                       | image_url: width: 800
@@ -89,9 +98,9 @@
                         class: 'md-promo-slider__img',
                         widths: '400, 600, 800, 1000',
                         sizes: '(max-width: 749px) 100vw, (max-width: 989px) 65vw, 50vw',
-                        loading: forloop.first and section.settings.show_highlight == false ? 'eager' : 'lazy',
-                        fetchpriority: forloop.first and section.settings.show_highlight == false ? 'high' : 'auto',
-                        alt: block.settings.heading | default: block.settings.image.alt
+                        loading: slide_loading,
+                        fetchpriority: slide_priority,
+                        alt: slide_alt
                     }}
                   {% endif %}
                 </div>
