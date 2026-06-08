@@ -396,14 +396,14 @@
 
 .md-header-catflyout__inner {
   display: grid;
-  grid-template-columns: 32rem 1fr;
+  grid-template-columns: 36rem 1fr;
   max-width: var(--md-header-max-width);
   margin: 0 auto;
   min-height: 38rem;
 }
 
 .md-header-catflyout__inner--has-promo {
-  grid-template-columns: 32rem 1fr 26rem;
+  grid-template-columns: 36rem 1fr 26rem;
 }
 
 .md-header-catflyout__rail {
@@ -420,10 +420,11 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 1rem 1.6rem;
+  min-height: 5.4rem;
+  padding: 1.5rem 2rem;
   background: none;
   border: none;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 500;
   color: var(--md-header-text);
   cursor: pointer;
@@ -448,9 +449,9 @@
 
 .md-header-catflyout__rail-arrow {
   flex-shrink: 0;
-  width: 1.2rem;
-  height: 1.2rem;
-  opacity: 0.4;
+  width: 1.4rem;
+  height: 1.4rem;
+  opacity: 0.35;
 }
 
 .md-header-catflyout__panel {
@@ -556,19 +557,19 @@
 /* Quicklinks in Rail */
 .md-header-catflyout__quicklinks {
   margin-top: auto;
-  padding: 1.2rem 1.6rem 1.6rem;
+  padding: 1.6rem 2rem 2rem;
   border-top: 1px solid rgba(0, 0, 0, 0.06);
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 0.8rem;
 }
 
 .md-header-catflyout__quicklink {
   display: inline-block;
-  padding: 0.4rem 0.8rem;
+  padding: 0.6rem 1.2rem;
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: 500;
   color: var(--md-header-text);
   text-decoration: none;
@@ -672,7 +673,7 @@
 
 @media screen and (max-width: 1199px) {
   .md-header-catflyout__inner {
-    grid-template-columns: 28rem 1fr;
+    grid-template-columns: 30rem 1fr;
   }
   .md-header-catflyout__panel-grid {
     grid-template-columns: repeat(2, 1fr);
