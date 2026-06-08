@@ -124,14 +124,13 @@
           {% if section.settings.drawer_info_menu != blank %}
             {% assign info_menu_handle = section.settings.drawer_info_menu | strip %}
             {% if linklists[info_menu_handle].links.size > 0 %}
-              <div class="md-header-drawer__info">
-                <p class="md-header-drawer__info-title">{{ section.settings.drawer_info_title | default: 'Kontakt & Informationen' | escape }}</p>
-                {% for info_link in linklists[info_menu_handle].links %}
-                  <a href="{{ info_link.url }}" class="md-header-drawer__info-link">
-                    {{ info_link.title | escape }}
-                  </a>
-                {% endfor %}
-              </div>
+              <button
+                class="md-header-drawer__info-button"
+                type="button"
+                data-drilldown-target="info"
+              >
+                {{ section.settings.drawer_info_title | default: 'Kontakt & Informationen' | escape }}
+              </button>
             {% endif %}
           {% endif %}
 
@@ -196,6 +195,28 @@
               </div>
             {% endif %}
           {% endfor %}
+        {% endif %}
+
+        {% if section.settings.drawer_info_menu != blank %}
+          {% assign info_menu_handle = section.settings.drawer_info_menu | strip %}
+          {% if linklists[info_menu_handle].links.size > 0 %}
+            <div class="md-header-drawer__level md-header-drawer__level--child" data-drilldown-level="info">
+              <button class="md-header-drawer__back" type="button" aria-label="Zurück">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                Zurück
+              </button>
+              <p class="md-header-drawer__level-title">{{ section.settings.drawer_info_title | default: 'Kontakt & Informationen' | escape }}</p>
+              <ul class="md-header-drawer__nav-list" role="list">
+                {% for info_link in linklists[info_menu_handle].links %}
+                  <li class="md-header-drawer__nav-item">
+                    <a href="{{ info_link.url }}" class="md-header-drawer__nav-link">
+                      {{ info_link.title | escape }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
         {% endif %}
       </nav>
     </div>
