@@ -163,7 +163,7 @@
                 <p class="md-header-drawer__level-title">{{ link.title | escape }}</p>
                 <ul class="md-header-drawer__nav-list" role="list">
                   <li class="md-header-drawer__nav-item">
-                    <a href="{{ link.url }}" class="md-header-drawer__nav-link" style="font-weight: 600;">
+                    <a href="{{ link.url }}" class="md-header-drawer__nav-link md-header-drawer__nav-link--strong">
                       Alle anzeigen
                     </a>
                   </li>
@@ -378,6 +378,57 @@
       "label": "Themen-Link"
     },
     {
+      "type": "text",
+      "id": "quicklink_industries_label",
+      "default": "Branchen",
+      "label": "Branchen-Label"
+    },
+    {
+      "type": "url",
+      "id": "quicklink_industries_url",
+      "label": "Branchen-Link"
+    },
+    {
+      "type": "header",
+      "content": "Flyout-Promo"
+    },
+    {
+      "type": "image_picker",
+      "id": "promo_image",
+      "label": "Promo-Bild"
+    },
+    {
+      "type": "text",
+      "id": "promo_heading",
+      "label": "Promo-Überschrift"
+    },
+    {
+      "type": "text",
+      "id": "promo_text",
+      "label": "Promo-Text"
+    },
+    {
+      "type": "url",
+      "id": "promo_link",
+      "label": "Promo-Link"
+    },
+    {
+      "type": "text",
+      "id": "promo_link_label",
+      "default": "Mehr erfahren",
+      "label": "Promo-Link-Text"
+    },
+    {
+      "type": "header",
+      "content": "Top-Marken"
+    },
+    {
+      "type": "text",
+      "id": "brand_menu",
+      "label": "Marken-Menü-Handle",
+      "info": "Handle des Menüs für Top-Marken (z.B. top-marken)"
+    },
+    {
       "type": "header",
       "content": "Sticky Header"
     },
@@ -413,6 +464,22 @@
         "show_service_link": true,
         "service_label": "Service",
         "service_link": "",
+        "quicklink_brands_label": "Marken",
+        "quicklink_brands_url": "",
+        "quicklink_sale_label": "Sale",
+        "quicklink_sale_url": "",
+        "quicklink_new_label": "Neuheiten",
+        "quicklink_new_url": "",
+        "quicklink_topics_label": "Themen",
+        "quicklink_topics_url": "",
+        "quicklink_industries_label": "Branchen",
+        "quicklink_industries_url": "",
+        "promo_image": "",
+        "promo_heading": "",
+        "promo_text": "",
+        "promo_link": "",
+        "promo_link_label": "Mehr erfahren",
+        "brand_menu": "",
         "sticky_header": true
       }
     }

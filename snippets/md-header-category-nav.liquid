@@ -18,7 +18,12 @@
     <div class="md-header-catflyout" id="md-header-category-flyout">
       {% assign cat_menu = section.settings.menu %}
       {% if cat_menu.links.size > 0 %}
-        <div class="md-header-catflyout__inner">
+        {% assign has_promo = false %}
+        {% if section.settings.promo_image != blank or section.settings.promo_heading != blank %}
+          {% assign has_promo = true %}
+        {% endif %}
+
+        <div class="md-header-catflyout__inner{% if has_promo %} md-header-catflyout__inner--has-promo{% endif %}">
           <div class="md-header-catflyout__rail">
             {% for link in cat_menu.links %}
               <button
@@ -52,35 +57,86 @@
                   {{ section.settings.quicklink_topics_label | default: 'Themen' | escape }}
                 </a>
               {% endif %}
+              {% if section.settings.quicklink_industries_url != blank %}
+                <a href="{{ section.settings.quicklink_industries_url }}" class="md-header-catflyout__quicklink">
+                  {{ section.settings.quicklink_industries_label | default: 'Branchen' | escape }}
+                </a>
+              {% endif %}
             </div>
           </div>
 
-          <div class="md-header-catflyout__panel">
-            {% for link in cat_menu.links %}
-              <div class="md-header-catflyout__panel-content" data-cat-index="{{ forloop.index0 }}">
-                <div class="md-header-catflyout__panel-header">
-                  <h3 class="md-header-catflyout__panel-title">{{ link.title | escape }}</h3>
-                  <a href="{{ link.url }}" class="md-header-catflyout__panel-all-link">
-                    Alle anzeigen &rsaquo;
-                  </a>
+          <div class="md-header-catflyout__content">
+            <div class="md-header-catflyout__panel">
+              {% for link in cat_menu.links %}
+                <div class="md-header-catflyout__panel-content" data-cat-index="{{ forloop.index0 }}">
+                  <div class="md-header-catflyout__panel-header">
+                    <h3 class="md-header-catflyout__panel-title">{{ link.title | escape }}</h3>
+                    <a href="{{ link.url }}" class="md-header-catflyout__panel-all-link">
+                      Alle anzeigen &rsaquo;
+                    </a>
+                  </div>
+                  {% if link.links.size > 0 %}
+                    <div class="md-header-catflyout__panel-grid">
+                      {% for childlink in link.links %}
+                        <a href="{{ childlink.url }}" class="md-header-catflyout__panel-link">
+                          {{ childlink.title | escape }}
+                        </a>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    <div class="md-header-catflyout__panel-empty">
+                      <a href="{{ link.url }}" class="md-header-catflyout__panel-link">
+                        Zum Bereich &rsaquo;
+                      </a>
+                    </div>
+                  {% endif %}
                 </div>
-                {% if link.links.size > 0 %}
-                  <div class="md-header-catflyout__panel-grid">
-                    {% for childlink in link.links %}
-                      <a href="{{ childlink.url }}" class="md-header-catflyout__panel-link">
-                        {{ childlink.title | escape }}
+              {% endfor %}
+            </div>
+
+            {% if section.settings.brand_menu != blank %}
+              {% assign brand_menu_handle = section.settings.brand_menu | strip %}
+              {% if linklists[brand_menu_handle].links.size > 0 %}
+                <div class="md-header-catflyout__brands">
+                  <p class="md-header-catflyout__brands-title">Top Marken</p>
+                  <div class="md-header-catflyout__brands-grid">
+                    {% for brand_link in linklists[brand_menu_handle].links %}
+                      <a href="{{ brand_link.url }}" class="md-header-catflyout__brands-link">
+                        {{ brand_link.title | escape }}
                       </a>
                     {% endfor %}
                   </div>
-                {% else %}
-                  <div class="md-header-catflyout__panel-empty">
-                    <p>Keine Unterkategorien vorhanden.</p>
-                    <a href="{{ link.url }}" class="md-header-catflyout__panel-link">Zum Bereich &rsaquo;</a>
-                  </div>
-                {% endif %}
-              </div>
-            {% endfor %}
+                </div>
+              {% endif %}
+            {% endif %}
           </div>
+
+          {% if has_promo %}
+            <div class="md-header-catflyout__promo has-content">
+              {% if section.settings.promo_image != blank %}
+                {% assign promo_alt = section.settings.promo_heading | default: 'Promo' | escape %}
+                {{
+                  section.settings.promo_image
+                  | image_url: width: 520
+                  | image_tag:
+                    class: 'md-header-catflyout__promo-image',
+                    alt: promo_alt,
+                    loading: 'lazy'
+                }}
+              {% endif %}
+              {% if section.settings.promo_heading != blank %}
+                <h4 class="md-header-catflyout__promo-heading">{{ section.settings.promo_heading | escape }}</h4>
+              {% endif %}
+              {% if section.settings.promo_text != blank %}
+                <p class="md-header-catflyout__promo-text">{{ section.settings.promo_text | escape }}</p>
+              {% endif %}
+              {% if section.settings.promo_link != blank and section.settings.promo_link_label != blank %}
+                <a href="{{ section.settings.promo_link }}" class="md-header-catflyout__promo-link">
+                  {{ section.settings.promo_link_label | escape }}
+                </a>
+              {% endif %}
+            </div>
+          {% endif %}
         </div>
       {% endif %}
     </div>
