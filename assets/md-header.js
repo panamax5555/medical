@@ -169,16 +169,28 @@
     this.drawer.classList.remove('is-open');
 
     var self = this;
-    var onTransitionEnd = function () {
+    var didFinish = false;
+    var fallbackTimer = null;
+
+    function finishClose() {
+      if (didFinish) return;
+      didFinish = true;
+      if (fallbackTimer) clearTimeout(fallbackTimer);
+      self.drawerPanel.removeEventListener('transitionend', onTransitionEnd);
       self.drawer.classList.remove('is-closing');
       document.body.style.overflow = '';
       if (self.previousActiveElement && self.previousActiveElement.focus) {
         self.previousActiveElement.focus();
         self.previousActiveElement = null;
       }
-      self.drawerPanel.removeEventListener('transitionend', onTransitionEnd);
-    };
-    this.drawerPanel.addEventListener('transitionend', onTransitionEnd);
+    }
+
+    function onTransitionEnd() {
+      finishClose();
+    }
+
+    self.drawerPanel.addEventListener('transitionend', onTransitionEnd);
+    fallbackTimer = setTimeout(finishClose, 350);
   };
 
   MDHeader.prototype.openDrilldown = function (target) {

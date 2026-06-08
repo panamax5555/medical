@@ -121,6 +121,20 @@
             {% endif %}
           </div>
 
+          {% if section.settings.drawer_info_menu != blank %}
+            {% assign info_menu_handle = section.settings.drawer_info_menu | strip %}
+            {% if linklists[info_menu_handle].links.size > 0 %}
+              <div class="md-header-drawer__info">
+                <p class="md-header-drawer__info-title">{{ section.settings.drawer_info_title | default: 'Kontakt & Informationen' | escape }}</p>
+                {% for info_link in linklists[info_menu_handle].links %}
+                  <a href="{{ info_link.url }}" class="md-header-drawer__info-link">
+                    {{ info_link.title | escape }}
+                  </a>
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endif %}
+
           <div class="md-header-drawer__footer">
             {% if shop.customer_accounts_enabled %}
               <a
@@ -331,6 +345,22 @@
     },
     {
       "type": "header",
+      "content": "Drawer Info-Menü"
+    },
+    {
+      "type": "text",
+      "id": "drawer_info_title",
+      "default": "Kontakt & Informationen",
+      "label": "Info-Block Titel"
+    },
+    {
+      "type": "text",
+      "id": "drawer_info_menu",
+      "label": "Info-Menü-Handle",
+      "info": "Handle eines Shopify-Menüs, z. B. kontakt-informationen"
+    },
+    {
+      "type": "header",
       "content": "Flyout-Quicklinks"
     },
     {
@@ -464,6 +494,8 @@
         "show_service_link": true,
         "service_label": "Service",
         "service_link": "",
+        "drawer_info_title": "Kontakt & Informationen",
+        "drawer_info_menu": "",
         "quicklink_brands_label": "Marken",
         "quicklink_brands_url": "",
         "quicklink_sale_label": "Sale",
