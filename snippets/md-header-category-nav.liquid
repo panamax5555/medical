@@ -77,7 +77,8 @@
                   </div>
                   {% if link.links.size > 0 %}
                     <div class="md-header-catflyout__panel-grid">
-                      {% for childlink in link.links %}
+                      {% assign sorted_childlinks = link.links | sort: 'title' %}
+                      {% for childlink in sorted_childlinks %}
                         {% assign child_title = childlink.title | downcase %}
                         {% capture child_icon %}
                           {% if child_title contains 'handschuh' or child_title contains 'nitril' or child_title contains 'latex' or child_title contains 'vinyl' or child_title contains 'pe' %}

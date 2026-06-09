@@ -1,32 +1,46 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
-  "name": "t:sections.footer.name",
+  "name": "Footer",
   "type": "footer",
   "sections": {
     "footer": {
       "type": "footer",
-      "disabled": true,
+      "disabled": false,
       "settings": {
-        "color_scheme": "scheme-1",
-        "newsletter_enable": true,
-        "newsletter_heading": "Subscribe to our emails",
-        "enable_follow_on_shop": true,
-        "show_social": true,
-        "enable_country_selector": true,
-        "enable_language_selector": true,
-        "payment_enable": true,
-        "show_policy": true,
-        "margin_top": 0,
-        "padding_top": 36,
-        "padding_bottom": 36
+        "show_trustbar": true,
+        "trust_item_1_title": "Präqualifizierter Anbieter",
+        "trust_item_1_text": "Für Pflegehilfsmittel und Versorgungslösungen qualifiziert",
+        "trust_1_icon": "shield",
+        "trust_1_custom_icon": "",
+        "trust_item_2_title": "Google Bewertungen",
+        "trust_item_2_text": "Von Kunden bei Google bewertet",
+        "trust_2_icon": "star",
+        "trust_2_custom_icon": "",
+        "trust_item_3_title": "Schneller Versand",
+        "trust_item_3_text": "Versand mit UPS, Großmengen nach Absprache",
+        "trust_3_icon": "truck",
+        "trust_3_custom_icon": "",
+        "trust_item_4_title": "Persönlicher B2B-Service",
+        "trust_item_4_text": "Direktkontakt für Praxen, Pflege, Gewerbe und Wiederverkäufer",
+        "trust_4_icon": "user",
+        "trust_4_custom_icon": "",
+        "show_logo": true,
+        "company_description": "Ihr Partner für Hygieneartikel, Pflegebedarf und gewerbliche Versorgung.",
+        "company_address": "Kieler Straße 407, 22525 Hamburg",
+        "company_email": "info@medical-deal.de",
+        "company_phone": "+49 176 72042448",
+        "heading_assortment": "Sortiment",
+        "menu_assortment": "",
+        "heading_service": "Service",
+        "menu_service": "",
+        "heading_company": "Unternehmen",
+        "menu_company": "",
+        "heading_legal": "Rechtliches",
+        "menu_legal": "",
+        "show_payment_icons": true,
+        "show_shipping_text": false,
+        "shipping_text": "",
+        "show_legal_disclaimer": false,
+        "legal_disclaimer_text": ""
       }
     }
   },

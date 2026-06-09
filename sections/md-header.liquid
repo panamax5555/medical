@@ -175,11 +175,6 @@
                 </button>
                 <p class="md-header-drawer__level-title">{{ link.title | escape }}</p>
                 <ul class="md-header-drawer__nav-list" role="list">
-                  <li class="md-header-drawer__nav-item">
-                    <a href="{{ link.url }}" class="md-header-drawer__nav-link md-header-drawer__nav-link--strong">
-                      Alle anzeigen
-                    </a>
-                  </li>
                   {% for childlink in link.links %}
                     <li class="md-header-drawer__nav-item">
                       <a
@@ -191,6 +186,11 @@
                       </a>
                     </li>
                   {% endfor %}
+                  <li class="md-header-drawer__nav-item">
+                    <a href="{{ link.url }}" class="md-header-drawer__nav-link md-header-drawer__nav-link--strong">
+                      Alle anzeigen
+                    </a>
+                  </li>
                 </ul>
               </div>
             {% endif %}
