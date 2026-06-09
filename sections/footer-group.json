@@ -2,11 +2,11 @@
   "name": "Footer",
   "type": "footer",
   "sections": {
-    "footer": {
-      "type": "footer",
+    "md-trustbar": {
+      "type": "md-trustbar",
       "disabled": false,
       "settings": {
-        "show_trustbar": true,
+        "color_scheme": "scheme-1",
         "trust_item_1_title": "Präqualifizierter Anbieter",
         "trust_item_1_text": "Für Pflegehilfsmittel und Versorgungslösungen qualifiziert",
         "trust_1_icon": "shield",
@@ -22,7 +22,14 @@
         "trust_item_4_title": "Persönlicher B2B-Service",
         "trust_item_4_text": "Direktkontakt für Praxen, Pflege, Gewerbe und Wiederverkäufer",
         "trust_4_icon": "user",
-        "trust_4_custom_icon": "",
+        "trust_4_custom_icon": ""
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "disabled": false,
+      "settings": {
+        "color_scheme": "scheme-3",
         "show_logo": true,
         "company_description": "Ihr Partner für Hygieneartikel, Pflegebedarf und gewerbliche Versorgung.",
         "company_address": "Kieler Straße 407, 22525 Hamburg",
@@ -45,6 +52,7 @@
     }
   },
   "order": [
+    "md-trustbar",
     "footer"
   ]
 }

@@ -1,41 +1,6 @@
 {{ 'md-footer.css' | asset_url | stylesheet_tag }}
 
-<footer class="md-footer-section">
-  {% if section.settings.show_trustbar %}
-    {% assign trust_items = '1,2,3,4' | split: ',' %}
-    <div class="md-footer-trust">
-      <div class="md-footer-trust__inner">
-        {% for t in trust_items %}
-          {% assign t_icon_key = 'trust_' | append: t | append: '_icon' %}
-          {% assign t_custom_icon_key = 'trust_' | append: t | append: '_custom_icon' %}
-          {% assign t_title_key = 'trust_item_' | append: t | append: '_title' %}
-          {% assign t_text_key = 'trust_item_' | append: t | append: '_text' %}
-          <div class="md-footer-trust__item">
-            <div class="md-footer-trust__icon">
-              {% if section.settings[t_custom_icon_key] != blank %}
-                {% assign trust_img_alt = section.settings[t_title_key] | escape %}
-                {{
-                  section.settings[t_custom_icon_key]
-                  | image_url: width: 96
-                  | image_tag:
-                    class: 'md-footer-trust__custom-icon',
-                    width: 48,
-                    height: 48,
-                    alt: trust_img_alt,
-                    loading: 'lazy'
-                }}
-              {% else %}
-                {% render 'md-footer-icon', icon: section.settings[t_icon_key] %}
-              {% endif %}
-            </div>
-            <p class="md-footer-trust__title">{{ section.settings[t_title_key] | escape }}</p>
-            <p class="md-footer-trust__text">{{ section.settings[t_text_key] | escape }}</p>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
-  {% endif %}
-
+<footer class="md-footer-section color-{{ section.settings.color_scheme }} gradient">
   <div class="md-footer-main">
     <div class="md-footer-main__inner">
       <div class="md-footer-grid">
@@ -81,7 +46,7 @@
           {% assign menu_links = linklists[menu_handle].links %}
 
           <div class="md-footer-col">
-            <details>
+            <details open>
               <summary>{{ section.settings[heading_key] | escape }}</summary>
               <ul class="md-footer-col__list md-footer-col__list--accordion" role="list">
                 {% if menu_links.size > 0 %}
@@ -165,162 +130,10 @@
   "max_blocks": 6,
   "settings": [
     {
-      "type": "header",
-      "content": "Trust-Bar"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_trustbar",
-      "default": true,
-      "label": "Trust-Bar anzeigen"
-    },
-    {
-      "type": "header",
-      "content": "Trust Item 1"
-    },
-    {
-      "type": "text",
-      "id": "trust_item_1_title",
-      "default": "Präqualifizierter Anbieter",
-      "label": "Titel"
-    },
-    {
-      "type": "text",
-      "id": "trust_item_1_text",
-      "default": "Für Pflegehilfsmittel und Versorgungslösungen qualifiziert",
-      "label": "Text"
-    },
-    {
-      "type": "select",
-      "id": "trust_1_icon",
-      "label": "Icon",
-      "options": [
-        { "value": "shield", "label": "Schild / Sicherheit" },
-        { "value": "star", "label": "Stern / Bewertung" },
-        { "value": "truck", "label": "LKW / Versand" },
-        { "value": "user", "label": "Person / Service" },
-        { "value": "check", "label": "Haken / Geprüft" },
-        { "value": "google", "label": "Google" },
-        { "value": "certificate", "label": "Zertifikat" }
-      ],
-      "default": "shield"
-    },
-    {
-      "type": "image_picker",
-      "id": "trust_1_custom_icon",
-      "label": "Eigenes Icon-Bild (optional)",
-      "info": "Überschreibt das Icon-Auswahlfeld."
-    },
-    {
-      "type": "header",
-      "content": "Trust Item 2"
-    },
-    {
-      "type": "text",
-      "id": "trust_item_2_title",
-      "default": "Google Bewertungen",
-      "label": "Titel"
-    },
-    {
-      "type": "text",
-      "id": "trust_item_2_text",
-      "default": "Von Kunden bei Google bewertet",
-      "label": "Text"
-    },
-    {
-      "type": "select",
-      "id": "trust_2_icon",
-      "label": "Icon",
-      "options": [
-        { "value": "shield", "label": "Schild / Sicherheit" },
-        { "value": "star", "label": "Stern / Bewertung" },
-        { "value": "truck", "label": "LKW / Versand" },
-        { "value": "user", "label": "Person / Service" },
-        { "value": "check", "label": "Haken / Geprüft" },
-        { "value": "google", "label": "Google" },
-        { "value": "certificate", "label": "Zertifikat" }
-      ],
-      "default": "star"
-    },
-    {
-      "type": "image_picker",
-      "id": "trust_2_custom_icon",
-      "label": "Eigenes Icon-Bild (optional)",
-      "info": "Überschreibt das Icon-Auswahlfeld."
-    },
-    {
-      "type": "header",
-      "content": "Trust Item 3"
-    },
-    {
-      "type": "text",
-      "id": "trust_item_3_title",
-      "default": "Schneller Versand",
-      "label": "Titel"
-    },
-    {
-      "type": "text",
-      "id": "trust_item_3_text",
-      "default": "Versand mit UPS, Großmengen nach Absprache",
-      "label": "Text"
-    },
-    {
-      "type": "select",
-      "id": "trust_3_icon",
-      "label": "Icon",
-      "options": [
-        { "value": "shield", "label": "Schild / Sicherheit" },
-        { "value": "star", "label": "Stern / Bewertung" },
-        { "value": "truck", "label": "LKW / Versand" },
-        { "value": "user", "label": "Person / Service" },
-        { "value": "check", "label": "Haken / Geprüft" },
-        { "value": "google", "label": "Google" },
-        { "value": "certificate", "label": "Zertifikat" }
-      ],
-      "default": "truck"
-    },
-    {
-      "type": "image_picker",
-      "id": "trust_3_custom_icon",
-      "label": "Eigenes Icon-Bild (optional)",
-      "info": "Überschreibt das Icon-Auswahlfeld."
-    },
-    {
-      "type": "header",
-      "content": "Trust Item 4"
-    },
-    {
-      "type": "text",
-      "id": "trust_item_4_title",
-      "default": "Persönlicher B2B-Service",
-      "label": "Titel"
-    },
-    {
-      "type": "text",
-      "id": "trust_item_4_text",
-      "default": "Direktkontakt für Praxen, Pflege, Gewerbe und Wiederverkäufer",
-      "label": "Text"
-    },
-    {
-      "type": "select",
-      "id": "trust_4_icon",
-      "label": "Icon",
-      "options": [
-        { "value": "shield", "label": "Schild / Sicherheit" },
-        { "value": "star", "label": "Stern / Bewertung" },
-        { "value": "truck", "label": "LKW / Versand" },
-        { "value": "user", "label": "Person / Service" },
-        { "value": "check", "label": "Haken / Geprüft" },
-        { "value": "google", "label": "Google" },
-        { "value": "certificate", "label": "Zertifikat" }
-      ],
-      "default": "user"
-    },
-    {
-      "type": "image_picker",
-      "id": "trust_4_custom_icon",
-      "label": "Eigenes Icon-Bild (optional)",
-      "info": "Überschreibt das Icon-Auswahlfeld."
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Farbschema",
+      "default": "scheme-3"
     },
     {
       "type": "header",
@@ -464,23 +277,7 @@
     {
       "name": "Medical-Deal Footer",
       "settings": {
-        "show_trustbar": true,
-        "trust_item_1_title": "Präqualifizierter Anbieter",
-        "trust_item_1_text": "Für Pflegehilfsmittel und Versorgungslösungen qualifiziert",
-        "trust_1_icon": "shield",
-        "trust_1_custom_icon": "",
-        "trust_item_2_title": "Google Bewertungen",
-        "trust_item_2_text": "Von Kunden bei Google bewertet",
-        "trust_2_icon": "star",
-        "trust_2_custom_icon": "",
-        "trust_item_3_title": "Schneller Versand",
-        "trust_item_3_text": "Versand mit UPS, Großmengen nach Absprache",
-        "trust_3_icon": "truck",
-        "trust_3_custom_icon": "",
-        "trust_item_4_title": "Persönlicher B2B-Service",
-        "trust_item_4_text": "Direktkontakt für Praxen, Pflege, Gewerbe und Wiederverkäufer",
-        "trust_4_icon": "user",
-        "trust_4_custom_icon": "",
+        "color_scheme": "scheme-3",
         "show_logo": true,
         "company_description": "Ihr Partner für Hygieneartikel, Pflegebedarf und gewerbliche Versorgung.",
         "company_address": "Kieler Straße 407, 22525 Hamburg",

@@ -1,81 +1,21 @@
 /* ==========================================================================
    Medical-Deal Custom Footer Styles
    Prefix: md-footer-
-   Reuses :root brand tokens from md-header.css
+   Uses Shopify color_scheme tokens
    ========================================================================== */
+
+.md-footer-section {
+  background: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+  margin-top: 0;
+}
 
 /* Section Variables
    ========================================================================== */
 .md-footer-section {
-  --md-footer-bg: var(--md-header-brand-navy);
-  --md-footer-text: #ffffff;
-  --md-footer-text-muted: rgba(255, 255, 255, 0.65);
-  --md-footer-border: rgba(255, 255, 255, 0.08);
-  --md-footer-link-hover: var(--md-header-brand-ice);
-  --md-footer-trust-bg: var(--md-header-brand-ice);
-  --md-footer-trust-text: var(--md-header-brand-charcoal);
-  --md-footer-bottom-bg: rgba(0, 0, 0, 0.15);
-}
-
-.md-footer-section {
-  background: var(--md-footer-bg);
-  color: var(--md-footer-text);
-  margin-top: 0;
-}
-
-/* Trust Bar
-   ========================================================================== */
-.md-footer-trust {
-  background: var(--md-footer-trust-bg);
-  color: var(--md-footer-trust-text);
-  padding: 4rem 2rem;
-}
-
-.md-footer-trust__inner {
-  max-width: var(--md-header-max-width);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
-}
-
-.md-footer-trust__item {
-  text-align: center;
-  padding: 0 1rem;
-}
-
-.md-footer-trust__icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 4.8rem;
-  height: 4.8rem;
-  margin: 0 auto var(--md-header-space-lg);
-  color: var(--md-header-brand-petrol);
-}
-
-.md-footer-trust__icon svg {
-  width: 3.2rem;
-  height: 3.2rem;
-}
-
-.md-footer-trust__custom-icon {
-  width: 4.8rem;
-  height: 4.8rem;
-  object-fit: contain;
-}
-
-.md-footer-trust__title {
-  font-size: var(--md-header-font-md);
-  font-weight: var(--md-header-weight-bold);
-  margin: 0 0 var(--md-header-space-xs);
-}
-
-.md-footer-trust__text {
-  font-size: var(--md-header-font-sm);
-  color: var(--md-header-text-muted);
-  margin: 0;
-  line-height: 1.5;
+  --md-footer-text-muted: rgba(var(--color-foreground), 0.72);
+  --md-footer-border: rgba(var(--color-foreground), 0.12);
+  --md-footer-bottom-bg: rgba(var(--color-foreground), 0.06);
 }
 
 /* Main Footer Layout
@@ -102,7 +42,7 @@
   font-weight: var(--md-header-weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--md-footer-link-hover);
+  color: rgba(var(--color-foreground), 0.85);
   margin: 0 0 1.4rem;
 }
 
@@ -126,7 +66,7 @@
 
 .md-footer-col__link:hover,
 .md-footer-col__link:focus {
-  color: var(--md-footer-link-hover);
+  color: rgb(var(--color-foreground));
   text-decoration: underline;
 }
 
@@ -160,7 +100,7 @@
 }
 
 .md-footer-brand__contact a:hover {
-  color: var(--md-footer-link-hover);
+  color: rgb(var(--color-foreground));
 }
 
 /* Bottom Bar
@@ -246,7 +186,7 @@
   font-weight: var(--md-header-weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--md-footer-link-hover);
+  color: rgba(var(--color-foreground), 0.85);
   cursor: pointer;
   list-style: none;
   user-select: none;
@@ -293,11 +233,6 @@
 /* Responsive
    ========================================================================== */
 @media screen and (max-width: 989px) {
-  .md-footer-trust__inner {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-  }
-
   .md-footer-main {
     padding: 3rem 2rem 2rem;
   }
@@ -323,30 +258,6 @@
 }
 
 @media screen and (max-width: 749px) {
-  .md-footer-trust {
-    padding: 2.5rem 1.5rem;
-  }
-
-  .md-footer-trust__inner {
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-  }
-
-  .md-footer-trust__icon {
-    width: 4rem;
-    height: 4rem;
-  }
-
-  .md-footer-trust__icon svg {
-    width: 2.6rem;
-    height: 2.6rem;
-  }
-
-  .md-footer-trust__custom-icon {
-    width: 4rem;
-    height: 4rem;
-  }
-
   .md-footer-main {
     padding: 2rem 1.5rem 1.5rem;
   }
