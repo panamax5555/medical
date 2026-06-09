@@ -11,7 +11,7 @@
 }
 
 .md-trustbar__inner {
-  max-width: var(--md-header-max-width);
+  max-width: var(--md-header-max-width, var(--page-width, 1400px));
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -29,7 +29,7 @@
   justify-content: center;
   width: 4.8rem;
   height: 4.8rem;
-  margin: 0 auto var(--md-header-space-lg);
+  margin: 0 auto var(--md-header-space-lg, 1rem);
   color: rgb(var(--color-button));
 }
 
@@ -45,13 +45,13 @@
 }
 
 .md-trustbar__title {
-  font-size: var(--md-header-font-md);
-  font-weight: var(--md-header-weight-bold);
-  margin: 0 0 var(--md-header-space-xs);
+  font-size: var(--md-header-font-md, 1.4rem);
+  font-weight: var(--md-header-weight-bold, 700);
+  margin: 0 0 var(--md-header-space-xs, 0.4rem);
 }
 
 .md-trustbar__text {
-  font-size: var(--md-header-font-sm);
+  font-size: var(--md-header-font-sm, 1.2rem);
   opacity: 0.72;
   margin: 0;
   line-height: 1.5;

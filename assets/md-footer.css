@@ -25,7 +25,7 @@
 }
 
 .md-footer-main__inner {
-  max-width: var(--md-header-max-width);
+  max-width: var(--md-header-max-width, var(--page-width, 1400px));
   margin: 0 auto;
 }
 
@@ -37,15 +37,6 @@
 
 /* Footer Column
    ========================================================================== */
-.md-footer-col__heading {
-  font-size: var(--md-header-font-sm);
-  font-weight: var(--md-header-weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: rgba(var(--color-foreground), 0.85);
-  margin: 0 0 1.4rem;
-}
-
 .md-footer-col__list {
   list-style: none;
   margin: 0;
@@ -57,10 +48,10 @@
 
 .md-footer-col__link {
   display: inline-block;
-  font-size: var(--md-header-font-md);
+  font-size: var(--md-header-font-md, 1.4rem);
   color: var(--md-footer-text-muted);
   text-decoration: none;
-  padding: var(--md-header-space-xs) 0;
+  padding: var(--md-header-space-xs, 0.4rem) 0;
   transition: color 0.15s;
 }
 
@@ -80,14 +71,14 @@
 }
 
 .md-footer-brand__text {
-  font-size: var(--md-header-font-md);
+  font-size: var(--md-header-font-md, 1.4rem);
   color: var(--md-footer-text-muted);
   line-height: 1.6;
   margin: 0 0 1.6rem;
 }
 
 .md-footer-brand__contact {
-  font-size: var(--md-header-font-base);
+  font-size: var(--md-header-font-base, 1.3rem);
   color: var(--md-footer-text-muted);
   line-height: 1.8;
   margin: 0;
@@ -112,7 +103,7 @@
 }
 
 .md-footer-bottom__inner {
-  max-width: var(--md-header-max-width);
+  max-width: var(--md-header-max-width, var(--page-width, 1400px));
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -144,7 +135,7 @@
 }
 
 .md-footer-bottom__shipping {
-  font-size: var(--md-header-font-sm);
+  font-size: var(--md-header-font-sm, 1.2rem);
   color: var(--md-footer-text-muted);
   margin: 0;
 }
@@ -154,17 +145,17 @@
 }
 
 .md-footer-bottom__legal {
-  font-size: var(--md-header-font-xs);
+  font-size: var(--md-header-font-xs, 1.1rem);
   color: var(--md-footer-text-muted);
   line-height: 1.5;
-  margin: 0 0 var(--md-header-space-xs);
+  margin: 0 0 var(--md-header-space-xs, 0.4rem);
   max-width: 56rem;
 }
 
 .md-footer-bottom__copyright {
-  font-size: var(--md-header-font-sm);
+  font-size: var(--md-header-font-sm, 1.2rem);
   color: var(--md-footer-text-muted);
-  margin: var(--md-header-space-sm) 0 0;
+  margin: var(--md-header-space-sm, 0.6rem) 0 0;
 }
 
 /* Mobile Accordion
@@ -182,8 +173,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.4rem 0;
-  font-size: var(--md-header-font-md);
-  font-weight: var(--md-header-weight-bold);
+  font-size: var(--md-header-font-md, 1.4rem);
+  font-weight: var(--md-header-weight-bold, 700);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: rgba(var(--color-foreground), 0.85);

@@ -6,19 +6,33 @@
       <div class="md-footer-grid">
 
         <div class="md-footer-col">
-          {% if section.settings.show_logo and settings.logo != blank %}
-            {% assign logo_alt = settings.logo.alt | default: shop.name | escape %}
-            {% assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio %}
-            {{
-              settings.logo
-              | image_url: width: 320
-              | image_tag:
-                class: 'md-footer-brand__logo',
-                width: settings.logo_width,
-                height: logo_height,
-                alt: logo_alt,
-                loading: 'lazy'
-            }}
+          {% if section.settings.show_logo %}
+            {% if section.settings.footer_logo != blank %}
+              {% assign flogo_alt = section.settings.footer_logo.alt | default: shop.name | escape %}
+              {{
+                section.settings.footer_logo
+                | image_url: width: 320
+                | image_tag:
+                  class: 'md-footer-brand__logo',
+                  width: section.settings.footer_logo.width,
+                  height: section.settings.footer_logo.height,
+                  alt: flogo_alt,
+                  loading: 'lazy'
+              }}
+            {% elsif settings.logo != blank %}
+              {% assign logo_alt = settings.logo.alt | default: shop.name | escape %}
+              {% assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio %}
+              {{
+                settings.logo
+                | image_url: width: 320
+                | image_tag:
+                  class: 'md-footer-brand__logo',
+                  width: settings.logo_width,
+                  height: logo_height,
+                  alt: logo_alt,
+                  loading: 'lazy'
+              }}
+            {% endif %}
           {% endif %}
           {% if section.settings.company_description != blank %}
             <p class="md-footer-brand__text">{{ section.settings.company_description | escape }}</p>
@@ -127,7 +141,6 @@
 {
   "name": "Medical-Deal Footer",
   "class": "md-footer-section-wrapper",
-  "max_blocks": 6,
   "settings": [
     {
       "type": "color_scheme",
@@ -144,6 +157,12 @@
       "id": "show_logo",
       "default": true,
       "label": "Logo anzeigen"
+    },
+    {
+      "type": "image_picker",
+      "id": "footer_logo",
+      "label": "Footer Logo",
+      "info": "Eigenes Logo für den Footer. Falls leer, wird das globale Shop-Logo verwendet."
     },
     {
       "type": "text",
@@ -268,17 +287,13 @@
       "label": "Rechtlicher Hinweis Text"
     }
   ],
-  "blocks": [
-    {
-      "type": "@app"
-    }
-  ],
   "presets": [
     {
       "name": "Medical-Deal Footer",
       "settings": {
         "color_scheme": "scheme-3",
         "show_logo": true,
+        "footer_logo": "",
         "company_description": "Ihr Partner für Hygieneartikel, Pflegebedarf und gewerbliche Versorgung.",
         "company_address": "Kieler Straße 407, 22525 Hamburg",
         "company_email": "info@medical-deal.de",
