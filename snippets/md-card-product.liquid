@@ -1,0 +1,177 @@
+{% comment %}
+  Renders a Hygi-style product card for collections
+
+  Accepts:
+  - card_product: {Object} Product Liquid object
+  - lazy_load: {Boolean} Lazy load image (default: true)
+  - show_vendor: {Boolean} Show vendor (default: false)
+  - show_rating: {Boolean} Show rating (default: false)
+  - show_inventory: {Boolean} Show inventory status (default: false)
+  - show_unit_price: {Boolean} Show unit price / base price (default: false)
+  - show_variant_hint: {Boolean} Show variant count hint (default: false)
+  - section_id: {String} Section ID for unique IDs
+
+  Usage:
+  {% render 'md-card-product',
+    card_product: product,
+    show_vendor: section.settings.show_vendor,
+    show_rating: section.settings.show_rating,
+    show_inventory: section.settings.show_inventory,
+    show_unit_price: section.settings.show_unit_price,
+    show_variant_hint: section.settings.show_variant_hint,
+    lazy_load: lazy_load,
+    section_id: section.id
+  %}
+{% endcomment %}
+
+{%- if card_product and card_product != empty -%}
+  {%- liquid
+    assign featured_media = card_product.featured_media
+    assign product_url = card_product.url
+    assign current_variant = card_product.selected_or_first_available_variant
+    assign compare_at_price = current_variant.compare_at_price
+    assign price = current_variant.price
+    assign available = current_variant.available
+    assign money_price = price | money
+    assign money_compare_at_price = compare_at_price | money
+    if settings.currency_code_enabled
+      assign money_price = price | money_with_currency
+      assign money_compare_at_price = compare_at_price | money_with_currency
+    endif
+    assign on_sale = false
+    if compare_at_price > price and available
+      assign on_sale = true
+    endif
+    assign variant_count = card_product.variants_count
+  -%}
+
+  <div class="md-card-product">
+    <div class="md-card-product__inner">
+      {%- if show_variant_hint and variant_count > 1 -%}
+        <div class="md-card-product__watchlist">
+          {% comment %} Reserved for watchlist toggle {% endcomment %}
+        </div>
+      {%- endif -%}
+
+      <a href="{{ product_url }}" class="md-card-product__link" aria-label="{{ card_product.title | escape }}">
+        {%- if featured_media -%}
+          <figure class="md-card-product__figure">
+            <img
+              srcset="
+                {%- if featured_media.width >= 165 -%}{{ featured_media | image_url: width: 165 }} 165w,{%- endif -%}
+                {%- if featured_media.width >= 360 -%}{{ featured_media | image_url: width: 360 }} 360w,{%- endif -%}
+                {%- if featured_media.width >= 533 -%}{{ featured_media | image_url: width: 533 }} 533w,{%- endif -%}
+                {%- if featured_media.width >= 720 -%}{{ featured_media | image_url: width: 720 }} 720w,{%- endif -%}
+                {%- if featured_media.width >= 940 -%}{{ featured_media | image_url: width: 940 }} 940w,{%- endif -%}
+                {{ featured_media | image_url }} {{ featured_media.width }}w
+              "
+              src="{{ featured_media | image_url: width: 360 }}"
+              sizes="(min-width: 990px) calc((100vw - 27vw) / 4), (min-width: 750px) calc(100vw / 3), (min-width: 480px) calc(100vw / 2), 100vw"
+              alt="{{ featured_media.alt | default: card_product.title | escape }}"
+              class="md-card-product__image"
+              width="{{ featured_media.width }}"
+              height="{{ featured_media.height }}"
+              {% if lazy_load %}
+                loading="lazy"
+              {% endif %}
+            >
+          </figure>
+        {%- endif -%}
+
+        <div class="md-card-product__text">
+          {%- if show_vendor and card_product.vendor != blank -%}
+            <span class="md-card-product__vendor">{{ card_product.vendor | escape }}</span>
+          {%- endif -%}
+
+          <h3 class="md-card-product__title">
+            {{- card_product.title | escape -}}
+          </h3>
+
+          {%- if current_variant.title != blank and current_variant.title != 'Default Title' -%}
+            <span class="md-card-product__description">{{ current_variant.title | escape }}</span>
+          {%- endif -%}
+
+          {%- if show_rating -%}
+            {%- if card_product.metafields.reviews.rating.value != blank -%}
+              {%- liquid
+                assign rating_value = card_product.metafields.reviews.rating.value.rating | times: 1.0
+                assign rating_max = card_product.metafields.reviews.rating.value.scale_max | times: 1.0
+                assign rating_count = card_product.metafields.reviews.rating_count | default: 0
+              -%}
+              <div class="md-card-product__rating" aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: rating_value, rating_max: rating_max }}">
+                <span class="md-card-product__rating-stars" aria-hidden="true">
+                  {%- for i in (1..5) -%}
+                    {%- assign half_star = i | minus: 0.5 -%}
+                    {%- if rating_value >= i -%}
+                      <svg class="md-card-product__rating-star" viewBox="0 0 14 14" fill="currentColor"><path d="M7 0l1.66 5.1H14l-4.33 3.15L11.33 14 7 10.85 2.67 14l1.66-5.75L0 5.1h5.34L7 0z"/></svg>
+                    {%- elsif rating_value >= half_star -%}
+                      <svg class="md-card-product__rating-star" viewBox="0 0 14 14" fill="currentColor"><path d="M7 0l1.66 5.1H14L9.67 8.25 11.33 14 7 10.85V0z"/></svg>
+                    {%- else -%}
+                      <svg class="md-card-product__rating-star" viewBox="0 0 14 14" fill="currentColor" opacity="0.25"><path d="M7 0l1.66 5.1H14l-4.33 3.15L11.33 14 7 10.85 2.67 14l1.66-5.75L0 5.1h5.34L7 0z"/></svg>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </span>
+                {%- if rating_count > 0 -%}
+                  <span aria-hidden="true">({{ rating_count }})</span>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+
+          <div class="md-card-product__prices">
+            {%- if on_sale -%}
+              <span class="md-card-product__price-old">{{ money_compare_at_price }}</span>
+            {%- endif -%}
+            <span class="md-card-product__price-current{% if on_sale %} md-card-product__price-current--discount{% endif %}">
+              {{- money_price -}}
+            </span>
+
+            {%- if show_unit_price and current_variant.unit_price_measurement -%}
+              <span class="md-card-product__unit-price">
+                {{- current_variant.unit_price | money }}
+                /
+                {%- if current_variant.unit_price_measurement.reference_value != 1 -%}
+                  {{- current_variant.unit_price_measurement.reference_value -}}
+                {%- endif -%}
+                {{- current_variant.unit_price_measurement.reference_unit -}}
+              </span>
+            {%- endif -%}
+          </div>
+
+          {%- if show_inventory -%}
+            {%- if available -%}
+              <span class="md-card-product__inventory">Auf Lager</span>
+            {%- else -%}
+              <span class="md-card-product__inventory md-card-product__inventory--unavailable">
+                {{- 'products.product.sold_out' | t -}}
+              </span>
+            {%- endif -%}
+          {%- endif -%}
+
+          {%- if show_variant_hint and variant_count > 1 -%}
+            <div class="md-card-product__variant-hint">
+              {{- variant_count }} Packgr&ouml;&szlig;en
+            </div>
+          {%- endif -%}
+        </div>
+      </a>
+    </div>
+  </div>
+{%- else -%}
+  {% comment %} Placeholder card for editor preview {% endcomment %}
+  <div class="md-card-product">
+    <div class="md-card-product__inner">
+      <div class="md-card-product__link" style="cursor: default;">
+        <figure class="md-card-product__figure">
+          {{ 'product-apparel-2' | placeholder_svg_tag: 'md-card-product__image' }}
+        </figure>
+        <div class="md-card-product__text">
+          <h3 class="md-card-product__title">{{ 'onboarding.product_title' | t }}</h3>
+          <div class="md-card-product__prices">
+            <span class="md-card-product__price-current">19,99 €</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
