@@ -513,6 +513,7 @@
   cursor: pointer;
   font-family: var(--font-body-family);
   text-align: left;
+  text-decoration: none;
   transition: background 0.1s, color 0.1s;
 }
 

@@ -83,14 +83,14 @@
       document.addEventListener('click', self._onDocClick);
 
       for (var r = 0; r < self.railLinks.length; r++) {
-        self.railLinks[r].addEventListener('click', function (el) {
+        self.railLinks[r].addEventListener('mouseenter', function (el) {
           return function () {
             var idx = parseInt(el.getAttribute('data-cat-index'), 10);
             if (!isNaN(idx)) self.activateCategory(idx);
           };
         }(self.railLinks[r]));
 
-        self.railLinks[r].addEventListener('mouseenter', function (el) {
+        self.railLinks[r].addEventListener('focus', function (el) {
           return function () {
             var idx = parseInt(el.getAttribute('data-cat-index'), 10);
             if (!isNaN(idx)) self.activateCategory(idx);

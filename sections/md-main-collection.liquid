@@ -33,31 +33,83 @@
       </button>
     {%- endif -%}
 
-    <div class="md-collection-grid{% unless section.settings.show_sidebar %} md-collection-grid--no-sidebar{% endunless %}">
+    {%- assign hide_sidebar = true -%}
+    <div class="md-collection-grid{% unless section.settings.show_sidebar and hide_sidebar == false %} md-collection-grid--no-sidebar{% endunless %}">
       {%- if section.settings.show_sidebar -%}
+        {%- liquid
+          assign sidebar_links = null
+          assign sidebar_heading = section.settings.sidebar_heading | default: 'Produktgruppen'
+          if section.settings.sidebar_mode == 'manual'
+            if section.settings.manual_sidebar_menu != blank
+              assign manual_handle = section.settings.manual_sidebar_menu | strip
+              if linklists[manual_handle].links.size > 0
+                assign sidebar_links = linklists[manual_handle].links
+                assign hide_sidebar = false
+              endif
+            endif
+          elsif section.settings.sidebar_mode == 'auto' and section.settings.category_menu != blank
+            assign cat_handle = section.settings.category_menu | strip
+            if linklists[cat_handle].links.size > 0
+              assign found_parent = false
+              assign found_as_child = false
+              for top_link in linklists[cat_handle].links
+                if top_link.current
+                  assign sidebar_links = top_link.links
+                  assign sidebar_heading = top_link.title
+                  assign found_parent = true
+                  break
+                else
+                  for child in top_link.links
+                    if child.current
+                      assign sidebar_links = top_link.links
+                      assign sidebar_heading = top_link.title
+                      assign found_as_child = true
+                      break
+                    endif
+                  endfor
+                  if found_as_child
+                    break
+                  endif
+                endif
+              endfor
+              unless found_parent or found_as_child
+                assign sidebar_links = linklists[cat_handle].links
+              endunless
+              if sidebar_links.size > 0
+                assign hide_sidebar = false
+              endif
+            endif
+          endif
+        -%}
+        {%- unless hide_sidebar -%}
         <aside class="md-collection-sidebar color-{{ section.settings.sidebar_color_scheme }}">
           <div class="md-collection-sidebar__inner">
-            {%- if section.settings.sidebar_menu != blank -%}
-              {% assign menu_handle = section.settings.sidebar_menu | strip %}
-              {% if linklists[menu_handle].links.size > 0 %}
-                <div class="md-collection-sidebar__section">
-                  <h2 class="md-collection-sidebar__heading">{{ section.settings.sidebar_heading | default: 'Produktgruppen' | escape }}</h2>
-                  <ul class="md-collection-sidebar__list" role="list">
-                    {% for link in linklists[menu_handle].links %}
-                      <li>
-                        <a
-                          href="{{ link.url }}"
-                          class="md-collection-sidebar__link{% if link.current %} md-collection-sidebar__link--active{% endif %}"
-                          {% if link.current %}aria-current="page"{% endif %}
-                        >
-                          {{ link.title | escape }}
-                        </a>
-                      </li>
-                    {% endfor %}
-                  </ul>
-                </div>
-              {% endif %}
-            {%- endif -%}
+            <div class="md-collection-sidebar__section">
+              <h2 class="md-collection-sidebar__heading">{{ sidebar_heading | escape }}</h2>
+              <ul class="md-collection-sidebar__list" role="list">
+                {% for link in sidebar_links %}
+                  <li>
+                    <a
+                      href="{{ link.url }}"
+                      class="md-collection-sidebar__link{% if link.current %} md-collection-sidebar__link--active{% endif %}"
+                      {% if link.current %}aria-current="page"{% endif %}
+                    >
+                      {%- if section.settings.show_sidebar_icons -%}
+                        <span class="md-collection-sidebar__link-icon">
+                          {%- render 'md-category-icon', title: link.title -%}
+                        </span>
+                      {%- endif -%}
+                      <span class="md-collection-sidebar__link-text">{{ link.title | escape }}</span>
+                      {%- if section.settings.show_sidebar_arrows and link.links.size > 0 -%}
+                        <span class="md-collection-sidebar__link-arrow">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </span>
+                      {%- endif -%}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
 
             {%- if section.settings.show_sidebar_banner -%}
               {%- if section.settings.sidebar_banner_image != blank -%}
@@ -75,13 +127,13 @@
                       loading: 'lazy'
                   }}
                 </a>
-                {%- else -%}
+                 {%- else -%}
                 <div class="md-collection-sidebar__banner" style="position:relative;">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" class="md-collection-sidebar__banner-image" width="400" height="300" aria-label="Werbebanner Platzhalter" style="display:block;width:100%;height:auto;">
-                    <rect width="400" height="300" fill="#e8f0f2"/>
-                    <rect x="80" y="110" width="240" height="80" rx="4" fill="#1f6f78" opacity="0.15"/>
-                    <text x="200" y="155" text-anchor="middle" fill="#1f6f78" font-family="system-ui, sans-serif" font-size="15" font-weight="500">Werbebanner</text>
-                    <text x="200" y="175" text-anchor="middle" fill="#1f6f78" font-family="system-ui, sans-serif" font-size="11" opacity="0.7">400 × 300 px</text>
+                    <rect width="400" height="300" fill="rgb(var(--color-background))"/>
+                    <rect x="80" y="110" width="240" height="80" rx="4" fill="rgb(var(--color-foreground))" opacity="0.08"/>
+                    <text x="200" y="155" text-anchor="middle" fill="rgb(var(--color-foreground))" font-family="system-ui, sans-serif" font-size="15" font-weight="500" opacity="0.5">Werbebanner</text>
+                    <text x="200" y="175" text-anchor="middle" fill="rgb(var(--color-foreground))" font-family="system-ui, sans-serif" font-size="11" opacity="0.35">400 × 300 px</text>
                   </svg>
                 </div>
                 {%- endif -%}
@@ -104,9 +156,38 @@
             {%- endif -%}
           </div>
         </aside>
+        {%- endunless -%}
       {%- endif -%}
 
       <div class="md-collection-content">
+        {%- if section.settings.show_breadcrumb and section.settings.category_menu != blank -%}
+          {%- liquid
+            assign cat_handle = section.settings.category_menu | strip
+            assign breadcrumb_links = ''
+            if linklists[cat_handle].links.size > 0
+              assign breadcrumb_links = breadcrumb_links | append: '<a href="' | append: routes.root_url | append: '">Startseite</a>'
+              for top_link in linklists[cat_handle].links
+                if top_link.current
+                  assign breadcrumb_links = breadcrumb_links | append: ' / <span aria-current="page">' | append: top_link.title | append: '</span>'
+                  break
+                endif
+                for child in top_link.links
+                  if child.current
+                    assign breadcrumb_links = breadcrumb_links | append: ' / <a href="' | append: top_link.url | append: '">' | append: top_link.title | append: '</a>'
+                    assign breadcrumb_links = breadcrumb_links | append: ' / <span aria-current="page">' | append: child.title | append: '</span>'
+                    break
+                  endif
+                endfor
+              endfor
+            endif
+          -%}
+          {%- if breadcrumb_links != '' -%}
+            <nav class="md-collection-breadcrumb" aria-label="Navigationspfad" style="padding: 0.8rem 0 0; font-size: var(--md-collection-font-xs); color: rgba(var(--color-foreground), 0.55);">
+              {{ breadcrumb_links }}
+            </nav>
+          {%- endif -%}
+        {%- endif -%}
+
         <div class="md-collection-page-header">
           <h1 class="md-collection-page-title">
             {{- collection.title | escape -}}
@@ -655,7 +736,7 @@
                 class="md-collection-products"
                 id="product-grid"
                 data-id="{{ section.id }}"
-                style="--md-collection-grid-columns: {{ section.settings.columns_mobile }};"
+                style="--md-collection-columns-mobile: {{ section.settings.columns_mobile }}; --md-collection-columns-tablet: {{ section.settings.columns_tablet }}; --md-collection-columns-desktop: {{ section.settings.columns_desktop }};"
               >
                 {%- for product in collection.products -%}
                   {%- assign lazy_load = true -%}
@@ -744,24 +825,26 @@
       </button>
     </div>
     <div class="md-collection-sidebar-drawer__content">
-      {%- if section.settings.sidebar_menu != blank -%}
-        {% assign menu_handle = section.settings.sidebar_menu | strip %}
-        {% if linklists[menu_handle].links.size > 0 %}
-          <ul class="md-collection-sidebar__list" role="list">
-            {% for link in linklists[menu_handle].links %}
-              <li>
-                <a
-                  href="{{ link.url }}"
-                  class="md-collection-sidebar__link{% if link.current %} md-collection-sidebar__link--active{% endif %}"
-                  {% if link.current %}aria-current="page"{% endif %}
-                >
-                  {{ link.title | escape }}
-                </a>
-              </li>
-            {% endfor %}
-          </ul>
-        {% endif %}
-      {%- endif -%}
+      {%- unless hide_sidebar -%}
+        <ul class="md-collection-sidebar__list" role="list">
+          {% for link in sidebar_links %}
+            <li>
+              <a
+                href="{{ link.url }}"
+                class="md-collection-sidebar__link{% if link.current %} md-collection-sidebar__link--active{% endif %}"
+                {% if link.current %}aria-current="page"{% endif %}
+              >
+                {%- if section.settings.show_sidebar_icons -%}
+                  <span class="md-collection-sidebar__link-icon">
+                    {%- render 'md-category-icon', title: link.title -%}
+                  </span>
+                {%- endif -%}
+                <span class="md-collection-sidebar__link-text">{{ link.title | escape }}</span>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {%- endunless -%}
 
       {%- if section.settings.show_sidebar_banner -%}
         {%- if section.settings.sidebar_banner_image != blank -%}
@@ -783,10 +866,10 @@
         {%- else -%}
         <div class="md-collection-sidebar__banner" style="margin-top:1.6rem;position:relative;">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" class="md-collection-sidebar__banner-image" width="400" height="300" aria-label="Werbebanner Platzhalter" style="display:block;width:100%;height:auto;">
-            <rect width="400" height="300" fill="#e8f0f2"/>
-            <rect x="80" y="110" width="240" height="80" rx="4" fill="#1f6f78" opacity="0.15"/>
-            <text x="200" y="155" text-anchor="middle" fill="#1f6f78" font-family="system-ui, sans-serif" font-size="15" font-weight="500">Werbebanner</text>
-            <text x="200" y="175" text-anchor="middle" fill="#1f6f78" font-family="system-ui, sans-serif" font-size="11" opacity="0.7">400 × 300 px</text>
+            <rect width="400" height="300" fill="rgb(var(--color-background))"/>
+            <rect x="80" y="110" width="240" height="80" rx="4" fill="rgb(var(--color-foreground))" opacity="0.08"/>
+            <text x="200" y="155" text-anchor="middle" fill="rgb(var(--color-foreground))" font-family="system-ui, sans-serif" font-size="15" font-weight="500" opacity="0.5">Werbebanner</text>
+            <text x="200" y="175" text-anchor="middle" fill="rgb(var(--color-foreground))" font-family="system-ui, sans-serif" font-size="11" opacity="0.35">400 × 300 px</text>
           </svg>
         </div>
         {%- endif -%}
@@ -859,10 +942,38 @@
       "default": "Produktgruppen"
     },
     {
+      "type": "select",
+      "id": "sidebar_mode",
+      "label": "Sidebar-Modus",
+      "options": [
+        { "value": "auto", "label": "Automatisch (Kontext aus Kategorie-Menü)" },
+        { "value": "manual", "label": "Manuell" }
+      ],
+      "default": "auto"
+    },
+    {
       "type": "link_list",
-      "id": "sidebar_menu",
-      "label": "Menü für Produktgruppen",
-      "info": "Wähle ein Menü für die linke Sidebar"
+      "id": "category_menu",
+      "label": "Kategorie-Menü für Sidebar-Logik",
+      "info": "Wird für automatische Sidebar + Breadcrumbs verwendet"
+    },
+    {
+      "type": "link_list",
+      "id": "manual_sidebar_menu",
+      "label": "Manuelles Sidebar-Menü",
+      "info": "Wird nur bei Modus 'Manuell' verwendet"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sidebar_icons",
+      "label": "Sidebar-Icons anzeigen",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sidebar_arrows",
+      "label": "Sidebar-Pfeile anzeigen",
+      "default": true
     },
     {
       "type": "text",
@@ -972,6 +1083,16 @@
     },
     {
       "type": "select",
+      "id": "columns_tablet",
+      "label": "Spalten Tablet (750–989px)",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "select",
       "id": "columns_mobile",
       "label": "Spalten Mobile",
       "options": [
@@ -1000,19 +1121,19 @@
       "type": "checkbox",
       "id": "show_inventory",
       "label": "Lagerbestand anzeigen",
-      "default": false
+      "default": true
     },
     {
       "type": "checkbox",
       "id": "show_unit_price",
       "label": "Grundpreis anzeigen",
-      "default": false
+      "default": true
     },
     {
       "type": "checkbox",
       "id": "show_variant_hint",
       "label": "Varianten-Hinweis anzeigen",
-      "default": false,
+      "default": true,
       "info": "Zeigt z.B. '3 Packgrößen'"
     },
     {
