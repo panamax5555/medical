@@ -9,6 +9,8 @@
         "sidebar_heading": "Produktgruppen",
         "sidebar_toggle_label": "Kategorien",
         "sidebar_mode": "auto",
+        "category_menu": "md-header-dev",
+        "manual_sidebar_menu": "",
         "show_sidebar_icons": true,
         "show_sidebar_arrows": true,
         "show_collection_description": true,

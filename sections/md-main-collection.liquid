@@ -18,7 +18,70 @@
 
 <div class="md-collection color-{{ section.settings.color_scheme }} section-{{ section.id }}-padding">
   {%- paginate collection.products by section.settings.products_per_page -%}
-    {%- if section.settings.show_sidebar -%}
+    {%- liquid
+      assign sidebar_links = null
+      assign sidebar_heading = section.settings.sidebar_heading | default: 'Produktgruppen'
+      assign hide_sidebar = true
+      assign breadcrumb_parent_title = null
+      assign breadcrumb_parent_url = null
+      assign breadcrumb_current_title = collection.title
+      assign breadcrumb_is_root = false
+
+      if section.settings.show_sidebar
+        if section.settings.sidebar_mode == 'manual'
+          if section.settings.manual_sidebar_menu != blank
+            assign manual_handle = section.settings.manual_sidebar_menu | strip
+            if linklists[manual_handle].links.size > 0
+              assign sidebar_links = linklists[manual_handle].links
+              assign hide_sidebar = false
+            endif
+          endif
+        elsif section.settings.sidebar_mode == 'auto' and section.settings.category_menu != blank
+          assign cat_handle = section.settings.category_menu | strip
+          if linklists[cat_handle].links.size > 0
+            assign found_parent = false
+            assign found_as_child = false
+            for top_link in linklists[cat_handle].links
+              if top_link.current
+                assign sidebar_links = top_link.links
+                assign sidebar_heading = top_link.title
+                assign found_parent = true
+                assign breadcrumb_is_root = true
+                break
+              else
+                for child in top_link.links
+                  if child.current
+                    assign sidebar_links = top_link.links
+                    assign sidebar_heading = top_link.title
+                    assign found_as_child = true
+                    assign breadcrumb_parent_title = top_link.title
+                    assign breadcrumb_parent_url = top_link.url
+                    assign breadcrumb_current_title = child.title
+                    break
+                  endif
+                endfor
+                if found_as_child
+                  break
+                endif
+              endif
+            endfor
+            unless found_parent or found_as_child
+              assign sidebar_links = linklists[cat_handle].links
+            endunless
+            if sidebar_links.size > 0
+              assign hide_sidebar = false
+            endif
+          endif
+        endif
+      endif
+
+      assign show_mobile_toggle = false
+      if section.settings.show_sidebar and hide_sidebar == false
+        assign show_mobile_toggle = true
+      endif
+    -%}
+
+    {%- if show_mobile_toggle -%}
       <button
         class="md-collection-sidebar-toggle"
         type="button"
@@ -33,55 +96,8 @@
       </button>
     {%- endif -%}
 
-    {%- assign hide_sidebar = true -%}
-    <div class="md-collection-grid{% unless section.settings.show_sidebar and hide_sidebar == false %} md-collection-grid--no-sidebar{% endunless %}">
-      {%- if section.settings.show_sidebar -%}
-        {%- liquid
-          assign sidebar_links = null
-          assign sidebar_heading = section.settings.sidebar_heading | default: 'Produktgruppen'
-          if section.settings.sidebar_mode == 'manual'
-            if section.settings.manual_sidebar_menu != blank
-              assign manual_handle = section.settings.manual_sidebar_menu | strip
-              if linklists[manual_handle].links.size > 0
-                assign sidebar_links = linklists[manual_handle].links
-                assign hide_sidebar = false
-              endif
-            endif
-          elsif section.settings.sidebar_mode == 'auto' and section.settings.category_menu != blank
-            assign cat_handle = section.settings.category_menu | strip
-            if linklists[cat_handle].links.size > 0
-              assign found_parent = false
-              assign found_as_child = false
-              for top_link in linklists[cat_handle].links
-                if top_link.current
-                  assign sidebar_links = top_link.links
-                  assign sidebar_heading = top_link.title
-                  assign found_parent = true
-                  break
-                else
-                  for child in top_link.links
-                    if child.current
-                      assign sidebar_links = top_link.links
-                      assign sidebar_heading = top_link.title
-                      assign found_as_child = true
-                      break
-                    endif
-                  endfor
-                  if found_as_child
-                    break
-                  endif
-                endif
-              endfor
-              unless found_parent or found_as_child
-                assign sidebar_links = linklists[cat_handle].links
-              endunless
-              if sidebar_links.size > 0
-                assign hide_sidebar = false
-              endif
-            endif
-          endif
-        -%}
-        {%- unless hide_sidebar -%}
+    <div class="md-collection-grid{% if hide_sidebar %} md-collection-grid--no-sidebar{% endif %}">
+      {%- unless hide_sidebar -%}
         <aside class="md-collection-sidebar color-{{ section.settings.sidebar_color_scheme }}">
           <div class="md-collection-sidebar__inner">
             <div class="md-collection-sidebar__section">
@@ -127,7 +143,7 @@
                       loading: 'lazy'
                   }}
                 </a>
-                 {%- else -%}
+              {%- else -%}
                 <div class="md-collection-sidebar__banner" style="position:relative;">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" class="md-collection-sidebar__banner-image" width="400" height="300" aria-label="Werbebanner Platzhalter" style="display:block;width:100%;height:auto;">
                     <rect width="400" height="300" fill="rgb(var(--color-background))"/>
@@ -136,7 +152,7 @@
                     <text x="200" y="175" text-anchor="middle" fill="rgb(var(--color-foreground))" font-family="system-ui, sans-serif" font-size="11" opacity="0.35">400 × 300 px</text>
                   </svg>
                 </div>
-                {%- endif -%}
+              {%- endif -%}
             {%- endif -%}
 
             {%- if section.settings.sidebar_links_menu != blank -%}
@@ -156,36 +172,22 @@
             {%- endif -%}
           </div>
         </aside>
-        {%- endunless -%}
-      {%- endif -%}
+      {%- endunless -%}
 
       <div class="md-collection-content">
-        {%- if section.settings.show_breadcrumb and section.settings.category_menu != blank -%}
-          {%- liquid
-            assign cat_handle = section.settings.category_menu | strip
-            assign breadcrumb_links = ''
-            if linklists[cat_handle].links.size > 0
-              assign breadcrumb_links = breadcrumb_links | append: '<a href="' | append: routes.root_url | append: '">Startseite</a>'
-              for top_link in linklists[cat_handle].links
-                if top_link.current
-                  assign breadcrumb_links = breadcrumb_links | append: ' / <span aria-current="page">' | append: top_link.title | append: '</span>'
-                  break
-                endif
-                for child in top_link.links
-                  if child.current
-                    assign breadcrumb_links = breadcrumb_links | append: ' / <a href="' | append: top_link.url | append: '">' | append: top_link.title | append: '</a>'
-                    assign breadcrumb_links = breadcrumb_links | append: ' / <span aria-current="page">' | append: child.title | append: '</span>'
-                    break
-                  endif
-                endfor
-              endfor
-            endif
-          -%}
-          {%- if breadcrumb_links != '' -%}
-            <nav class="md-collection-breadcrumb" aria-label="Navigationspfad" style="padding: 0.8rem 0 0; font-size: var(--md-collection-font-xs); color: rgba(var(--color-foreground), 0.55);">
-              {{ breadcrumb_links }}
-            </nav>
-          {%- endif -%}
+        {%- if section.settings.show_breadcrumb and section.settings.category_menu != blank and breadcrumb_parent_title != null or breadcrumb_is_root -%}
+          <nav class="md-collection-breadcrumb" aria-label="Navigationspfad" style="padding: 0.8rem 0 0; font-size: var(--md-collection-font-xs); color: rgba(var(--color-foreground), 0.55);">
+            <a href="{{ routes.root_url }}" style="color: inherit; text-decoration: none;">Startseite</a>
+            {%- if breadcrumb_parent_title != null -%}
+              <span aria-hidden="true"> / </span>
+              <a href="{{ breadcrumb_parent_url }}" style="color: inherit; text-decoration: none;">{{ breadcrumb_parent_title | escape }}</a>
+              <span aria-hidden="true"> / </span>
+              <span aria-current="page">{{ breadcrumb_current_title | escape }}</span>
+            {%- elsif breadcrumb_is_root -%}
+              <span aria-hidden="true"> / </span>
+              <span aria-current="page">{{ breadcrumb_current_title | escape }}</span>
+            {%- endif -%}
+          </nav>
         {%- endif -%}
 
         <div class="md-collection-page-header">
@@ -803,7 +805,7 @@
   {%- endpaginate -%}
 </div>
 
-{%- if section.settings.show_sidebar -%}
+{%- if show_mobile_toggle -%}
   <div
     id="md-collection-sidebar-overlay"
     class="md-collection-sidebar-drawer__overlay"
@@ -814,7 +816,7 @@
     class="md-collection-sidebar-drawer color-{{ section.settings.sidebar_color_scheme }}"
   >
     <div class="md-collection-sidebar-drawer__header">
-      <h2 class="md-collection-sidebar-drawer__title">{{ section.settings.sidebar_heading | default: 'Produktgruppen' | escape }}</h2>
+      <h2 class="md-collection-sidebar-drawer__title">{{ sidebar_heading | escape }}</h2>
       <button
         class="md-collection-sidebar-drawer__close"
         type="button"

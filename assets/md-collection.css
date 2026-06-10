@@ -9,6 +9,9 @@
   /* Brand tokens referenced from md-header.css (global :root) */
   /* --md-header-brand-petrol, --md-header-brand-navy, --md-header-brand-ice */
 
+  /* Accent link: delegates to global Header Brand petrol */
+  --md-collection-accent: var(--md-header-brand-petrol);
+
   /* Collection-specific tokens */
   --md-collection-max-width: 1400px;
   --md-collection-space-xs: 0.4rem;
@@ -171,21 +174,21 @@
 
 .md-collection-sidebar__link:hover,
 .md-collection-sidebar__link:focus {
-  color: var(--md-header-brand-petrol, #1f6f78);
+  color: var(--md-collection-accent);
 }
 
 .md-collection-sidebar__link:hover .md-collection-sidebar__link-icon,
 .md-collection-sidebar__link:focus .md-collection-sidebar__link-icon {
-  color: var(--md-header-brand-petrol, #1f6f78);
+  color: var(--md-collection-accent);
 }
 
 .md-collection-sidebar__link--active {
   font-weight: 700;
-  color: var(--md-header-brand-petrol, #1f6f78);
+  color: var(--md-collection-accent);
 }
 
 .md-collection-sidebar__link--active .md-collection-sidebar__link-icon {
-  color: var(--md-header-brand-petrol, #1f6f78);
+  color: var(--md-collection-accent);
 }
 
 /* Sidebar banner */
@@ -227,7 +230,7 @@
 }
 
 .md-collection-sidebar__links-link:hover {
-  color: var(--md-header-brand-petrol, #1f6f78);
+  color: var(--md-collection-accent);
   text-decoration: underline;
 }
 
