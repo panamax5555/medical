@@ -358,7 +358,7 @@
                               {% when 'price_range' %}
                                 <details
                                   id="Details-{{ filter.param_name | escape }}-{{ section.id }}"
-                                  class="md-collection-filterbar__group js-filter{% if filter.min_value.value or filter.max_value.value %} md-collection-filterbar__group--has-active{% endif %}"
+                                  class="md-collection-filterbar__group md-collection-filterbar__group--price js-filter{% if filter.min_value.value or filter.max_value.value %} md-collection-filterbar__group--has-active{% endif %}"
                                   data-index="{{ forloop.index }}"
                                 >
                                   <summary class="md-collection-filterbar__summary facets__summary">
@@ -371,41 +371,45 @@
                                   <div id="Facet-{{ forloop.index }}-{{ section.id }}" class="md-collection-filterbar__popover">
                                     <p class="md-collection-filterbar__price-hint">{{ 'products.facets.max_price' | t: price: filter.range_max | money }}</p>
                                     <price-range class="facets__price">
-                                      <span class="field-currency">{{ cart.currency.symbol }}</span>
-                                      <div class="field">
-                                        <input
-                                          class="field__input"
-                                          name="{{ filter.min_value.param_name }}"
-                                          id="Filter-{{ filter.label | escape }}-GTE"
-                                          {%- if filter.min_value.value -%}
-                                            value="{{ filter.min_value.value | divided_by: 100.00 }}"
-                                          {%- endif -%}
-                                          type="number"
-                                          placeholder="0"
-                                          min="0"
-                                          max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
-                                          data-min="0"
-                                          data-max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
-                                        >
-                                        <label class="field__label" for="Filter-{{ filter.label | escape }}-GTE">{{ 'products.facets.from' | t }}</label>
+                                      <div class="md-collection-price-field">
+                                        <span class="field-currency">{{ cart.currency.symbol }}</span>
+                                        <div class="field">
+                                          <input
+                                            class="field__input"
+                                            name="{{ filter.min_value.param_name }}"
+                                            id="Filter-{{ filter.label | escape }}-GTE"
+                                            {%- if filter.min_value.value -%}
+                                              value="{{ filter.min_value.value | divided_by: 100.00 }}"
+                                            {%- endif -%}
+                                            type="number"
+                                            placeholder="0"
+                                            min="0"
+                                            max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
+                                            data-min="0"
+                                            data-max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
+                                          >
+                                          <label class="field__label" for="Filter-{{ filter.label | escape }}-GTE">{{ 'products.facets.from' | t }}</label>
+                                        </div>
                                       </div>
-                                      <span class="field-currency">{{ cart.currency.symbol }}</span>
-                                      <div class="field">
-                                        <input
-                                          class="field__input"
-                                          name="{{ filter.max_value.param_name }}"
-                                          id="Filter-{{ filter.label | escape }}-LTE"
-                                          {%- if filter.max_value.value -%}
-                                            value="{{ filter.max_value.value | divided_by: 100.00 }}"
-                                          {%- endif -%}
-                                          type="number"
-                                          min="0"
-                                          placeholder="{{ filter.range_max | divided_by: 100.00 | ceil }}"
-                                          max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
-                                          data-min="0"
-                                          data-max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
-                                        >
-                                        <label class="field__label" for="Filter-{{ filter.label | escape }}-LTE">{{ 'products.facets.to' | t }}</label>
+                                      <div class="md-collection-price-field">
+                                        <span class="field-currency">{{ cart.currency.symbol }}</span>
+                                        <div class="field">
+                                          <input
+                                            class="field__input"
+                                            name="{{ filter.max_value.param_name }}"
+                                            id="Filter-{{ filter.label | escape }}-LTE"
+                                            {%- if filter.max_value.value -%}
+                                              value="{{ filter.max_value.value | divided_by: 100.00 }}"
+                                            {%- endif -%}
+                                            type="number"
+                                            min="0"
+                                            placeholder="{{ filter.range_max | divided_by: 100.00 | ceil }}"
+                                            max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
+                                            data-min="0"
+                                            data-max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
+                                          >
+                                          <label class="field__label" for="Filter-{{ filter.label | escape }}-LTE">{{ 'products.facets.to' | t }}</label>
+                                        </div>
                                       </div>
                                     </price-range>
                                   </div>
