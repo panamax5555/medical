@@ -355,9 +355,9 @@
                     endif
                   endfor
                 -%}
-                {%- if total_active_values > 0 -%}
-                  <div class="md-collection-toolbar__active">
-                    <div class="active-facets active-facets-desktop">
+                <div class="md-collection-toolbar__active{% if total_active_values == 0 %} is-empty{% endif %}">
+                  <div class="active-facets active-facets-desktop">
+                    {%- if total_active_values > 0 -%}
                       {%- for filter in collection.filters -%}
                         {%- for value in filter.active_values -%}
                           <facet-remove>
@@ -391,9 +391,9 @@
                           <span>{{ 'products.facets.clear_all' | t }}</span>
                         </a>
                       </facet-remove>
-                    </div>
+                    {%- endif -%}
                   </div>
-                {%- endif -%}
+                </div>
               {%- endif -%}
             </div>
 

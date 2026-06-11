@@ -203,8 +203,9 @@ class FacetFiltersForm extends HTMLElement {
 
     activeFacetElementSelectors.forEach((selector) => {
       const activeFacetsElement = html.querySelector(selector);
-      if (!activeFacetsElement) return;
-      document.querySelector(selector).innerHTML = activeFacetsElement.innerHTML;
+      const targetActiveFacetsElement = document.querySelector(selector);
+      if (!activeFacetsElement || !targetActiveFacetsElement) return;
+      targetActiveFacetsElement.innerHTML = activeFacetsElement.innerHTML;
     });
 
     FacetFiltersForm.toggleActiveFacets(false);

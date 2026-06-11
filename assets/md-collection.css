@@ -591,6 +591,10 @@
   padding-top: var(--md-collection-space-sm);
 }
 
+.md-collection-toolbar__active.is-empty {
+  display: none;
+}
+
 .md-collection-toolbar__active .active-facets {
   display: flex;
   flex-wrap: wrap;
