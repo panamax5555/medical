@@ -51,4 +51,39 @@
   document.addEventListener('toggle', handleToggle, true);
   document.addEventListener('click', handleClickOutside);
   document.addEventListener('keydown', handleKeydown);
+
+  function handleMediaNavClick(e) {
+    var button = e.target.closest('[data-md-card-media-prev], [data-md-card-media-next]');
+    if (!button) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    var media = button.closest('[data-md-card-media]');
+    if (!media) return;
+
+    var track = media.querySelector('[data-md-card-media-track]');
+    if (!track) return;
+
+    var direction = button.hasAttribute('data-md-card-media-next') ? 1 : -1;
+    var amount = track.clientWidth;
+    var scrollMax = track.scrollWidth - track.clientWidth;
+
+    if (direction > 0 && track.scrollLeft + amount > scrollMax) {
+      track.scrollTo({ left: 0, behavior: 'smooth' });
+      return;
+    }
+
+    if (direction < 0 && track.scrollLeft - amount < 0) {
+      track.scrollTo({ left: scrollMax, behavior: 'smooth' });
+      return;
+    }
+
+    track.scrollBy({
+      left: direction * amount,
+      behavior: 'smooth'
+    });
+  }
+
+  document.addEventListener('click', handleMediaNavClick);
 })();

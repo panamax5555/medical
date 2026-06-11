@@ -50,6 +50,7 @@
     endif
 
     assign variant_count = card_product.variants_count
+    assign product_images = card_product.images
   -%}
 
   <div class="md-card-product">
@@ -60,31 +61,83 @@
         </div>
       {%- endif -%}
 
-      <a href="{{ product_url }}" class="md-card-product__link" aria-label="{{ card_product.title | escape }}">
-        {%- if featured_media -%}
-          <figure class="md-card-product__figure">
-            <img
-              srcset="
-                {%- if featured_media.width >= 165 -%}{{ featured_media | image_url: width: 165 }} 165w,{%- endif -%}
-                {%- if featured_media.width >= 360 -%}{{ featured_media | image_url: width: 360 }} 360w,{%- endif -%}
-                {%- if featured_media.width >= 533 -%}{{ featured_media | image_url: width: 533 }} 533w,{%- endif -%}
-                {%- if featured_media.width >= 720 -%}{{ featured_media | image_url: width: 720 }} 720w,{%- endif -%}
-                {%- if featured_media.width >= 940 -%}{{ featured_media | image_url: width: 940 }} 940w,{%- endif -%}
-                {{ featured_media | image_url }} {{ featured_media.width }}w
-              "
-              src="{{ featured_media | image_url: width: 360 }}"
-              sizes="(min-width: 990px) calc((100vw - 27vw) / 4), (min-width: 750px) calc(100vw / 3), (min-width: 480px) calc(100vw / 2), 100vw"
-              alt="{{ featured_media.alt | default: card_product.title | escape }}"
-              class="md-card-product__image"
-              width="{{ featured_media.width }}"
-              height="{{ featured_media.height }}"
-              {% if lazy_load %}
-                loading="lazy"
-              {% endif %}
-            >
-          </figure>
-        {%- endif -%}
+      <div class="md-card-product__media" data-md-card-media>
+        <a href="{{ product_url }}" class="md-card-product__media-link" aria-label="{{ card_product.title | escape }}">
+          <div class="md-card-product__media-track" data-md-card-media-track>
+            {%- if product_images.size > 0 -%}
+              {%- for image in product_images limit: 6 -%}
+                {%- assign is_first = false -%}
+                {%- if forloop.first -%}{%- assign is_first = true -%}{%- endif -%}
+                <div class="md-card-product__media-slide" data-md-card-media-slide>
+                  <img
+                    srcset="
+                      {%- if image.width >= 165 -%}{{ image | image_url: width: 165 }} 165w,{%- endif -%}
+                      {%- if image.width >= 360 -%}{{ image | image_url: width: 360 }} 360w,{%- endif -%}
+                      {%- if image.width >= 533 -%}{{ image | image_url: width: 533 }} 533w,{%- endif -%}
+                      {%- if image.width >= 720 -%}{{ image | image_url: width: 720 }} 720w,{%- endif -%}
+                      {%- if image.width >= 940 -%}{{ image | image_url: width: 940 }} 940w,{%- endif -%}
+                      {{ image | image_url }} {{ image.width }}w
+                    "
+                    src="{{ image | image_url: width: 360 }}"
+                    sizes="(min-width: 990px) calc((100vw - 27vw) / 4), (min-width: 750px) calc(100vw / 3), (min-width: 480px) calc(100vw / 2), 100vw"
+                    alt="{{ image.alt | default: card_product.title | escape }}"
+                    class="md-card-product__image"
+                    width="{{ image.width }}"
+                    height="{{ image.height }}"
+                    {%- if lazy_load and is_first == false -%}
+                      loading="lazy"
+                    {%- endif -%}
+                  >
+                </div>
+              {%- endfor -%}
+            {%- elsif featured_media -%}
+              <div class="md-card-product__media-slide" data-md-card-media-slide>
+                <img
+                  srcset="
+                    {%- if featured_media.width >= 165 -%}{{ featured_media | image_url: width: 165 }} 165w,{%- endif -%}
+                    {%- if featured_media.width >= 360 -%}{{ featured_media | image_url: width: 360 }} 360w,{%- endif -%}
+                    {%- if featured_media.width >= 533 -%}{{ featured_media | image_url: width: 533 }} 533w,{%- endif -%}
+                    {%- if featured_media.width >= 720 -%}{{ featured_media | image_url: width: 720 }} 720w,{%- endif -%}
+                    {%- if featured_media.width >= 940 -%}{{ featured_media | image_url: width: 940 }} 940w,{%- endif -%}
+                    {{ featured_media | image_url }} {{ featured_media.width }}w
+                  "
+                  src="{{ featured_media | image_url: width: 360 }}"
+                  sizes="(min-width: 990px) calc((100vw - 27vw) / 4), (min-width: 750px) calc(100vw / 3), (min-width: 480px) calc(100vw / 2), 100vw"
+                  alt="{{ featured_media.alt | default: card_product.title | escape }}"
+                  class="md-card-product__image"
+                  width="{{ featured_media.width }}"
+                  height="{{ featured_media.height }}"
+                >
+              </div>
+            {%- else -%}
+              <div class="md-card-product__media-slide" data-md-card-media-slide>
+                {{ 'product-apparel-2' | placeholder_svg_tag: 'md-card-product__image' }}
+              </div>
+            {%- endif -%}
+          </div>
+        </a>
 
+        {%- if product_images.size > 1 -%}
+          <button
+            type="button"
+            class="md-card-product__media-nav md-card-product__media-nav--prev"
+            aria-label="Vorheriges Produktbild"
+            data-md-card-media-prev
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button
+            type="button"
+            class="md-card-product__media-nav md-card-product__media-nav--next"
+            aria-label="Nächstes Produktbild"
+            data-md-card-media-next
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        {%- endif -%}
+      </div>
+
+      <a href="{{ product_url }}" class="md-card-product__link" aria-label="{{ card_product.title | escape }}">
         <div class="md-card-product__text">
           {%- if show_vendor and card_product.vendor != blank -%}
             <span class="md-card-product__vendor">{{ card_product.vendor | escape }}</span>
@@ -212,10 +265,16 @@
   {% comment %} Placeholder card for editor preview {% endcomment %}
   <div class="md-card-product">
     <div class="md-card-product__inner">
+      <div class="md-card-product__media" data-md-card-media>
+        <div class="md-card-product__media-link" style="cursor: default;">
+          <div class="md-card-product__media-track" data-md-card-media-track>
+            <div class="md-card-product__media-slide" data-md-card-media-slide>
+              {{ 'product-apparel-2' | placeholder_svg_tag: 'md-card-product__image' }}
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="md-card-product__link" style="cursor: default;">
-        <figure class="md-card-product__figure">
-          {{ 'product-apparel-2' | placeholder_svg_tag: 'md-card-product__image' }}
-        </figure>
         <div class="md-card-product__text">
           <h3 class="md-card-product__title">{{ 'onboarding.product_title' | t }}</h3>
           <div class="md-card-product__prices">
