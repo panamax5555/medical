@@ -222,11 +222,14 @@ class FacetFiltersForm extends HTMLElement {
       }
     });
 
-    const mobileForm = document.getElementById('FacetFiltersFormMobile');
-    if (mobileForm) {
+    const mobileFormIds = ['FacetFiltersFormMobile', 'FacetFiltersFormMobileStub'];
+    for (const formId of mobileFormIds) {
+      const mobileForm = document.getElementById(formId);
+      if (!mobileForm) continue;
       const menuDrawer = mobileForm.closest('menu-drawer');
       if (menuDrawer && typeof menuDrawer.bindEvents === 'function') {
         menuDrawer.bindEvents();
+        break;
       }
     }
   }

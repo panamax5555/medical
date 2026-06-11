@@ -456,8 +456,7 @@
    Toolbar: Filter button, Product Count, Sort, Active Chips
    ========================================================================== */
 .md-collection-toolbar {
-  padding: var(--md-collection-space-sm) 0;
-  border-bottom: 1px solid var(--md-collection-border-muted);
+  padding: var(--md-collection-space-sm) 0 0;
   margin-bottom: var(--md-collection-space-lg);
 }
 
@@ -467,6 +466,8 @@
   justify-content: space-between;
   gap: var(--md-collection-space-sm);
   flex-wrap: wrap;
+  padding-bottom: var(--md-collection-space-sm);
+  border-bottom: 1px solid var(--md-collection-border-muted);
 }
 
 .md-collection-toolbar__left {
@@ -476,7 +477,7 @@
   flex-wrap: wrap;
 }
 
-/* Filter button */
+/* Filter button — visible only on mobile */
 .md-collection-toolbar__filter-btn {
   display: inline-flex;
   align-items: center;
@@ -492,6 +493,7 @@
   min-height: 3.4rem;
   transition: background-color 0.15s, border-color 0.15s;
   white-space: nowrap;
+  margin-bottom: var(--md-collection-space-sm);
 }
 
 .md-collection-toolbar__filter-btn:hover {
@@ -504,6 +506,23 @@
   height: 1.6rem;
   flex-shrink: 0;
   opacity: 0.7;
+}
+
+@media screen and (min-width: 990px) {
+  .md-collection-toolbar__filter-btn {
+    display: none;
+  }
+}
+
+/* Desktop horizontal filters — visible only on desktop */
+.md-collection-desktop-filters {
+  display: none;
+}
+
+@media screen and (min-width: 990px) {
+  .md-collection-desktop-filters {
+    display: block;
+  }
 }
 
 /* Toolbar product count */
@@ -586,7 +605,256 @@
   min-height: 3.4rem;
 }
 
-/* Active filter chips in toolbar */
+/* ==========================================================================
+   Desktop Horizontal Filter Bar
+   ========================================================================== */
+.md-collection-filterbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--md-collection-space-xs);
+  padding: var(--md-collection-space-sm) 0;
+  border-bottom: 1px solid var(--md-collection-border-muted);
+}
+
+/* Filter group dropdown */
+.md-collection-filterbar__group {
+  position: relative;
+  border: none;
+  flex: 0 0 auto;
+}
+
+.md-collection-filterbar__group[open] .md-collection-filterbar__summary svg {
+  transform: rotate(180deg);
+}
+
+.md-collection-filterbar__summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  font-size: var(--md-collection-font-sm);
+  font-weight: 500;
+  color: rgb(var(--color-foreground));
+  background: rgb(var(--color-background));
+  border: 1px solid var(--md-collection-border-muted);
+  border-radius: var(--md-collection-radius-sm);
+  cursor: pointer;
+  list-style: none;
+  min-height: 3.4rem;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.md-collection-filterbar__summary::-webkit-details-marker {
+  display: none;
+}
+
+.md-collection-filterbar__summary:hover {
+  background: rgba(var(--color-foreground), 0.05);
+  border-color: rgba(var(--color-foreground), 0.25);
+}
+
+/* Active filter group: highlighted with scheme colors */
+.md-collection-filterbar__group--has-active .md-collection-filterbar__summary {
+  background: rgb(var(--color-button));
+  border-color: rgb(var(--color-button));
+  color: rgb(var(--color-button-text));
+}
+
+.md-collection-filterbar__group--has-active .md-collection-filterbar__summary svg {
+  opacity: 0.75;
+}
+
+.md-collection-filterbar__group--has-active .md-collection-filterbar__summary:hover {
+  background: rgba(var(--color-button), 0.85);
+  border-color: rgba(var(--color-button), 0.85);
+}
+
+/* Active filter badge — inverted for highlighted button */
+.md-collection-filterbar__group--has-active .md-collection-filterbar__badge {
+  background: rgb(var(--color-button-text));
+  color: rgb(var(--color-button));
+}
+
+.md-collection-filterbar__summary svg {
+  width: 1rem;
+  height: 0.6rem;
+  flex-shrink: 0;
+  opacity: 0.5;
+  transition: transform 0.2s;
+}
+
+/* Active filter count badge */
+.md-collection-filterbar__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.8rem;
+  height: 1.8rem;
+  padding: 0 0.4rem;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+  border-radius: 50%;
+  background: rgb(var(--color-button));
+  color: rgb(var(--color-button-text));
+  transition: background-color 0.15s, color 0.15s;
+}
+
+/* Popover dropdown */
+.md-collection-filterbar__popover {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  left: 0;
+  z-index: 3;
+  min-width: 22rem;
+  max-width: 32rem;
+  max-height: 40rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: rgb(var(--color-background));
+  border: 1px solid var(--md-collection-border-muted);
+  border-radius: var(--md-collection-radius-md);
+  box-shadow: 0 4px 16px rgba(var(--color-foreground), 0.08);
+  padding: var(--md-collection-space-sm);
+}
+
+/* Filter list inside popover */
+.md-collection-filterbar__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.md-collection-filterbar__item {
+  margin: 0;
+}
+
+/* Checkbox label in filter bar */
+.md-collection-filterbar__label {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.45rem 0.5rem;
+  font-size: var(--md-collection-font-sm);
+  color: rgb(var(--color-foreground));
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.1s;
+  line-height: 1.4;
+  border-radius: var(--md-collection-radius-sm);
+}
+
+.md-collection-filterbar__label:hover {
+  background: rgba(var(--color-foreground), 0.04);
+}
+
+.md-collection-filterbar__label input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Custom checkbox in filter bar */
+.md-collection-filterbar__check {
+  width: 1.6rem;
+  height: 1.6rem;
+  flex-shrink: 0;
+  border: 1.5px solid var(--md-collection-border-muted);
+  border-radius: 3px;
+  background: rgb(var(--color-background));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.md-collection-filterbar__check svg {
+  opacity: 0;
+  transition: opacity 0.15s;
+  width: 1.1rem;
+  height: 0.7rem;
+  color: rgb(var(--color-background));
+}
+
+.md-collection-filterbar__label input[type="checkbox"]:checked + .md-collection-filterbar__check {
+  background: rgb(var(--color-button));
+  border-color: rgb(var(--color-button));
+}
+
+.md-collection-filterbar__label input[type="checkbox"]:checked + .md-collection-filterbar__check svg {
+  opacity: 1;
+}
+
+.md-collection-filterbar__label--active .md-collection-filterbar__check {
+  background: rgb(var(--color-button));
+  border-color: rgb(var(--color-button));
+}
+
+.md-collection-filterbar__label--active .md-collection-filterbar__check svg {
+  opacity: 1;
+}
+
+.md-collection-filterbar__label--active {
+  font-weight: 500;
+}
+
+.md-collection-filterbar__label--disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.md-collection-filterbar__item-count {
+  font-size: var(--md-collection-font-xs);
+  color: rgba(var(--color-foreground), 0.45);
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* Price range inside filter bar popover */
+.md-collection-filterbar__price-hint {
+  font-size: var(--md-collection-font-xs);
+  color: rgba(var(--color-foreground), 0.5);
+  margin: 0 0 var(--md-collection-space-sm);
+}
+
+.md-collection-filterbar__popover .facets__price {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.md-collection-filterbar__popover .facets__price .field {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.md-collection-filterbar__popover .facets__price .field__input {
+  width: 100%;
+  padding: 0.5rem 0.7rem;
+  font-size: var(--md-collection-font-sm);
+  border: 1px solid var(--md-collection-border-muted);
+  border-radius: var(--md-collection-radius-sm);
+  background: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+}
+
+.md-collection-filterbar__popover .facets__price .field__label {
+  font-size: var(--md-collection-font-xs);
+  color: rgba(var(--color-foreground), 0.55);
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.md-collection-filterbar__popover .facets__price .field-currency {
+  font-size: var(--md-collection-font-sm);
+  color: rgba(var(--color-foreground), 0.55);
+  flex-shrink: 0;
+}
 .md-collection-toolbar__active {
   padding-top: var(--md-collection-space-sm);
 }
@@ -681,7 +949,7 @@
   border: 1px solid var(--md-collection-border-muted);
   background: rgb(var(--color-background));
   border-radius: var(--md-collection-radius-sm);
-  min-height: 3rem;
+  min-height: 3.2rem;
 }
 
 .md-active-filter-chip:hover {
@@ -692,7 +960,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 0.45rem 0.8rem;
+  padding: 0.55rem 0.9rem;
   border: 0;
   box-shadow: none;
   background: transparent;
@@ -728,7 +996,7 @@
 }
 
 /* ==========================================================================
-   Filter Drawer
+   Filter Drawer — mobile only
    ========================================================================== */
 .md-collection-filters-drawer {
   position: fixed;
@@ -743,6 +1011,12 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+@media screen and (min-width: 990px) {
+  .md-collection-filters-drawer {
+    display: none;
+  }
 }
 
 .md-collection-filters-drawer.is-open {
@@ -1016,6 +1290,12 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
+}
+
+@media screen and (min-width: 990px) {
+  .md-collection-filters-overlay {
+    display: none;
+  }
 }
 
 .md-collection-filters-overlay.is-open {

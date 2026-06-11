@@ -277,20 +277,6 @@
             <div class="md-collection-toolbar">
               <div class="md-collection-toolbar__inner">
                 <div class="md-collection-toolbar__left">
-                  {%- if section.settings.enable_filtering -%}
-                    <button
-                      type="button"
-                      class="md-collection-toolbar__filter-btn"
-                      aria-expanded="false"
-                      aria-controls="md-collection-filters-drawer"
-                      onclick="document.getElementById('md-collection-filters-drawer').classList.toggle('is-open');document.getElementById('md-collection-filters-overlay').classList.toggle('is-open');this.setAttribute('aria-expanded',document.getElementById('md-collection-filters-drawer').classList.contains('is-open'));"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="2" y1="4" x2="14" y2="4"/><line x1="3" y1="8" x2="13" y2="8"/><line x1="4" y1="12" x2="12" y2="12"/>
-                      </svg>
-                      {{- 'products.facets.filter_button' | t -}}
-                    </button>
-                  {%- endif -%}
                   <span class="visually-hidden" id="ProductCount" role="status">
                     {%- if collection.results_count -%}
                       {{ 'templates.search.results_with_count' | t: terms: collection.terms, count: collection.results_count }}
@@ -355,6 +341,128 @@
                     endif
                   endfor
                 -%}
+
+                {% comment %} Desktop horizontal filter bar {% endcomment %}
+                <facet-filters-form class="facets md-collection-desktop-filters">
+                  <form id="FacetFiltersForm">
+                    <div id="FacetsWrapperDesktop" class="md-collection-filterbar">
+                      {%- for filter in collection.filters -%}
+                        {% case filter.type %}
+                          {% when 'boolean', 'list' %}
+                            <details
+                              id="Details-{{ filter.param_name | escape }}-{{ section.id }}"
+                              class="md-collection-filterbar__group js-filter{% if filter.active_values.size > 0 %} md-collection-filterbar__group--has-active{% endif %}"
+                              data-index="{{ forloop.index }}"
+                            >
+                              <summary class="md-collection-filterbar__summary facets__summary">
+                                <span>{{ filter.label | escape }}</span>
+                                {%- if filter.active_values.size > 0 -%}
+                                  <span class="md-collection-filterbar__badge">{{ filter.active_values.size }}</span>
+                                {%- endif -%}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                              </summary>
+                              <div id="Facet-{{ forloop.index }}-{{ section.id }}" class="md-collection-filterbar__popover facets-wrap parent-wrap">
+                                <ul class="md-collection-filterbar__list facets__list list-unstyled" role="list">
+                                  {%- liquid
+                                    assign sorted_values = filter.values
+                                    if filter.operator == 'AND'
+                                      assign active_filter_values = filter.values | where: 'active', true
+                                      assign inactive_filter_values = filter.values | where: 'active', false
+                                      assign sorted_values = active_filter_values | concat: inactive_filter_values
+                                    endif
+                                  -%}
+                                  {%- for value in sorted_values -%}
+                                    {%- liquid
+                                      assign input_id = 'Filter-' | append: filter.param_name | escape | append: '-' | append: forloop.index
+                                      assign is_disabled = false
+                                      if value.count == 0 and value.active == false
+                                        assign is_disabled = true
+                                      endif
+                                    -%}
+                                    <li class="md-collection-filterbar__item">
+                                      <label for="{{ input_id }}" class="md-collection-filterbar__label facet-checkbox{% if is_disabled %} md-collection-filterbar__label--disabled{% endif %}{% if value.active %} md-collection-filterbar__label--active{% endif %}">
+                                        <input
+                                          type="checkbox"
+                                          name="{{ value.param_name }}"
+                                          value="{{ value.value }}"
+                                          id="{{ input_id }}"
+                                          {% if value.active %}checked{% endif %}
+                                          {% if is_disabled %}disabled{% endif %}
+                                        >
+                                        <span class="md-collection-filterbar__check">
+                                          <svg class="icon icon-checkmark" width="1.1rem" height="0.7rem" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M1.5 3.5L4 6.5L9.5 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                          </svg>
+                                        </span>
+                                        <span class="facet-checkbox__text" aria-hidden="true">
+                                          <span class="facet-checkbox__text-label">{{ value.label | escape }}</span>
+                                        </span>
+                                        <span class="md-collection-filterbar__item-count">({{ value.count }})</span>
+                                        <span class="visually-hidden">{{ value.label | escape }} ({{ value.count }})</span>
+                                      </label>
+                                    </li>
+                                  {%- endfor -%}
+                                </ul>
+                              </div>
+                            </details>
+                          {% when 'price_range' %}
+                            <details
+                              id="Details-{{ filter.param_name | escape }}-{{ section.id }}"
+                              class="md-collection-filterbar__group js-filter{% if filter.min_value.value or filter.max_value.value %} md-collection-filterbar__group--has-active{% endif %}"
+                              data-index="{{ forloop.index }}"
+                            >
+                              <summary class="md-collection-filterbar__summary">
+                                <span>{{ filter.label | escape }}</span>
+                                {%- if filter.min_value.value or filter.max_value.value -%}
+                                  <span class="md-collection-filterbar__badge">1</span>
+                                {%- endif -%}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                              </summary>
+                              <div id="Facet-{{ forloop.index }}-{{ section.id }}" class="md-collection-filterbar__popover">
+                                <p class="md-collection-filterbar__price-hint">{{ 'products.facets.max_price' | t: price: filter.range_max | money }}</p>
+                                <price-range class="facets__price">
+                                  <span class="field-currency">{{ cart.currency.symbol }}</span>
+                                  <div class="field">
+                                    <input
+                                      class="field__input"
+                                      name="{{ filter.min_value.param_name }}"
+                                      id="Filter-{{ filter.label | escape }}-GTE"
+                                      {%- if filter.min_value.value -%}
+                                        value="{{ filter.min_value.value | divided_by: 100.00 }}"
+                                      {%- endif -%}
+                                      type="number"
+                                      placeholder="0"
+                                      min="0"
+                                      max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
+                                    >
+                                    <label class="field__label" for="Filter-{{ filter.label | escape }}-GTE">{{ 'products.facets.from' | t }}</label>
+                                  </div>
+                                  <span class="field-currency">{{ cart.currency.symbol }}</span>
+                                  <div class="field">
+                                    <input
+                                      class="field__input"
+                                      name="{{ filter.max_value.param_name }}"
+                                      id="Filter-{{ filter.label | escape }}-LTE"
+                                      {%- if filter.max_value.value -%}
+                                        value="{{ filter.max_value.value | divided_by: 100.00 }}"
+                                      {%- endif -%}
+                                      type="number"
+                                      min="0"
+                                      placeholder="{{ filter.range_max | divided_by: 100.00 | ceil }}"
+                                      max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
+                                    >
+                                    <label class="field__label" for="Filter-{{ filter.label | escape }}-LTE">{{ 'products.facets.to' | t }}</label>
+                                  </div>
+                                </price-range>
+                              </div>
+                            </details>
+                        {% endcase %}
+                      {%- endfor -%}
+                    </div>
+                  </form>
+                </facet-filters-form>
+
+                {% comment %} Active filter chips {% endcomment %}
                 <div class="md-collection-toolbar__active{% if total_active_values == 0 %} is-empty{% endif %}">
                   <div class="active-facets active-facets-desktop">
                     {%- if total_active_values > 0 -%}
@@ -398,6 +506,21 @@
             </div>
 
             {%- if section.settings.enable_filtering -%}
+              {% comment %} Mobile filter button {% endcomment %}
+              <button
+                type="button"
+                class="md-collection-toolbar__filter-btn"
+                aria-expanded="false"
+                aria-controls="md-collection-filters-drawer"
+                onclick="document.getElementById('md-collection-filters-drawer').classList.toggle('is-open');document.getElementById('md-collection-filters-overlay').classList.toggle('is-open');this.setAttribute('aria-expanded',document.getElementById('md-collection-filters-drawer').classList.contains('is-open'));"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="2" y1="4" x2="14" y2="4"/><line x1="3" y1="8" x2="13" y2="8"/><line x1="4" y1="12" x2="12" y2="12"/>
+                </svg>
+                {{- 'products.facets.filter_button' | t -}}
+              </button>
+
+              {% comment %} Mobile filter drawer {% endcomment %}
               <div class="md-collection-filters-drawer" id="md-collection-filters-drawer">
                 <div class="md-collection-filters-drawer__header">
                   <h2 class="md-collection-filters-drawer__title">{{ 'products.facets.filter_button' | t }}</h2>
@@ -412,23 +535,22 @@
                 </div>
                 <div class="md-collection-filters-drawer__body">
                   <facet-filters-form class="facets">
-                    <form id="FacetFiltersForm" class="facets__form-drawer">
-                      <div id="FacetsWrapperDesktop" class="facets__wrapper-drawer">
+                    <form id="FacetFiltersFormMobile" class="facets__form-drawer">
+                      <div id="FacetsWrapperMobileDrawer" class="facets__wrapper-drawer">
                         {%- for filter in collection.filters -%}
-
                           {% case filter.type %}
                             {% when 'boolean', 'list' %}
                               <details
-                                id="Details-{{ filter.param_name | escape }}-{{ section.id }}"
+                                id="Details-Mobile-{{ filter.param_name | escape }}-{{ section.id }}"
                                 class="md-collection-filters-drawer__group js-filter"
-                                data-index="{{ forloop.index }}"
+                                data-index="mobile-{{ forloop.index }}"
                                 {% if filter.active_values.size > 0 %}open{% endif %}
                               >
                                 <summary class="md-collection-filters-drawer__group-header facets__summary">
                                   <span>{{ filter.label | escape }}</span>
                                   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                 </summary>
-                                <div id="Facet-{{ forloop.index }}-{{ section.id }}" class="md-collection-filters-drawer__group-body facets-wrap parent-wrap">
+                                <div id="FacetMobile-{{ forloop.index }}-{{ section.id }}" class="md-collection-filters-drawer__group-body facets-wrap parent-wrap">
                                   <ul class="md-collection-filters-drawer__list facets__list list-unstyled" role="list">
                                     {%- liquid
                                       assign sorted_values = filter.values
@@ -440,7 +562,7 @@
                                     -%}
                                     {%- for value in sorted_values -%}
                                       {%- liquid
-                                        assign input_id = 'Filter-' | append: filter.param_name | escape | append: '-' | append: forloop.index
+                                        assign input_id = 'Mobile-Filter-' | append: filter.param_name | escape | append: '-' | append: forloop.index
                                         assign is_disabled = false
                                         if value.count == 0 and value.active == false
                                           assign is_disabled = true
@@ -453,6 +575,7 @@
                                             name="{{ value.param_name }}"
                                             value="{{ value.value }}"
                                             id="{{ input_id }}"
+                                            class="mobile-facets__checkbox"
                                             {% if value.active %}checked{% endif %}
                                             {% if is_disabled %}disabled{% endif %}
                                           >
@@ -474,16 +597,16 @@
                               </details>
                             {% when 'price_range' %}
                               <details
-                                id="Details-{{ filter.param_name | escape }}-{{ section.id }}"
+                                id="Details-Mobile-{{ filter.param_name | escape }}-{{ section.id }}"
                                 class="md-collection-filters-drawer__group js-filter"
-                                data-index="{{ forloop.index }}"
+                                data-index="mobile-{{ forloop.index }}"
                                 {% if filter.min_value.value or filter.max_value.value %}open{% endif %}
                               >
                                 <summary class="md-collection-filters-drawer__group-header">
                                   <span>{{ filter.label | escape }}</span>
                                   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                 </summary>
-                                <div id="Facet-{{ forloop.index }}-{{ section.id }}" class="md-collection-filters-drawer__group-body">
+                                <div id="FacetMobile-{{ forloop.index }}-{{ section.id }}" class="md-collection-filters-drawer__group-body">
                                   <p class="md-collection-filters-drawer__price-hint">{{ 'products.facets.max_price' | t: price: filter.range_max | money }}</p>
                                   <price-range class="facets__price">
                                     <span class="field-currency">{{ cart.currency.symbol }}</span>
@@ -491,7 +614,7 @@
                                       <input
                                         class="field__input"
                                         name="{{ filter.min_value.param_name }}"
-                                        id="Filter-{{ filter.label | escape }}-GTE"
+                                        id="Mobile-Filter-{{ filter.label | escape }}-GTE"
                                         {%- if filter.min_value.value -%}
                                           value="{{ filter.min_value.value | divided_by: 100.00 }}"
                                         {%- endif -%}
@@ -500,14 +623,14 @@
                                         min="0"
                                         max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
                                       >
-                                      <label class="field__label" for="Filter-{{ filter.label | escape }}-GTE">{{ 'products.facets.from' | t }}</label>
+                                      <label class="field__label" for="Mobile-Filter-{{ filter.label | escape }}-GTE">{{ 'products.facets.from' | t }}</label>
                                     </div>
                                     <span class="field-currency">{{ cart.currency.symbol }}</span>
                                     <div class="field">
                                       <input
                                         class="field__input"
                                         name="{{ filter.max_value.param_name }}"
-                                        id="Filter-{{ filter.label | escape }}-LTE"
+                                        id="Mobile-Filter-{{ filter.label | escape }}-LTE"
                                         {%- if filter.max_value.value -%}
                                           value="{{ filter.max_value.value | divided_by: 100.00 }}"
                                         {%- endif -%}
@@ -516,7 +639,7 @@
                                         placeholder="{{ filter.range_max | divided_by: 100.00 | ceil }}"
                                         max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
                                       >
-                                      <label class="field__label" for="Filter-{{ filter.label | escape }}-LTE">{{ 'products.facets.to' | t }}</label>
+                                      <label class="field__label" for="Mobile-Filter-{{ filter.label | escape }}-LTE">{{ 'products.facets.to' | t }}</label>
                                     </div>
                                   </price-range>
                                 </div>
@@ -543,13 +666,13 @@
 
               <div class="md-collection-filters-overlay" id="md-collection-filters-overlay" onclick="document.getElementById('md-collection-filters-drawer').classList.remove('is-open'); this.classList.remove('is-open');"></div>
 
-              {% comment %} Minimal mobile facets stub for facets.js compatibility — structure kept, value loops stripped {% endcomment %}
+              {% comment %} Minimal mobile facets stub for facets.js bindEvents compatibility {% endcomment %}
               <div style="display:none" aria-hidden="true">
                 <menu-drawer>
                   <details>
                     <summary></summary>
                     <facet-filters-form>
-                      <form id="FacetFiltersFormMobile" class="mobile-facets">
+                      <form id="FacetFiltersFormMobileStub" class="mobile-facets">
                         <div class="mobile-facets__inner">
                           <div class="mobile-facets__header">
                             <h2 class="mobile-facets__heading">Filter</h2>
@@ -559,16 +682,16 @@
                             {%- for filter in collection.filters -%}
                               {% case filter.type %}
                                 {% when 'boolean', 'list' %}
-                                  <details id="Details-Mobile-{{ filter.param_name | escape }}-{{ section.id }}" class="mobile-facets__details js-filter" data-index="mobile-{{ forloop.index }}">
+                                  <details id="Details-Mobile-Stub-{{ filter.param_name | escape }}-{{ section.id }}" class="mobile-facets__details">
                                     <summary class="mobile-facets__summary"><span>{{ filter.label | escape }}</span></summary>
-                                    <div id="FacetMobile-{{ forloop.index }}-{{ section.id }}" class="mobile-facets__submenu">
+                                    <div class="mobile-facets__submenu">
                                       <ul class="mobile-facets__list list-unstyled"></ul>
                                     </div>
                                   </details>
                                 {% when 'price_range' %}
-                                  <details id="Details-Mobile-{{ filter.param_name | escape }}-{{ section.id }}" class="mobile-facets__details js-filter" data-index="mobile-{{ forloop.index }}">
+                                  <details id="Details-Mobile-Stub-{{ filter.param_name | escape }}-{{ section.id }}" class="mobile-facets__details">
                                     <summary class="mobile-facets__summary"><span>{{ filter.label | escape }}</span></summary>
-                                    <div id="FacetMobile-{{ forloop.index }}-{{ section.id }}" class="mobile-facets__submenu">
+                                    <div class="mobile-facets__submenu">
                                       <price-range class="facets__price"></price-range>
                                     </div>
                                   </details>
@@ -582,6 +705,22 @@
                 </menu-drawer>
               </div>
             {%- endif -%}
+          {%- endif -%}
+
+          {%- if section.settings.enable_filtering -%}
+          <script>
+            (function() {
+              var bar = document.querySelector('.md-collection-filterbar');
+              if (!bar) return;
+              bar.addEventListener('toggle', function(e) {
+                if (!e.target.open) return;
+                var groups = bar.querySelectorAll('.md-collection-filterbar__group[open]');
+                for (var i = 0; i < groups.length; i++) {
+                  if (groups[i] !== e.target) groups[i].open = false;
+                }
+              });
+            })();
+          </script>
           {%- endif -%}
 
           {% comment %} Product Grid {% endcomment %}
