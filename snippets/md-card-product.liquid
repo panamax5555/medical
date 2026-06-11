@@ -174,33 +174,38 @@
           {%- if show_variant_hint and variant_count > 1 -%}
             <div class="md-card-product__variant-hint">
               <div class="md-card-product__variant-count">{{ variant_count }} Packgr&ouml;&szlig;en</div>
-              <div class="md-card-product__variant-list">
-                {%- for variant in card_product.variants limit: 4 -%}
-                  <a href="{{ product_url }}?variant={{ variant.id }}" class="md-card-product__variant-tile" title="{{ variant.title | escape }}">
-                    {%- liquid
-                      assign tile_media = variant.featured_media | default: variant.image | default: featured_media
-                    -%}
-                    {%- if tile_media -%}
-                      <img
-                        src="{{ tile_media | image_url: width: 80 }}"
-                        srcset="{{ tile_media | image_url: width: 80 }} 1x, {{ tile_media | image_url: width: 160 }} 2x"
-                        alt="{{ variant.title | escape }}"
-                        class="md-card-product__variant-image"
-                        width="80"
-                        height="80"
-                        loading="lazy"
-                      >
-                    {%- endif -%}
-                    <span class="md-card-product__variant-label">
-                      {{- variant.title | replace: 'Default Title', '' | strip | truncate: 16 -}}
-                    </span>
-                  </a>
-                {%- endfor -%}
-              </div>
             </div>
           {%- endif -%}
         </div>
       </a>
+
+      {%- if show_variant_hint and variant_count > 1 -%}
+        <div class="md-card-product__variant-popover">
+          <div class="md-card-product__variant-list">
+            {%- for variant in card_product.variants limit: 4 -%}
+              <a href="{{ product_url }}?variant={{ variant.id }}" class="md-card-product__variant-tile" title="{{ variant.title | escape }}">
+                {%- liquid
+                  assign tile_media = variant.featured_media | default: variant.image | default: featured_media
+                -%}
+                {%- if tile_media -%}
+                  <img
+                    src="{{ tile_media | image_url: width: 80 }}"
+                    srcset="{{ tile_media | image_url: width: 80 }} 1x, {{ tile_media | image_url: width: 160 }} 2x"
+                    alt="{{ variant.title | escape }}"
+                    class="md-card-product__variant-image"
+                    width="80"
+                    height="80"
+                    loading="lazy"
+                  >
+                {%- endif -%}
+                <span class="md-card-product__variant-label">
+                  {{- variant.title | replace: 'Default Title', '' | strip | truncate: 16 -}}
+                </span>
+              </a>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
     </div>
   </div>
 {%- else -%}

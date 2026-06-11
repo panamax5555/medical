@@ -1644,17 +1644,65 @@
   }
 }
 
-/* Variant tiles */
+/* Variant hint: count only, in text flow */
 .md-card-product__variant-hint {
-  margin-top: var(--md-collection-space-md);
-  border-top: 1px solid var(--md-collection-border-subtle);
-  padding-top: var(--md-collection-space-md);
+  margin-top: var(--md-collection-space-sm);
 }
 
 .md-card-product__variant-count {
   font-size: var(--md-collection-font-xs);
   color: rgba(var(--color-foreground), 0.5);
-  margin-bottom: 0.6rem;
+}
+
+/* Variant popover: absolute, hidden by default, shown on hover/focus */
+.md-card-product__variant-popover {
+  position: absolute;
+  left: var(--md-collection-space-sm);
+  right: var(--md-collection-space-sm);
+  bottom: var(--md-collection-space-sm);
+  z-index: 4;
+  background: rgb(var(--color-background));
+  border: 1px solid var(--md-collection-border-subtle);
+  box-shadow: 0 0.8rem 2.4rem rgba(var(--color-foreground), 0.12);
+  padding: 0.8rem;
+  border-radius: var(--md-collection-radius-sm);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-0.4rem);
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+}
+
+.md-card-product:hover .md-card-product__variant-popover,
+.md-card-product:focus-within .md-card-product__variant-popover {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* Card stacking: prevent popover clipping from neighbour cards */
+.md-card-product:hover {
+  z-index: 5;
+}
+
+.md-collection-products {
+  overflow: visible;
+}
+
+.md-collection .product-grid-container {
+  overflow: visible;
+}
+
+.md-collection .collection {
+  overflow: visible;
+}
+
+/* Mobile: hide popover entirely, show count only */
+@media screen and (max-width: 989px) {
+  .md-card-product__variant-popover {
+    display: none;
+  }
 }
 
 .md-card-product__variant-list {
@@ -1707,16 +1755,6 @@
   .md-card-product__image {
     max-height: 14rem;
     padding: var(--md-collection-space-xs);
-  }
-
-  .md-card-product__variant-tile {
-    width: 4.4rem;
-    min-height: 5.4rem;
-  }
-
-  .md-card-product__variant-image {
-    width: 2.6rem;
-    height: 2.6rem;
   }
 }
 
