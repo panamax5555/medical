@@ -695,6 +695,36 @@
   transition: transform 0.2s;
 }
 
+/* Reset Dawn facets__summary styles that leak through when both classes coexist */
+.md-collection .md-collection-filterbar__summary.facets__summary {
+  margin: 0;
+  padding: 0 1.2rem;
+  height: 4rem;
+  min-height: 4rem;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  line-height: 1;
+  font-size: var(--md-collection-font-sm);
+  color: rgb(var(--color-foreground));
+  background: rgb(var(--color-background));
+  border: 1px solid var(--md-collection-border-muted);
+}
+
+.md-collection .md-collection-filterbar__summary.facets__summary > span {
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+
+.md-collection .md-collection-filterbar__summary.facets__summary svg {
+  display: block;
+  width: 1rem;
+  height: 0.6rem;
+  flex-shrink: 0;
+}
+
 /* Active filter count badge */
 .md-collection-filterbar__badge {
   display: inline-flex;

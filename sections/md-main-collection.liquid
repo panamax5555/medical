@@ -361,7 +361,7 @@
                                   class="md-collection-filterbar__group js-filter{% if filter.min_value.value or filter.max_value.value %} md-collection-filterbar__group--has-active{% endif %}"
                                   data-index="{{ forloop.index }}"
                                 >
-                                  <summary class="md-collection-filterbar__summary">
+                                  <summary class="md-collection-filterbar__summary facets__summary">
                                     <span>{{ filter.label | escape }}</span>
                                     {%- if filter.min_value.value or filter.max_value.value -%}
                                       <span class="md-collection-filterbar__badge">1</span>
