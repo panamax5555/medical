@@ -291,6 +291,15 @@
                       {{- 'products.facets.filter_button' | t -}}
                     </button>
                   {%- endif -%}
+                  <span class="visually-hidden" id="ProductCount" role="status">
+                    {%- if collection.results_count -%}
+                      {{ 'templates.search.results_with_count' | t: terms: collection.terms, count: collection.results_count }}
+                    {%- elsif collection.products_count == collection.all_products_count -%}
+                      {{ 'products.facets.product_count_simple' | t: count: collection.products_count }}
+                    {%- else -%}
+                      {{ 'products.facets.product_count' | t: product_count: collection.products_count, count: collection.all_products_count }}
+                    {%- endif -%}
+                  </span>
                   <span class="md-collection-toolbar__count product-count" role="status">
                     <span class="product-count__text text-body" id="ProductCountDesktop">
                       {%- if collection.results_count -%}
