@@ -483,9 +483,9 @@
   gap: 0.5rem;
   font-size: var(--md-collection-font-sm);
   font-weight: 500;
-  padding: 0.5rem 1.2rem;
+  padding: 0.55rem 1rem;
   border: 1px solid var(--md-collection-border-muted);
-  border-radius: 20px;
+  border-radius: var(--md-collection-radius-sm);
   background: rgb(var(--color-background));
   color: rgb(var(--color-foreground));
   cursor: pointer;
@@ -529,6 +529,8 @@
   display: flex;
   align-items: center;
   gap: var(--md-collection-space-sm);
+  flex-shrink: 0;
+  max-width: 100%;
 }
 
 .md-collection-toolbar__sort-form .facet-filters__field {
@@ -592,39 +594,125 @@
 .md-collection-toolbar__active .active-facets {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 0.6rem;
   align-items: center;
 }
 
+/* ====================
+   Dawn active-facets RESET inside md-collection toolbar
+   ==================== */
 .md-collection-toolbar__active .active-facets__button {
+  margin: 0;
+  padding: 0;
   display: inline-flex;
+}
+
+.md-collection-toolbar__active .active-facets__button,
+.md-collection-toolbar__active .active-facets__button-remove {
+  font-size: inherit;
+  padding: 0;
+}
+
+.md-collection-toolbar__active span.active-facets__button-inner {
+  box-shadow: none;
+  border-radius: 0;
+  font-size: inherit;
+  min-height: 0;
+  min-width: 0;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
+}
+
+.md-collection-toolbar__active span.active-facets__button-inner:before,
+.md-collection-toolbar__active span.active-facets__button-inner:after {
+  display: none;
+}
+
+.md-collection-toolbar__active .active-facets__button:hover .active-facets__button-inner {
+  box-shadow: none;
+}
+
+.md-collection-toolbar__active a.active-facets__button:focus-visible,
+.md-collection-toolbar__active a.active-facets__button.focused {
+  outline: none;
+  box-shadow: none;
+}
+
+.md-collection-toolbar__active a.active-facets__button:focus-visible .active-facets__button-inner,
+.md-collection-toolbar__active a.active-facets__button.focused .active-facets__button-inner {
+  box-shadow: none;
+  outline: none;
+}
+
+.md-collection-toolbar__active .active-facets__button .svg-wrapper {
+  display: none;
+}
+
+.md-collection-toolbar__active .active-facets__button-wrapper {
+  padding-top: 0;
+  margin: 0;
+  display: flex;
   align-items: center;
-  gap: 0.3rem;
-  font-size: var(--md-collection-font-xs);
-  padding: 0.3rem 0.8rem;
-  border: 1px solid var(--md-collection-border-muted);
-  border-radius: 20px;
-  background: rgba(var(--color-foreground), 0.04);
-  color: rgb(var(--color-foreground));
+}
+
+.md-collection-toolbar__active .active-facets__button-wrapper * {
+  font-size: inherit;
+}
+
+/* Hide Dawn default render of "Alle entfernen" when we only have it through our conditional logic.
+   Also keeps it accessible for facets.js state management. */
+.md-collection-toolbar__active .active-facets facet-remove:only-child {
+  display: block;
+}
+
+/* ====================
+   Custom MD chip styles
+   ==================== */
+.md-active-filter-chip {
+  display: inline-flex;
   text-decoration: none;
-  transition: background-color 0.15s;
+  color: rgb(var(--color-foreground));
+  border: 1px solid var(--md-collection-border-muted);
+  background: rgb(var(--color-background));
+  border-radius: var(--md-collection-radius-sm);
+  min-height: 3rem;
 }
 
-.md-collection-toolbar__active .active-facets__button:hover {
-  background: rgba(var(--color-foreground), 0.08);
+.md-active-filter-chip:hover {
+  background: rgba(var(--color-foreground), 0.05);
 }
 
-.md-collection-toolbar__active .active-facets__button .active-facets__button-inner {
+.md-active-filter-chip__inner {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.6rem;
+  padding: 0.45rem 0.8rem;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+  min-height: 0;
+  line-height: 1;
 }
 
-.md-collection-toolbar__active .active-facets__button svg {
-  width: 1rem;
-  height: 1rem;
-  flex-shrink: 0;
+.md-active-filter-chip__label {
+  font-size: var(--md-collection-font-xs);
+  line-height: 1;
+}
+
+.md-active-filter-chip__remove {
   opacity: 0.55;
+  font-size: 1.6rem;
+  line-height: 1;
+  font-weight: 400;
+}
+
+.md-active-filter-chip__clear-wrapper {
+  display: flex;
+  align-items: center;
+  padding-top: 0;
+  margin: 0;
 }
 
 .md-collection-toolbar__active .active-facets__button-remove {

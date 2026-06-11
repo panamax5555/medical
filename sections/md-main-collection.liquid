@@ -335,43 +335,56 @@
               </div>
 
               {%- if section.settings.enable_filtering -%}
-                <div class="md-collection-toolbar__active">
-                  <div class="active-facets active-facets-desktop">
-                    {%- for filter in collection.filters -%}
-                      {%- for value in filter.active_values -%}
-                        <facet-remove>
-                          <a href="{{ value.url_to_remove }}" class="active-facets__button">
-                            <span class="active-facets__button-inner">
-                              {{ value.label | escape }}
-                              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M7.5 2.5l-5 5M2.5 2.5l5 5" stroke="currentColor" stroke-width="1.2"/></svg>
-                            </span>
-                          </a>
-                        </facet-remove>
-                      {%- endfor -%}
-                      {% if filter.type == 'price_range' %}
-                        {%- assign min = filter.min_value.value -%}
-                        {%- assign max = filter.max_value.value -%}
-                        {%- if min != null or max != null -%}
+                {%- liquid
+                  assign total_active_values = 0
+                  for filter in collection.filters
+                    assign total_active_values = total_active_values | plus: filter.active_values.size
+                    if filter.type == 'price_range'
+                      if filter.min_value.value != null or filter.max_value.value != null
+                        assign total_active_values = total_active_values | plus: 1
+                      endif
+                    endif
+                  endfor
+                -%}
+                {%- if total_active_values > 0 -%}
+                  <div class="md-collection-toolbar__active">
+                    <div class="active-facets active-facets-desktop">
+                      {%- for filter in collection.filters -%}
+                        {%- for value in filter.active_values -%}
                           <facet-remove>
-                            <a href="{{ filter.url_to_remove }}" class="active-facets__button">
-                              <span class="active-facets__button-inner">
-                                {%- if min != null -%}{{ min | money }}{%- endif -%}
-                                {%- if min != null and max != null %} – {% endif -%}
-                                {%- if max != null -%}{{ max | money }}{%- endif -%}
-                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M7.5 2.5l-5 5M2.5 2.5l5 5" stroke="currentColor" stroke-width="1.2"/></svg>
+                            <a href="{{ value.url_to_remove }}" class="md-active-filter-chip active-facets__button">
+                              <span class="md-active-filter-chip__inner active-facets__button-inner">
+                                <span class="md-active-filter-chip__label">{{ value.label | escape }}</span>
+                                <span class="md-active-filter-chip__remove" aria-hidden="true">&times;</span>
                               </span>
                             </a>
                           </facet-remove>
-                        {%- endif -%}
-                      {% endif %}
-                    {%- endfor -%}
-                    <facet-remove class="active-facets__button-wrapper">
-                      <a href="{{ collection.url }}" class="active-facets__button-remove underlined-link">
-                        <span>{{ 'products.facets.clear_all' | t }}</span>
-                      </a>
-                    </facet-remove>
+                        {%- endfor -%}
+                        {% if filter.type == 'price_range' %}
+                          {%- assign min = filter.min_value.value -%}
+                          {%- assign max = filter.max_value.value -%}
+                          {%- if min != null or max != null -%}
+                            <facet-remove>
+                              <a href="{{ filter.url_to_remove }}" class="md-active-filter-chip active-facets__button">
+                                <span class="md-active-filter-chip__inner active-facets__button-inner">
+                                  {%- if min != null -%}<span class="md-active-filter-chip__label">{{ min | money }}</span>{%- endif -%}
+                                  {%- if min != null and max != null %} <span class="md-active-filter-chip__label">&ndash;</span> {% endif -%}
+                                  {%- if max != null -%}<span class="md-active-filter-chip__label">{{ max | money }}</span>{%- endif -%}
+                                  <span class="md-active-filter-chip__remove" aria-hidden="true">&times;</span>
+                                </span>
+                              </a>
+                            </facet-remove>
+                          {%- endif -%}
+                        {% endif %}
+                      {%- endfor -%}
+                      <facet-remove class="md-active-filter-chip__clear-wrapper active-facets__button-wrapper">
+                        <a href="{{ collection.url }}" class="active-facets__button-remove underlined-link">
+                          <span>{{ 'products.facets.clear_all' | t }}</span>
+                        </a>
+                      </facet-remove>
+                    </div>
                   </div>
-                </div>
+                {%- endif -%}
               {%- endif -%}
             </div>
 
