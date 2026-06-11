@@ -384,6 +384,8 @@
                                           placeholder="0"
                                           min="0"
                                           max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
+                                          data-min="0"
+                                          data-max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
                                         >
                                         <label class="field__label" for="Filter-{{ filter.label | escape }}-GTE">{{ 'products.facets.from' | t }}</label>
                                       </div>
@@ -400,6 +402,8 @@
                                           min="0"
                                           placeholder="{{ filter.range_max | divided_by: 100.00 | ceil }}"
                                           max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
+                                          data-min="0"
+                                          data-max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
                                         >
                                         <label class="field__label" for="Filter-{{ filter.label | escape }}-LTE">{{ 'products.facets.to' | t }}</label>
                                       </div>
@@ -625,6 +629,8 @@
                                         placeholder="0"
                                         min="0"
                                         max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
+                                        data-min="0"
+                                        data-max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
                                       >
                                       <label class="field__label" for="Mobile-Filter-{{ filter.label | escape }}-GTE">{{ 'products.facets.from' | t }}</label>
                                     </div>
@@ -641,6 +647,8 @@
                                         min="0"
                                         placeholder="{{ filter.range_max | divided_by: 100.00 | ceil }}"
                                         max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
+                                        data-min="0"
+                                        data-max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
                                       >
                                       <label class="field__label" for="Mobile-Filter-{{ filter.label | escape }}-LTE">{{ 'products.facets.to' | t }}</label>
                                     </div>
@@ -694,9 +702,7 @@
                                 {% when 'price_range' %}
                                   <details id="Details-Mobile-Stub-{{ filter.param_name | escape }}-{{ section.id }}" class="mobile-facets__details">
                                     <summary class="mobile-facets__summary"><span>{{ filter.label | escape }}</span></summary>
-                                    <div class="mobile-facets__submenu">
-                                      <price-range class="facets__price"></price-range>
-                                    </div>
+                                    <div class="mobile-facets__submenu"></div>
                                   </details>
                               {% endcase %}
                             {%- endfor -%}

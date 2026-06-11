@@ -58,6 +58,19 @@ class FacetFiltersForm extends HTMLElement {
     if (updateURLHash) FacetFiltersForm.updateURLHash(searchParams);
   }
 
+  static removeLoadingState() {
+    const countContainer = document.getElementById('ProductCount');
+    const countContainerDesktop = document.getElementById('ProductCountDesktop');
+    const gridContainer = document.getElementById('ProductGridContainer');
+    if (gridContainer) gridContainer.querySelector('.collection')?.classList.remove('loading');
+    if (countContainer) countContainer.classList.remove('loading');
+    if (countContainerDesktop) countContainerDesktop.classList.remove('loading');
+    const loadingSpinners = document.querySelectorAll(
+      '.facets-container .loading__spinner, facet-filters-form .loading__spinner, .loading-overlay'
+    );
+    loadingSpinners.forEach((spinner) => spinner.classList.add('hidden'));
+  }
+
   static renderSectionFromFetch(url, event) {
     fetch(url)
       .then((response) => response.text())
@@ -71,34 +84,36 @@ class FacetFiltersForm extends HTMLElement {
       })
       .catch((error) => {
         console.error('FacetFiltersForm renderSectionFromFetch error:', error);
-        const countContainer = document.getElementById('ProductCount');
-        const countContainerDesktop = document.getElementById('ProductCountDesktop');
-        const gridContainer = document.getElementById('ProductGridContainer');
-        if (gridContainer) gridContainer.querySelector('.collection')?.classList.remove('loading');
-        if (countContainer) countContainer.classList.remove('loading');
-        if (countContainerDesktop) countContainerDesktop.classList.remove('loading');
-        const loadingSpinners = document.querySelectorAll(
-          '.facets-container .loading__spinner, facet-filters-form .loading__spinner, .loading-overlay'
-        );
-        loadingSpinners.forEach((spinner) => spinner.classList.add('hidden'));
+        FacetFiltersForm.removeLoadingState();
       });
   }
 
   static renderSectionFromCache(filterDataUrl, event) {
-    const html = FacetFiltersForm.filterData.find(filterDataUrl).html;
-    FacetFiltersForm.renderFilters(html, event);
-    FacetFiltersForm.renderProductGridContainer(html);
-    FacetFiltersForm.renderProductCount(html);
-    if (typeof initializeScrollAnimationTrigger === 'function') initializeScrollAnimationTrigger(html.innerHTML);
+    try {
+      const cached = FacetFiltersForm.filterData.find(filterDataUrl);
+      if (!cached) throw new Error('Cache miss');
+
+      const html = cached.html;
+      FacetFiltersForm.renderFilters(html, event);
+      FacetFiltersForm.renderProductGridContainer(html);
+      FacetFiltersForm.renderProductCount(html);
+      if (typeof initializeScrollAnimationTrigger === 'function') initializeScrollAnimationTrigger(html.innerHTML);
+    } catch (error) {
+      console.error('FacetFiltersForm renderSectionFromCache error:', error);
+      FacetFiltersForm.removeLoadingState();
+    }
   }
 
   static renderProductGridContainer(html) {
-    document.getElementById('ProductGridContainer').innerHTML = new DOMParser()
+    const gridContainer = document.getElementById('ProductGridContainer');
+    if (!gridContainer) return;
+    const parsedGrid = new DOMParser()
       .parseFromString(html, 'text/html')
-      .getElementById('ProductGridContainer').innerHTML;
+      .getElementById('ProductGridContainer');
+    if (!parsedGrid) return;
+    gridContainer.innerHTML = parsedGrid.innerHTML;
 
-    document
-      .getElementById('ProductGridContainer')
+    gridContainer
       .querySelectorAll('.scroll-trigger')
       .forEach((element) => {
         element.classList.add('scroll-trigger--cancel');
@@ -392,8 +407,14 @@ class FacetRemove extends HTMLElement {
 
   closeFilter(event) {
     event.preventDefault();
-    const form = this.closest('facet-filters-form') || document.querySelector('facet-filters-form');
-    form.onActiveFilterClick(event);
+    const form = this.closest('facet-filters-form')
+      || document.querySelector('.md-collection-desktop-filters')
+      || document.querySelector('facet-filters-form');
+    if (form && typeof form.onActiveFilterClick === 'function') {
+      form.onActiveFilterClick(event);
+    } else {
+      window.location.href = event.currentTarget.href;
+    }
   }
 }
 
