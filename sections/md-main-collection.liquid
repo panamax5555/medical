@@ -534,7 +534,7 @@
 
               <div class="md-collection-filters-overlay" id="md-collection-filters-overlay" onclick="document.getElementById('md-collection-filters-drawer').classList.remove('is-open'); this.classList.remove('is-open');"></div>
 
-              {% comment %} Hidden mobile facets stub for facets.js compatibility {% endcomment %}
+              {% comment %} Minimal mobile facets stub for facets.js compatibility — structure kept, value loops stripped {% endcomment %}
               <div style="display:none" aria-hidden="true">
                 <menu-drawer>
                   <details>
@@ -553,26 +553,14 @@
                                   <details id="Details-Mobile-{{ filter.param_name | escape }}-{{ section.id }}" class="mobile-facets__details js-filter" data-index="mobile-{{ forloop.index }}">
                                     <summary class="mobile-facets__summary"><span>{{ filter.label | escape }}</span></summary>
                                     <div id="FacetMobile-{{ forloop.index }}-{{ section.id }}" class="mobile-facets__submenu">
-                                      <ul class="mobile-facets__list list-unstyled">
-                                        {%- for value in filter.values -%}
-                                          <li class="mobile-facets__item">
-                                            <label class="facets__label mobile-facets__label{% if value.active %} active{% endif %}">
-                                              <input class="mobile-facets__checkbox" type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %}>
-                                              <span class="facet-checkbox__text">{{ value.label | escape }} ({{ value.count }})</span>
-                                            </label>
-                                          </li>
-                                        {%- endfor -%}
-                                      </ul>
+                                      <ul class="mobile-facets__list list-unstyled"></ul>
                                     </div>
                                   </details>
                                 {% when 'price_range' %}
                                   <details id="Details-Mobile-{{ filter.param_name | escape }}-{{ section.id }}" class="mobile-facets__details js-filter" data-index="mobile-{{ forloop.index }}">
                                     <summary class="mobile-facets__summary"><span>{{ filter.label | escape }}</span></summary>
                                     <div id="FacetMobile-{{ forloop.index }}-{{ section.id }}" class="mobile-facets__submenu">
-                                      <price-range class="facets__price">
-                                        <input name="{{ filter.min_value.param_name }}" type="number" min="0" max="{{ filter.range_max | divided_by: 100.00 | ceil }}">
-                                        <input name="{{ filter.max_value.param_name }}" type="number" min="0" max="{{ filter.range_max | divided_by: 100.00 | ceil }}">
-                                      </price-range>
+                                      <price-range class="facets__price"></price-range>
                                     </div>
                                   </details>
                               {% endcase %}
