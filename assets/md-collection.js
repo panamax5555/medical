@@ -12,7 +12,7 @@
     if (!bar) return;
     var openGroups = bar.querySelectorAll(SELECTOR_GROUP + '[open]');
     for (var i = 0; i < openGroups.length; i++) {
-      openGroups[i].open = false;
+      openGroups[i].removeAttribute('open');
     }
   }
 
@@ -33,7 +33,7 @@
 
     var openGroups = bar.querySelectorAll(SELECTOR_GROUP + '[open]');
     for (var i = 0; i < openGroups.length; i++) {
-      if (openGroups[i] !== target) openGroups[i].open = false;
+      if (openGroups[i] !== target) openGroups[i].removeAttribute('open');
     }
   }
 
@@ -48,7 +48,7 @@
     closeAllFilterBars();
   }
 
-  document.addEventListener('toggle', handleToggle);
+  document.addEventListener('toggle', handleToggle, true);
   document.addEventListener('click', handleClickOutside);
   document.addEventListener('keydown', handleKeydown);
 })();
