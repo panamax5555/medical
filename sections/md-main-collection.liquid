@@ -1,6 +1,7 @@
 {{ 'md-collection.css' | asset_url | stylesheet_tag }}
 {{ 'component-facets.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'md-collection.js' | asset_url }}" defer="defer"></script>
 
 {%- style -%}
   .section-{{ section.id }}-padding {
@@ -275,8 +276,145 @@
           {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
             {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
             <div class="md-collection-toolbar">
-              <div class="md-collection-toolbar__inner">
-                <div class="md-collection-toolbar__left">
+              {%- if section.settings.enable_filtering -%}
+                {%- liquid
+                  assign total_active_values = 0
+                  for filter in collection.filters
+                    assign total_active_values = total_active_values | plus: filter.active_values.size
+                    if filter.type == 'price_range'
+                      if filter.min_value.value != null or filter.max_value.value != null
+                        assign total_active_values = total_active_values | plus: 1
+                      endif
+                    endif
+                  endfor
+                -%}
+              {%- endif -%}
+
+              <div class="md-collection-toolbar__row">
+                <div class="md-collection-toolbar__filters">
+                  {%- if section.settings.enable_filtering -%}
+                    <facet-filters-form class="facets md-collection-desktop-filters">
+                      <form id="FacetFiltersForm">
+                        <div id="FacetsWrapperDesktop" class="md-collection-filterbar">
+                          {%- for filter in collection.filters -%}
+                            {% case filter.type %}
+                              {% when 'boolean', 'list' %}
+                                <details
+                                  id="Details-{{ filter.param_name | escape }}-{{ section.id }}"
+                                  class="md-collection-filterbar__group js-filter{% if filter.active_values.size > 0 %} md-collection-filterbar__group--has-active{% endif %}"
+                                  data-index="{{ forloop.index }}"
+                                >
+                                  <summary class="md-collection-filterbar__summary facets__summary">
+                                    <span>{{ filter.label | escape }}</span>
+                                    {%- if filter.active_values.size > 0 -%}
+                                      <span class="md-collection-filterbar__badge">{{ filter.active_values.size }}</span>
+                                    {%- endif -%}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                  </summary>
+                                  <div id="Facet-{{ forloop.index }}-{{ section.id }}" class="md-collection-filterbar__popover facets-wrap parent-wrap">
+                                    <ul class="md-collection-filterbar__list facets__list list-unstyled" role="list">
+                                      {%- liquid
+                                        assign sorted_values = filter.values
+                                        if filter.operator == 'AND'
+                                          assign active_filter_values = filter.values | where: 'active', true
+                                          assign inactive_filter_values = filter.values | where: 'active', false
+                                          assign sorted_values = active_filter_values | concat: inactive_filter_values
+                                        endif
+                                      -%}
+                                      {%- for value in sorted_values -%}
+                                        {%- liquid
+                                          assign input_id = 'Filter-' | append: filter.param_name | escape | append: '-' | append: forloop.index
+                                          assign is_disabled = false
+                                          if value.count == 0 and value.active == false
+                                            assign is_disabled = true
+                                          endif
+                                        -%}
+                                        <li class="md-collection-filterbar__item">
+                                          <label for="{{ input_id }}" class="md-collection-filterbar__label facet-checkbox{% if is_disabled %} md-collection-filterbar__label--disabled{% endif %}{% if value.active %} md-collection-filterbar__label--active{% endif %}">
+                                            <input
+                                              type="checkbox"
+                                              name="{{ value.param_name }}"
+                                              value="{{ value.value }}"
+                                              id="{{ input_id }}"
+                                              {% if value.active %}checked{% endif %}
+                                              {% if is_disabled %}disabled{% endif %}
+                                            >
+                                            <span class="md-collection-filterbar__check">
+                                              <svg class="icon icon-checkmark" width="1.1rem" height="0.7rem" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M1.5 3.5L4 6.5L9.5 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                              </svg>
+                                            </span>
+                                            <span class="facet-checkbox__text" aria-hidden="true">
+                                              <span class="facet-checkbox__text-label">{{ value.label | escape }}</span>
+                                            </span>
+                                            <span class="md-collection-filterbar__item-count">({{ value.count }})</span>
+                                            <span class="visually-hidden">{{ value.label | escape }} ({{ value.count }})</span>
+                                          </label>
+                                        </li>
+                                      {%- endfor -%}
+                                    </ul>
+                                  </div>
+                                </details>
+                              {% when 'price_range' %}
+                                <details
+                                  id="Details-{{ filter.param_name | escape }}-{{ section.id }}"
+                                  class="md-collection-filterbar__group js-filter{% if filter.min_value.value or filter.max_value.value %} md-collection-filterbar__group--has-active{% endif %}"
+                                  data-index="{{ forloop.index }}"
+                                >
+                                  <summary class="md-collection-filterbar__summary">
+                                    <span>{{ filter.label | escape }}</span>
+                                    {%- if filter.min_value.value or filter.max_value.value -%}
+                                      <span class="md-collection-filterbar__badge">1</span>
+                                    {%- endif -%}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                  </summary>
+                                  <div id="Facet-{{ forloop.index }}-{{ section.id }}" class="md-collection-filterbar__popover">
+                                    <p class="md-collection-filterbar__price-hint">{{ 'products.facets.max_price' | t: price: filter.range_max | money }}</p>
+                                    <price-range class="facets__price">
+                                      <span class="field-currency">{{ cart.currency.symbol }}</span>
+                                      <div class="field">
+                                        <input
+                                          class="field__input"
+                                          name="{{ filter.min_value.param_name }}"
+                                          id="Filter-{{ filter.label | escape }}-GTE"
+                                          {%- if filter.min_value.value -%}
+                                            value="{{ filter.min_value.value | divided_by: 100.00 }}"
+                                          {%- endif -%}
+                                          type="number"
+                                          placeholder="0"
+                                          min="0"
+                                          max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
+                                        >
+                                        <label class="field__label" for="Filter-{{ filter.label | escape }}-GTE">{{ 'products.facets.from' | t }}</label>
+                                      </div>
+                                      <span class="field-currency">{{ cart.currency.symbol }}</span>
+                                      <div class="field">
+                                        <input
+                                          class="field__input"
+                                          name="{{ filter.max_value.param_name }}"
+                                          id="Filter-{{ filter.label | escape }}-LTE"
+                                          {%- if filter.max_value.value -%}
+                                            value="{{ filter.max_value.value | divided_by: 100.00 }}"
+                                          {%- endif -%}
+                                          type="number"
+                                          min="0"
+                                          placeholder="{{ filter.range_max | divided_by: 100.00 | ceil }}"
+                                          max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
+                                        >
+                                        <label class="field__label" for="Filter-{{ filter.label | escape }}-LTE">{{ 'products.facets.to' | t }}</label>
+                                      </div>
+                                    </price-range>
+                                  </div>
+                                </details>
+                            {% endcase %}
+                          {%- endfor -%}
+                        </div>
+                      </form>
+                    </facet-filters-form>
+                  {%- endif -%}
+                </div>
+
+                <div class="md-collection-toolbar__meta">
                   <span class="visually-hidden" id="ProductCount" role="status">
                     {%- if collection.results_count -%}
                       {{ 'templates.search.results_with_count' | t: terms: collection.terms, count: collection.results_count }}
@@ -297,9 +435,7 @@
                       {%- endif -%}
                     </span>
                   </span>
-                </div>
 
-                <div class="md-collection-toolbar__right">
                   {%- if section.settings.enable_sorting -%}
                     <facet-filters-form class="md-collection-toolbar__sort-form">
                       <form id="FacetSortForm">
@@ -330,139 +466,6 @@
               </div>
 
               {%- if section.settings.enable_filtering -%}
-                {%- liquid
-                  assign total_active_values = 0
-                  for filter in collection.filters
-                    assign total_active_values = total_active_values | plus: filter.active_values.size
-                    if filter.type == 'price_range'
-                      if filter.min_value.value != null or filter.max_value.value != null
-                        assign total_active_values = total_active_values | plus: 1
-                      endif
-                    endif
-                  endfor
-                -%}
-
-                {% comment %} Desktop horizontal filter bar {% endcomment %}
-                <facet-filters-form class="facets md-collection-desktop-filters">
-                  <form id="FacetFiltersForm">
-                    <div id="FacetsWrapperDesktop" class="md-collection-filterbar">
-                      {%- for filter in collection.filters -%}
-                        {% case filter.type %}
-                          {% when 'boolean', 'list' %}
-                            <details
-                              id="Details-{{ filter.param_name | escape }}-{{ section.id }}"
-                              class="md-collection-filterbar__group js-filter{% if filter.active_values.size > 0 %} md-collection-filterbar__group--has-active{% endif %}"
-                              data-index="{{ forloop.index }}"
-                            >
-                              <summary class="md-collection-filterbar__summary facets__summary">
-                                <span>{{ filter.label | escape }}</span>
-                                {%- if filter.active_values.size > 0 -%}
-                                  <span class="md-collection-filterbar__badge">{{ filter.active_values.size }}</span>
-                                {%- endif -%}
-                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                              </summary>
-                              <div id="Facet-{{ forloop.index }}-{{ section.id }}" class="md-collection-filterbar__popover facets-wrap parent-wrap">
-                                <ul class="md-collection-filterbar__list facets__list list-unstyled" role="list">
-                                  {%- liquid
-                                    assign sorted_values = filter.values
-                                    if filter.operator == 'AND'
-                                      assign active_filter_values = filter.values | where: 'active', true
-                                      assign inactive_filter_values = filter.values | where: 'active', false
-                                      assign sorted_values = active_filter_values | concat: inactive_filter_values
-                                    endif
-                                  -%}
-                                  {%- for value in sorted_values -%}
-                                    {%- liquid
-                                      assign input_id = 'Filter-' | append: filter.param_name | escape | append: '-' | append: forloop.index
-                                      assign is_disabled = false
-                                      if value.count == 0 and value.active == false
-                                        assign is_disabled = true
-                                      endif
-                                    -%}
-                                    <li class="md-collection-filterbar__item">
-                                      <label for="{{ input_id }}" class="md-collection-filterbar__label facet-checkbox{% if is_disabled %} md-collection-filterbar__label--disabled{% endif %}{% if value.active %} md-collection-filterbar__label--active{% endif %}">
-                                        <input
-                                          type="checkbox"
-                                          name="{{ value.param_name }}"
-                                          value="{{ value.value }}"
-                                          id="{{ input_id }}"
-                                          {% if value.active %}checked{% endif %}
-                                          {% if is_disabled %}disabled{% endif %}
-                                        >
-                                        <span class="md-collection-filterbar__check">
-                                          <svg class="icon icon-checkmark" width="1.1rem" height="0.7rem" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M1.5 3.5L4 6.5L9.5 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                          </svg>
-                                        </span>
-                                        <span class="facet-checkbox__text" aria-hidden="true">
-                                          <span class="facet-checkbox__text-label">{{ value.label | escape }}</span>
-                                        </span>
-                                        <span class="md-collection-filterbar__item-count">({{ value.count }})</span>
-                                        <span class="visually-hidden">{{ value.label | escape }} ({{ value.count }})</span>
-                                      </label>
-                                    </li>
-                                  {%- endfor -%}
-                                </ul>
-                              </div>
-                            </details>
-                          {% when 'price_range' %}
-                            <details
-                              id="Details-{{ filter.param_name | escape }}-{{ section.id }}"
-                              class="md-collection-filterbar__group js-filter{% if filter.min_value.value or filter.max_value.value %} md-collection-filterbar__group--has-active{% endif %}"
-                              data-index="{{ forloop.index }}"
-                            >
-                              <summary class="md-collection-filterbar__summary">
-                                <span>{{ filter.label | escape }}</span>
-                                {%- if filter.min_value.value or filter.max_value.value -%}
-                                  <span class="md-collection-filterbar__badge">1</span>
-                                {%- endif -%}
-                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                              </summary>
-                              <div id="Facet-{{ forloop.index }}-{{ section.id }}" class="md-collection-filterbar__popover">
-                                <p class="md-collection-filterbar__price-hint">{{ 'products.facets.max_price' | t: price: filter.range_max | money }}</p>
-                                <price-range class="facets__price">
-                                  <span class="field-currency">{{ cart.currency.symbol }}</span>
-                                  <div class="field">
-                                    <input
-                                      class="field__input"
-                                      name="{{ filter.min_value.param_name }}"
-                                      id="Filter-{{ filter.label | escape }}-GTE"
-                                      {%- if filter.min_value.value -%}
-                                        value="{{ filter.min_value.value | divided_by: 100.00 }}"
-                                      {%- endif -%}
-                                      type="number"
-                                      placeholder="0"
-                                      min="0"
-                                      max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
-                                    >
-                                    <label class="field__label" for="Filter-{{ filter.label | escape }}-GTE">{{ 'products.facets.from' | t }}</label>
-                                  </div>
-                                  <span class="field-currency">{{ cart.currency.symbol }}</span>
-                                  <div class="field">
-                                    <input
-                                      class="field__input"
-                                      name="{{ filter.max_value.param_name }}"
-                                      id="Filter-{{ filter.label | escape }}-LTE"
-                                      {%- if filter.max_value.value -%}
-                                        value="{{ filter.max_value.value | divided_by: 100.00 }}"
-                                      {%- endif -%}
-                                      type="number"
-                                      min="0"
-                                      placeholder="{{ filter.range_max | divided_by: 100.00 | ceil }}"
-                                      max="{{ filter.range_max | divided_by: 100.00 | ceil }}"
-                                    >
-                                    <label class="field__label" for="Filter-{{ filter.label | escape }}-LTE">{{ 'products.facets.to' | t }}</label>
-                                  </div>
-                                </price-range>
-                              </div>
-                            </details>
-                        {% endcase %}
-                      {%- endfor -%}
-                    </div>
-                  </form>
-                </facet-filters-form>
-
-                {% comment %} Active filter chips {% endcomment %}
                 <div class="md-collection-toolbar__active{% if total_active_values == 0 %} is-empty{% endif %}">
                   <div class="active-facets active-facets-desktop">
                     {%- if total_active_values > 0 -%}
@@ -705,22 +708,6 @@
                 </menu-drawer>
               </div>
             {%- endif -%}
-          {%- endif -%}
-
-          {%- if section.settings.enable_filtering -%}
-          <script>
-            (function() {
-              var bar = document.querySelector('.md-collection-filterbar');
-              if (!bar) return;
-              bar.addEventListener('toggle', function(e) {
-                if (!e.target.open) return;
-                var groups = bar.querySelectorAll('.md-collection-filterbar__group[open]');
-                for (var i = 0; i < groups.length; i++) {
-                  if (groups[i] !== e.target) groups[i].open = false;
-                }
-              });
-            })();
-          </script>
           {%- endif -%}
 
           {% comment %} Product Grid {% endcomment %}
