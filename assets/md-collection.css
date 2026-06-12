@@ -41,14 +41,14 @@
   --md-collection-border-muted: rgba(var(--color-foreground), 0.15);
 
   /* Font tokens */
-  --md-collection-font-xs: 1.1rem;
-  --md-collection-font-sm: 1.2rem;
-  --md-collection-font-base: 1.3rem;
-  --md-collection-font-md: 1.4rem;
-  --md-collection-font-lg: 1.6rem;
-  --md-collection-font-xl: 1.8rem;
-  --md-collection-font-2xl: 2.2rem;
-  --md-collection-font-3xl: 2.8rem;
+  --md-collection-font-xs: 1.2rem;
+  --md-collection-font-sm: 1.3rem;
+  --md-collection-font-base: 1.4rem;
+  --md-collection-font-md: 1.5rem;
+  --md-collection-font-lg: 1.7rem;
+  --md-collection-font-xl: 1.9rem;
+  --md-collection-font-2xl: 2.4rem;
+  --md-collection-font-3xl: 3rem;
 
   /* Radius */
   --md-collection-radius-sm: 0.2rem;
