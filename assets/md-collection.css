@@ -93,20 +93,14 @@
 @media screen and (min-width: 990px) {
   .md-collection-sidebar {
     display: block;
+    padding-top: var(--md-collection-space-lg);
   }
-}
 
-@media screen and (min-width: 990px) {
   .md-collection-sidebar .md-collection-sidebar__inner {
     background: rgba(var(--color-foreground), 0.025);
     padding: var(--md-collection-space-lg);
     border-radius: var(--md-collection-radius-md);
   }
-}
-
-/* Sidebar inner spacing uses scheme tokens */
-.md-collection-sidebar .md-collection-sidebar__inner {
-  padding: var(--md-collection-space-lg) 0;
 }
 
 /* Category box */
@@ -155,11 +149,14 @@
   align-items: center;
   justify-content: center;
   color: rgba(var(--color-foreground), 0.55);
+  line-height: 0;
+  transform: translateY(-0.05rem);
 }
 
 .md-collection-sidebar__link-icon svg {
   width: 1.8rem;
   height: 1.8rem;
+  display: block;
 }
 
 .md-collection-sidebar__link-text {
