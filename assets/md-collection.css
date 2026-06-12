@@ -1571,6 +1571,40 @@
   border-color: var(--md-collection-border-muted);
 }
 
+/* Pagination dots */
+.md-card-product__media-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 0.9rem;
+}
+
+.md-card-product__media-dot {
+  width: 0.9rem;
+  height: 0.9rem;
+  padding: 0;
+  border: 1px solid rgba(var(--color-foreground), 0.55);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.18s ease, border-color 0.18s ease;
+}
+
+.md-card-product__media-dot.is-active {
+  background: rgb(var(--color-foreground));
+  border-color: rgb(var(--color-foreground));
+}
+
+.md-card-product__media-dot:hover {
+  border-color: rgb(var(--color-foreground));
+}
+
+.md-card-product__media-dot:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(var(--color-foreground), 0.15);
+}
+
 /* Mobile: hide nav arrows, smaller media */
 @media screen and (max-width: 989px) {
   .md-card-product__media-nav {

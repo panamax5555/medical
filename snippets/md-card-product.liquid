@@ -135,6 +135,20 @@
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
         {%- endif -%}
+
+        {%- if product_images.size > 1 -%}
+          <div class="md-card-product__media-pagination" data-md-card-media-pagination aria-hidden="true">
+            {%- for image in product_images -%}
+              <button
+                type="button"
+                class="md-card-product__media-dot{% if forloop.first %} is-active{% endif %}"
+                data-md-card-media-dot
+                data-md-card-media-dot-index="{{ forloop.index0 }}"
+                aria-label="Bild {{ forloop.index }} anzeigen"
+              ></button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
       </div>
 
       <a href="{{ product_url }}" class="md-card-product__link" aria-label="{{ card_product.title | escape }}">

@@ -52,6 +52,20 @@
   document.addEventListener('click', handleClickOutside);
   document.addEventListener('keydown', handleKeydown);
 
+  function updateMediaDots(media, activeIndex) {
+    if (!media) return;
+    var dots = media.querySelectorAll('[data-md-card-media-dot]');
+    if (!dots.length) return;
+
+    for (var d = 0; d < dots.length; d++) {
+      if (d === activeIndex) {
+        dots[d].classList.add('is-active');
+      } else {
+        dots[d].classList.remove('is-active');
+      }
+    }
+  }
+
   function handleMediaNavClick(e) {
     var button = e.target.closest('[data-md-card-media-prev], [data-md-card-media-next]');
     if (!button) return;
@@ -65,25 +79,92 @@
     var track = media.querySelector('[data-md-card-media-track]');
     if (!track) return;
 
+    var slides = track.querySelectorAll('[data-md-card-media-slide]');
+    if (slides.length <= 1) return;
+
     var direction = button.hasAttribute('data-md-card-media-next') ? 1 : -1;
-    var amount = track.clientWidth;
-    var scrollMax = track.scrollWidth - track.clientWidth;
 
-    if (direction > 0 && track.scrollLeft + amount > scrollMax) {
-      track.scrollTo({ left: 0, behavior: 'smooth' });
-      return;
+    var currentIndex = parseInt(media.getAttribute('data-md-card-media-index') || '0', 10);
+    if (isNaN(currentIndex) || currentIndex < 0 || currentIndex >= slides.length) {
+      currentIndex = 0;
     }
 
-    if (direction < 0 && track.scrollLeft - amount < 0) {
-      track.scrollTo({ left: scrollMax, behavior: 'smooth' });
-      return;
-    }
+    var nextIndex = (currentIndex + direction + slides.length) % slides.length;
+    media.setAttribute('data-md-card-media-index', String(nextIndex));
 
-    track.scrollBy({
-      left: direction * amount,
+    track.scrollTo({
+      left: slides[nextIndex].offsetLeft,
       behavior: 'smooth'
     });
+    updateMediaDots(media, nextIndex);
   }
 
-  document.addEventListener('click', handleMediaNavClick);
+  function handleMediaDotClick(e) {
+    var dot = e.target.closest('[data-md-card-media-dot]');
+    if (!dot) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    var media = dot.closest('[data-md-card-media]');
+    if (!media) return;
+
+    var track = media.querySelector('[data-md-card-media-track]');
+    if (!track) return;
+
+    var slides = track.querySelectorAll('[data-md-card-media-slide]');
+    if (!slides.length) return;
+
+    var index = parseInt(dot.getAttribute('data-md-card-media-dot-index') || '0', 10);
+    if (isNaN(index) || index < 0 || index >= slides.length) return;
+
+    media.setAttribute('data-md-card-media-index', String(index));
+    track.scrollTo({
+      left: slides[index].offsetLeft,
+      behavior: 'smooth'
+    });
+    updateMediaDots(media, index);
+  }
+
+  function handleMediaScrollSync(e) {
+    var track = e.target;
+    if (!track.hasAttribute('data-md-card-media-track')) return;
+
+    var media = track.closest('[data-md-card-media]');
+    if (!media) return;
+
+    var slides = track.querySelectorAll('[data-md-card-media-slide]');
+    if (!slides.length) return;
+
+    var scrollLeft = track.scrollLeft;
+    var closestIndex = 0;
+    var closestDistance = Infinity;
+
+    for (var s = 0; s < slides.length; s++) {
+      var distance = Math.abs(slides[s].offsetLeft - scrollLeft);
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestIndex = s;
+      }
+    }
+
+    media.setAttribute('data-md-card-media-index', String(closestIndex));
+    updateMediaDots(media, closestIndex);
+  }
+
+  var debouncedScrollSync;
+
+  function onDebouncedScrollSync(e) {
+    clearTimeout(debouncedScrollSync);
+    debouncedScrollSync = setTimeout(function () {
+      handleMediaScrollSync(e);
+    }, 100);
+  }
+
+  document.addEventListener('click', function (e) {
+    handleMediaNavClick(e);
+    handleMediaDotClick(e);
+  });
+
+  document.addEventListener('scroll', onDebouncedScrollSync, true);
 })();
