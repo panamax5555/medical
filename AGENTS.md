@@ -19,7 +19,7 @@ Main goals:
 
 ## Rules
 - Never modify or push to the live theme.
-- Always use theme ID 201958162762 for Shopify CLI push/dev.
+- Always use theme ID 201959539018 for Shopify CLI push/dev.
 - Do not use PageFly for core templates.
 - Prefer custom files with `md-` prefix.
 - Keep Dawn core changes minimal.
@@ -47,5 +47,5 @@ Create or extend:
 - First analyze.
 - Then plan.
 - Only then change code.
-- Work in small commits.
+- Do not commit unless told 
 - Run `shopify theme check` before finishing.

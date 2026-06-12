@@ -741,7 +741,9 @@
     }
 
     .md-collection[data-md-view="list"] .md-card-product__title {
-      font-size: var(--md-collection-font-lg);
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.2;
     }
 
     .md-collection[data-md-view="list"] .md-card-product__purchase {
@@ -764,7 +766,9 @@
   }
 
   .md-collection[data-md-view="list"] .md-card-product__title {
-    font-size: var(--md-collection-font-md);
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1.2;
     -webkit-line-clamp: 2;
   }
 
@@ -1977,13 +1981,24 @@
   z-index: 1;
 }
 
-/* Link wrapper */
+/* Link wrapper (title link only) */
 .md-card-product__link {
   text-decoration: none;
   color: inherit;
+}
+
+/* Info wrapper — fills available height in card */
+.md-card-product__info {
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Title link — only the product title is linked */
+.md-card-product__title-link {
+  text-decoration: none;
+  color: inherit;
 }
 
 /* Media: image track with scroll-snap */

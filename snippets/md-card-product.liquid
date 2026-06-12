@@ -152,14 +152,15 @@
       </div>
 
       <div class="md-card-product__info">
-        <a href="{{ product_url }}" class="md-card-product__link" aria-label="{{ card_product.title | escape }}">
         <div class="md-card-product__text">
           {%- if show_vendor and card_product.vendor != blank -%}
             <span class="md-card-product__vendor">{{ card_product.vendor | escape }}</span>
           {%- endif -%}
 
           <h3 class="md-card-product__title">
-            {{- card_product.title | escape -}}
+            <a href="{{ product_url }}" class="md-card-product__title-link">
+              {{- card_product.title | escape -}}
+            </a>
           </h3>
 
           {%- liquid
@@ -252,7 +253,6 @@
             </div>
           {%- endif -%}
         </div>
-      </a>
 
       {%- if show_variant_hint and variant_count > 1 -%}
         <div class="md-card-product__variant-popover">
@@ -447,7 +447,7 @@
           </div>
         </div>
       </div>
-      <div class="md-card-product__link" style="cursor: default;">
+      <div class="md-card-product__info">
         <div class="md-card-product__text">
           <h3 class="md-card-product__title">{{ 'onboarding.product_title' | t }}</h3>
           <div class="md-card-product__prices">
