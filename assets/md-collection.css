@@ -1489,14 +1489,15 @@
 .md-card-product__media {
   position: relative;
   margin: 0 0 var(--md-collection-space-lg);
-  border-radius: var(--md-collection-radius-sm);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .md-card-product__media-link {
   display: block;
   text-decoration: none;
   color: inherit;
+  overflow: hidden;
+  border-radius: var(--md-collection-radius-sm);
 }
 
 .md-card-product__media-track {
@@ -1552,8 +1553,8 @@
   transition: opacity 0.18s ease, visibility 0.18s ease, border-color 0.18s ease;
 }
 
-.md-card-product:hover .md-card-product__media-nav,
-.md-card-product:focus-within .md-card-product__media-nav {
+.md-card-product__media:hover .md-card-product__media-nav,
+.md-card-product__media:focus-within .md-card-product__media-nav {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -1578,6 +1579,19 @@
   align-items: center;
   gap: 0.7rem;
   margin-top: 0.9rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-0.2rem);
+  transition: opacity 0.18s ease, visibility 0.18s ease, transform 0.18s ease;
+}
+
+.md-card-product__media:hover .md-card-product__media-pagination,
+.md-card-product__media:focus-within .md-card-product__media-pagination {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 .md-card-product__media-dot {
@@ -1608,6 +1622,10 @@
 /* Mobile: hide nav arrows, smaller media */
 @media screen and (max-width: 989px) {
   .md-card-product__media-nav {
+    display: none;
+  }
+
+  .md-card-product__media-pagination {
     display: none;
   }
 
