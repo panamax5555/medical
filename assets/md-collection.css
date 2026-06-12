@@ -1766,6 +1766,7 @@
   font-size: var(--md-collection-font-2xl);
   font-weight: 700;
   line-height: 1.12;
+  letter-spacing: 0;
   color: rgb(var(--color-foreground));
   display: block;
 }
@@ -1784,6 +1785,7 @@
   font-size: var(--md-collection-font-xs);
   color: rgba(var(--color-foreground), 0.5);
   text-decoration: line-through;
+  letter-spacing: 0;
   display: block;
   margin-bottom: 0.2rem;
 }
