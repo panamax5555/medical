@@ -249,7 +249,7 @@
       {%- if show_variant_hint and variant_count > 1 -%}
         <div class="md-card-product__variant-popover">
           <div class="md-card-product__variant-list">
-            {%- for variant in card_product.variants limit: 4 -%}
+            {%- for variant in card_product.variants limit: 6 -%}
               <a href="{{ product_url }}?variant={{ variant.id }}" class="md-card-product__variant-tile" title="{{ variant.title | escape }}">
                 {%- liquid
                   assign tile_media = variant.featured_media | default: variant.image | default: featured_media
