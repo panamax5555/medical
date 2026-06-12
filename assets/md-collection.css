@@ -630,6 +630,142 @@
 }
 
 /* ==========================================================================
+   View Switch
+   ========================================================================== */
+.md-collection-toolbar__view-controls {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  margin-left: var(--md-collection-space-md);
+}
+
+@media screen and (min-width: 990px) {
+  .md-collection-toolbar__view-controls {
+    display: flex;
+  }
+}
+
+.md-collection-toolbar__view-label {
+  font-size: var(--md-collection-font-sm);
+  color: rgba(var(--color-foreground), 0.55);
+  white-space: nowrap;
+}
+
+.md-collection-toolbar__view-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.4rem;
+  height: 3.4rem;
+  padding: 0;
+  border: 1px solid var(--md-collection-border-muted);
+  border-radius: var(--md-collection-radius-sm);
+  background: rgb(var(--color-background));
+  color: rgba(var(--color-foreground), 0.45);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background-color 0.15s;
+}
+
+.md-collection-toolbar__view-btn:hover {
+  color: rgb(var(--color-foreground));
+  border-color: rgba(var(--color-foreground), 0.35);
+}
+
+.md-collection-toolbar__view-btn[aria-pressed="true"] {
+  color: rgb(var(--color-button-text));
+  background: rgb(var(--color-button));
+  border-color: rgb(var(--color-button));
+}
+
+/* ==========================================================================
+   List View
+   ========================================================================== */
+@media screen and (min-width: 750px) {
+  .md-collection[data-md-view="list"] .md-collection-products {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .md-collection[data-md-view="list"] .md-card-product {
+    border-top: 1px solid var(--md-collection-border-subtle);
+    padding: var(--md-collection-space-lg) var(--md-collection-space-sm);
+  }
+
+  .md-collection[data-md-view="list"] .md-card-product__inner {
+    display: grid;
+    grid-template-columns: 18rem minmax(0, 1fr) auto;
+    gap: var(--md-collection-space-lg);
+    align-items: start;
+    height: auto;
+  }
+
+  .md-collection[data-md-view="list"] .md-card-product__media {
+    margin: 0;
+  }
+
+  .md-collection[data-md-view="list"] .md-card-product__media-slide {
+    min-height: 16rem;
+  }
+
+  .md-collection[data-md-view="list"] .md-card-product__image {
+    max-height: 15rem;
+  }
+
+  .md-collection[data-md-view="list"] .md-card-product__link {
+    display: contents;
+  }
+
+  .md-collection[data-md-view="list"] .md-card-product__text {
+    flex: 1 1 auto;
+    gap: var(--md-collection-space-xs);
+  }
+
+  .md-collection[data-md-view="list"] .md-card-product__title {
+    font-size: var(--md-collection-font-md);
+    -webkit-line-clamp: 2;
+  }
+
+  .md-collection[data-md-view="list"] .md-card-product__prices {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding-top: 0;
+    margin-top: 0;
+    min-width: 10rem;
+    text-align: right;
+  }
+
+  .md-collection[data-md-view="list"] .md-card-product__price-current {
+    font-size: var(--md-collection-font-xl);
+    line-height: 1.15;
+  }
+
+  .md-collection[data-md-view="list"] .md-card-product__inventory {
+    text-align: right;
+  }
+
+  .md-collection[data-md-view="list"] .md-card-product__variant-popover,
+  .md-collection[data-md-view="list"] .md-card-product__media-nav,
+  .md-collection[data-md-view="list"] .md-card-product__media-pagination {
+    display: none;
+  }
+
+  .md-collection[data-md-view="list"] .md-card-product__watchlist {
+    display: none;
+  }
+}
+
+/* Mobile list view: keep grid but single column */
+@media screen and (max-width: 749px) {
+  .md-collection[data-md-view="list"] .md-collection-products {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
    Desktop Horizontal Filter Bar
    ========================================================================== */
 .md-collection-filterbar {

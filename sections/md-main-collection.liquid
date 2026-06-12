@@ -17,7 +17,7 @@
   }
 {%- endstyle -%}
 
-<div class="md-collection color-{{ section.settings.color_scheme }} section-{{ section.id }}-padding">
+<div class="md-collection color-{{ section.settings.color_scheme }} section-{{ section.id }}-padding" data-md-view="{{ section.settings.default_view | default: 'grid' }}">
   {%- paginate collection.products by section.settings.products_per_page -%}
     {%- liquid
       assign sidebar_links = null
@@ -470,6 +470,16 @@
                       </form>
                     </facet-filters-form>
                   {%- endif -%}
+
+                  <div class="md-collection-toolbar__view-controls" aria-label="Ansicht">
+                    <span class="md-collection-toolbar__view-label">Ansicht:</span>
+                    <button type="button" class="md-collection-toolbar__view-btn" data-md-view-button="grid" aria-pressed="true" aria-label="Kachelansicht">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16" height="16" aria-hidden="true"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+                    </button>
+                    <button type="button" class="md-collection-toolbar__view-btn" data-md-view-button="list" aria-pressed="false" aria-label="Listenansicht">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16" height="16" aria-hidden="true"><rect x="1" y="2" width="14" height="4" rx="1"/><rect x="1" y="10" width="14" height="4" rx="1"/></svg>
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -1095,6 +1105,16 @@
         { "value": "2", "label": "2" }
       ],
       "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "default_view",
+      "label": "Standardansicht",
+      "options": [
+        { "value": "grid", "label": "Kachelansicht" },
+        { "value": "list", "label": "Listenansicht" }
+      ],
+      "default": "grid"
     },
     {
       "type": "header",

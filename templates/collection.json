@@ -30,6 +30,7 @@
         "enable_filtering": true,
         "filter_type": "horizontal",
         "enable_sorting": true,
+        "default_view": "grid",
         "padding_top": 16,
         "padding_bottom": 28
       }
