@@ -151,7 +151,8 @@
         {%- endif -%}
       </div>
 
-      <a href="{{ product_url }}" class="md-card-product__link" aria-label="{{ card_product.title | escape }}">
+      <div class="md-card-product__info">
+        <a href="{{ product_url }}" class="md-card-product__link" aria-label="{{ card_product.title | escape }}">
         <div class="md-card-product__text">
           {%- if show_vendor and card_product.vendor != blank -%}
             <span class="md-card-product__vendor">{{ card_product.vendor | escape }}</span>
@@ -379,6 +380,7 @@
           </div>
         </div>
       {%- endif -%}
+      </div>
 
       <form method="post" action="{{ routes.cart_add_url }}" class="md-card-product__purchase">
         <div class="md-card-product__purchase-price" data-md-purchase-price>
