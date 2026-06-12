@@ -250,15 +250,36 @@
         <div class="md-card-product__variant-popover">
           <div class="md-card-product__variant-list">
             {%- for variant in card_product.variants limit: 6 -%}
-              <a href="{{ product_url }}?variant={{ variant.id }}" class="md-card-product__variant-tile" title="{{ variant.title | escape }}">
-                {%- liquid
-                  assign tile_media = variant.featured_media | default: variant.image | default: featured_media
-                -%}
+              {%- liquid
+                assign tile_media = variant.featured_media | default: variant.image | default: featured_media
+                assign variant_label_clean = ''
+
+                if variant.title != blank and variant.title != 'Default Title'
+                  assign variant_label_clean = variant.title | strip
+                elsif variant.option1 != blank and variant.option1 != 'Default Title'
+                  assign variant_label_clean = variant.option1 | strip
+                endif
+
+                if variant_label_clean == blank
+                  if variant.metafields.custom.vpe != blank
+                    assign variant_label_clean = variant.metafields.custom.vpe | strip
+                  elsif variant.metafields.custom.inhalt != blank
+                    assign variant_label_clean = variant.metafields.custom.inhalt | strip
+                  elsif variant.metafields.custom.menge != blank
+                    assign variant_label_clean = variant.metafields.custom.menge | strip
+                  elsif variant.metafields.custom.gebinde != blank
+                    assign variant_label_clean = variant.metafields.custom.gebinde | strip
+                  else
+                    assign variant_label_clean = card_product.title | strip
+                  endif
+                endif
+              -%}
+              <a href="{{ product_url }}?variant={{ variant.id }}" class="md-card-product__variant-tile" title="{{ variant_label_clean | escape }}">
                 {%- if tile_media -%}
                   <img
                     src="{{ tile_media | image_url: width: 80 }}"
                     srcset="{{ tile_media | image_url: width: 80 }} 1x, {{ tile_media | image_url: width: 160 }} 2x"
-                    alt="{{ variant.title | escape }}"
+                    alt="{{ variant_label_clean | escape }}"
                     class="md-card-product__variant-image"
                     width="80"
                     height="80"
@@ -266,7 +287,7 @@
                   >
                 {%- endif -%}
                 <span class="md-card-product__variant-label">
-                  {{- variant.title | replace: 'Default Title', '' | strip | truncate: 16 -}}
+                  {{- variant_label_clean | truncate: 24 -}}
                 </span>
               </a>
             {%- endfor -%}
