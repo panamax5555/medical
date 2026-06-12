@@ -75,14 +75,14 @@
   --md-header-z-drawer: 10;
 
   /* Typography — font sizes */
-  --md-header-font-2xs: 1rem;
-  --md-header-font-xs: 1.2rem;
-  --md-header-font-sm: 1.3rem;
-  --md-header-font-base: 1.4rem;
-  --md-header-font-md: 1.5rem;
-  --md-header-font-lg: 1.6rem;
-  --md-header-font-xl: 1.7rem;
-  --md-header-font-title: 2rem;
+  --md-header-font-2xs: 0.95rem;
+  --md-header-font-xs: 1.1rem;
+  --md-header-font-sm: 1.2rem;
+  --md-header-font-base: 1.3rem;
+  --md-header-font-md: 1.4rem;
+  --md-header-font-lg: 1.5rem;
+  --md-header-font-xl: 1.6rem;
+  --md-header-font-title: 1.8rem;
   --md-header-font-logo-mobile: 1.8rem;
   --md-header-font-logo-desktop: 2.2rem;
 

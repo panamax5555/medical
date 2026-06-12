@@ -97,6 +97,21 @@
       </button>
     {%- endif -%}
 
+    {%- if section.settings.show_breadcrumb and section.settings.category_menu != blank and breadcrumb_parent_title != null or breadcrumb_is_root -%}
+      <nav class="md-collection-breadcrumb" aria-label="Navigationspfad">
+        <a href="{{ routes.root_url }}" style="color: inherit; text-decoration: none;">Startseite</a>
+        {%- if breadcrumb_parent_title != null -%}
+          <span class="md-collection-breadcrumb__separator" aria-hidden="true">&rsaquo;</span>
+          <a href="{{ breadcrumb_parent_url }}" style="color: inherit; text-decoration: none;">{{ breadcrumb_parent_title | escape }}</a>
+          <span class="md-collection-breadcrumb__separator" aria-hidden="true">&rsaquo;</span>
+          <span aria-current="page">{{ breadcrumb_current_title | escape }}</span>
+        {%- elsif breadcrumb_is_root -%}
+          <span class="md-collection-breadcrumb__separator" aria-hidden="true">&rsaquo;</span>
+          <span aria-current="page">{{ breadcrumb_current_title | escape }}</span>
+        {%- endif -%}
+      </nav>
+    {%- endif -%}
+
     <div class="md-collection-grid{% if hide_sidebar %} md-collection-grid--no-sidebar{% endif %}">
       {%- unless hide_sidebar -%}
         <aside class="md-collection-sidebar color-{{ section.settings.sidebar_color_scheme }}">
@@ -176,21 +191,6 @@
       {%- endunless -%}
 
       <div class="md-collection-content">
-        {%- if section.settings.show_breadcrumb and section.settings.category_menu != blank and breadcrumb_parent_title != null or breadcrumb_is_root -%}
-          <nav class="md-collection-breadcrumb" aria-label="Navigationspfad" style="padding: 0.8rem 0 0; font-size: var(--md-collection-font-xs); color: rgba(var(--color-foreground), 0.55);">
-            <a href="{{ routes.root_url }}" style="color: inherit; text-decoration: none;">Startseite</a>
-            {%- if breadcrumb_parent_title != null -%}
-              <span aria-hidden="true"> / </span>
-              <a href="{{ breadcrumb_parent_url }}" style="color: inherit; text-decoration: none;">{{ breadcrumb_parent_title | escape }}</a>
-              <span aria-hidden="true"> / </span>
-              <span aria-current="page">{{ breadcrumb_current_title | escape }}</span>
-            {%- elsif breadcrumb_is_root -%}
-              <span aria-hidden="true"> / </span>
-              <span aria-current="page">{{ breadcrumb_current_title | escape }}</span>
-            {%- endif -%}
-          </nav>
-        {%- endif -%}
-
         <div class="md-collection-page-header">
           <h1 class="md-collection-page-title">
             {{- collection.title | escape -}}
