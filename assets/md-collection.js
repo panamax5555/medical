@@ -199,6 +199,7 @@
     if (!button) return;
 
     e.preventDefault();
+    e.stopPropagation();
     var view = button.getAttribute('data-md-view-button');
     if (view) setView(view);
   }
@@ -235,4 +236,236 @@
   if (sectionContainer && sectionContainer.parentNode) {
     observer.observe(sectionContainer.parentNode, { childList: true, subtree: true });
   }
+
+  document.addEventListener('shopify:section:load', function (e) {
+    if (e.target && e.target.querySelector && e.target.querySelector('.md-collection[data-md-view]')) {
+      initView();
+    }
+  });
+
+  /* ==========================================================================
+     Quantity Buttons
+     ========================================================================== */
+  function handleQuantityClick(e) {
+    var button = e.target.closest('[data-md-quantity-minus], [data-md-quantity-plus]');
+    if (!button) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    var form = button.closest('form');
+    if (!form) return;
+
+    var input = form.querySelector('.md-card-product__quantity-input');
+    if (!input) return;
+
+    var current = parseInt(input.value, 10);
+    if (isNaN(current)) current = 1;
+
+    var min = parseInt(input.getAttribute('min'), 10);
+    if (isNaN(min)) min = 1;
+
+    var delta = button.hasAttribute('data-md-quantity-plus') ? 1 : -1;
+    var next = current + delta;
+    if (next < min) next = min;
+
+    input.value = next;
+  }
+
+  /* ==========================================================================
+     Variant Dropdown
+     ========================================================================== */
+  function closeAllVariantMenus() {
+    var menus = document.querySelectorAll('.md-card-product__variant-menu.is-open');
+    for (var i = 0; i < menus.length; i++) {
+      menus[i].classList.remove('is-open');
+      var dd = menus[i].closest('[data-md-variant-dropdown]');
+      if (dd) {
+        var trigger = dd.querySelector('[data-md-variant-trigger]');
+        if (trigger) trigger.setAttribute('aria-expanded', 'false');
+      }
+    }
+  }
+
+  function handleVariantTriggerClick(e) {
+    var trigger = e.target.closest('[data-md-variant-trigger]');
+    if (!trigger) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    var dropdown = trigger.closest('[data-md-variant-dropdown]');
+    if (!dropdown) return;
+
+    var menu = dropdown.querySelector('[data-md-variant-menu]');
+    if (!menu) return;
+
+    if (menu.classList.contains('is-open')) {
+      menu.classList.remove('is-open');
+      trigger.setAttribute('aria-expanded', 'false');
+    } else {
+      closeAllVariantMenus();
+      menu.classList.add('is-open');
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+  }
+
+  function handleVariantOptionClick(e) {
+    var option = e.target.closest('[data-md-variant-option]');
+    if (!option) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (option.disabled) return;
+
+    var dropdown = option.closest('[data-md-variant-dropdown]');
+    if (!dropdown) return;
+
+    var card = option.closest('.md-card-product');
+    if (!card) return;
+
+    var form = dropdown.closest('form');
+
+    // Update hidden input
+    var variantInput = dropdown.querySelector('[data-md-variant-input]');
+    if (variantInput) {
+      variantInput.value = option.getAttribute('data-variant-id');
+    } else if (form) {
+      var hiddenInput = form.querySelector('input[name="id"]');
+      if (hiddenInput) hiddenInput.value = option.getAttribute('data-variant-id');
+    }
+
+    // Update trigger UI
+    var trigger = dropdown.querySelector('[data-md-variant-trigger]');
+    var triggerLabel = dropdown.querySelector('[data-md-variant-trigger-label]');
+    var triggerImage = dropdown.querySelector('[data-md-variant-trigger-image]');
+    var triggerDot = dropdown.querySelector('[data-md-variant-trigger-dot]');
+
+    if (triggerLabel) {
+      triggerLabel.textContent = option.getAttribute('data-variant-title') || '';
+    }
+
+    if (triggerImage) {
+      var imgSrc = option.getAttribute('data-variant-image');
+      if (imgSrc) {
+        triggerImage.src = imgSrc;
+        triggerImage.style.display = '';
+      } else {
+        triggerImage.style.display = 'none';
+      }
+    }
+
+    var isAvailable = option.getAttribute('data-variant-available') === 'true';
+    if (triggerDot) {
+      if (isAvailable) {
+        triggerDot.classList.add('is-available');
+      } else {
+        triggerDot.classList.remove('is-available');
+      }
+    }
+
+    // Update prices
+    var priceEl = card.querySelector('[data-md-purchase-price]');
+    if (priceEl) {
+      var price = option.getAttribute('data-variant-price');
+      var comparePrice = option.getAttribute('data-variant-compare-price');
+      var current = priceEl.querySelector('.md-card-product__purchase-price-current');
+      var old = priceEl.querySelector('.md-card-product__purchase-price-old');
+
+      if (current && price) current.textContent = price;
+
+      if (old) {
+        if (comparePrice) {
+          old.textContent = comparePrice;
+          old.style.display = '';
+        } else {
+          old.style.display = 'none';
+        }
+      }
+    }
+
+    // Update unit price in purchase meta
+    var purchaseMeta = card.querySelector('.md-card-product__purchase-meta');
+    if (purchaseMeta) {
+      var unitPriceEl = purchaseMeta.querySelector('.md-card-product__purchase-unit-price');
+      if (unitPriceEl) {
+        var unitPrice = option.getAttribute('data-variant-unit-price');
+        var refValue = option.getAttribute('data-variant-unit-ref-value');
+        var refUnit = option.getAttribute('data-variant-unit-ref-unit');
+        if (unitPrice && refUnit) {
+          unitPriceEl.textContent = unitPrice + ' / ' + (refValue || '1') + ' ' + refUnit;
+          unitPriceEl.style.display = '';
+        } else if (unitPrice) {
+          unitPriceEl.textContent = unitPrice;
+          unitPriceEl.style.display = '';
+        } else {
+          unitPriceEl.style.display = 'none';
+        }
+      }
+    }
+
+    // Update inventory
+    var inventoryEl = card.querySelector('[data-md-purchase-inventory]');
+    if (inventoryEl) {
+      inventoryEl.textContent = isAvailable ? 'Auf Lager' : (document.querySelector('[data-md-sold-out-text]')?.textContent || 'Ausverkauft');
+      inventoryEl.style.color = isAvailable ? 'var(--md-collection-success)' : 'rgba(var(--color-foreground), 0.45)';
+    }
+
+    // Update submit button
+    var submitBtn = card.querySelector('[data-md-purchase-submit]');
+    if (submitBtn) {
+      if (isAvailable) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'In den Warenkorb';
+      } else {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Ausverkauft';
+      }
+    }
+
+    // Mark active option
+    var options = dropdown.querySelectorAll('[data-md-variant-option]');
+    for (var o = 0; o < options.length; o++) {
+      if (options[o] === option) {
+        options[o].classList.add('is-active');
+        options[o].setAttribute('aria-selected', 'true');
+      } else {
+        options[o].classList.remove('is-active');
+        options[o].setAttribute('aria-selected', 'false');
+      }
+    }
+
+    // Close menu
+    var menu = dropdown.querySelector('[data-md-variant-menu]');
+    if (menu) menu.classList.remove('is-open');
+    if (trigger) trigger.setAttribute('aria-expanded', 'false');
+  }
+
+  function handleClickOutsideVariant(e) {
+    if (!e.target.closest('[data-md-variant-dropdown]')) {
+      closeAllVariantMenus();
+    }
+  }
+
+  function handleEscapeVariant(e) {
+    if (e.key === 'Escape') {
+      closeAllVariantMenus();
+    }
+  }
+
+  document.addEventListener('click', function (e) {
+    handleQuantityClick(e);
+    handleVariantTriggerClick(e);
+    handleVariantOptionClick(e);
+    handleClickOutsideVariant(e);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    handleEscapeVariant(e);
+  });
+
+  document.addEventListener('click', function (e) {
+    handleQuantityClick(e);
+  });
 })();
