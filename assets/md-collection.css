@@ -778,6 +778,15 @@
     color: rgba(var(--color-foreground), 0.45);
   }
 
+  .md-collection[data-md-view="list"] .md-card-product__tax-link {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  .md-collection[data-md-view="list"] .md-card-product__tax-link:hover {
+    color: rgba(var(--color-foreground), 0.75);
+  }
+
   .md-collection[data-md-view="list"] .md-card-product__purchase-unit-price {
     font-size: var(--md-collection-font-sm);
     color: rgba(var(--color-foreground), 0.6);
@@ -1005,7 +1014,8 @@
     font-size: var(--md-collection-font-md);
     font-weight: 700;
     cursor: pointer;
-    transition: opacity 0.15s, background-color 0.15s;
+    box-shadow: 0 0.4rem 0.5rem rgba(var(--color-shadow), 0.1);
+    transition: opacity 0.15s, background-color 0.15s, box-shadow 0.15s;
   }
 
   .md-collection[data-md-view="list"] .md-card-product__add-btn:hover {
