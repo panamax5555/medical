@@ -721,43 +721,14 @@
     align-self: start;
   }
 
-  @media screen and (min-width: 990px) {
-    .md-collection[data-md-view="list"] .md-card-product__inner {
-      grid-template-columns: minmax(20rem, 24rem) minmax(0, 1fr) minmax(25rem, 28rem);
-      gap: 2.6rem;
-    }
-
-    .md-collection[data-md-view="list"] .md-card-product {
-      padding: 2.2rem 0;
-    }
-
-    .md-collection[data-md-view="list"] .md-card-product__media-slide {
-      min-height: 26rem;
-    }
-
-    .md-collection[data-md-view="list"] .md-card-product__image {
-      max-height: 25rem;
-      padding: 0;
-    }
-
-    .md-collection[data-md-view="list"] .md-card-product__title {
-      font-size: 2rem;
-      font-weight: 700;
-      line-height: 1.2;
-    }
-
-    .md-collection[data-md-view="list"] .md-card-product__purchase {
-      padding: var(--md-collection-space-lg);
-      background: rgba(var(--color-foreground), 0.025);
-    }
-  }
-
   .md-collection[data-md-view="list"] .md-card-product__media-slide {
-    min-height: 22rem;
+    min-height: 0;
+    align-items: flex-start;
   }
 
   .md-collection[data-md-view="list"] .md-card-product__image {
-    max-height: 22rem;
+    max-height: 20rem;
+    padding: 0;
   }
 
   .md-collection[data-md-view="list"] .md-card-product__text {
@@ -1090,6 +1061,40 @@
   .md-collection[data-md-view="list"] .md-card-product__add-btn:disabled {
     opacity: 0.5;
     cursor: default;
+  }
+
+  @media screen and (min-width: 990px) {
+    .md-collection[data-md-view="list"] .md-card-product__inner {
+      grid-template-columns: minmax(20rem, 24rem) minmax(0, 1fr) minmax(25rem, 28rem);
+      gap: 2.6rem;
+    }
+
+    .md-collection[data-md-view="list"] .md-card-product {
+      padding: 2.2rem 0;
+    }
+
+    .md-collection[data-md-view="list"] .md-card-product__media-slide {
+      min-height: 0;
+    }
+
+    .md-collection[data-md-view="list"] .md-card-product__image {
+      max-height: 22rem;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      padding: 0;
+    }
+
+    .md-collection[data-md-view="list"] .md-card-product__title {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .md-collection[data-md-view="list"] .md-card-product__purchase {
+      padding: var(--md-collection-space-lg);
+      background: rgba(var(--color-foreground), 0.025);
+    }
   }
 }
 
