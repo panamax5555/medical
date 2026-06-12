@@ -1787,20 +1787,21 @@
   color: rgba(var(--color-foreground), 0.5);
 }
 
-/* Desktop: variant panel slides out from the side */
+/* Desktop: variant popover slides out to the right */
 @media screen and (min-width: 990px) {
   .md-card-product__variant-popover {
     position: absolute;
-    top: var(--md-collection-space-lg);
     left: 100%;
-    width: 18rem;
-    max-height: calc(100% - var(--md-collection-space-lg));
-    z-index: 30;
+    top: auto;
+    bottom: var(--md-collection-space-lg);
+    width: max-content;
+    min-width: 24rem;
+    max-width: 30rem;
+    z-index: 50;
     background: rgb(var(--color-background));
     border: 1px solid var(--md-collection-border-subtle);
-    padding: var(--md-collection-space-sm);
+    padding: 0.8rem;
     box-shadow: 0 0.8rem 2rem rgba(var(--color-foreground), 0.10);
-    overflow-y: auto;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -1816,35 +1817,26 @@
     transform: translateX(0);
   }
 
-  /* Last column: open left */
-  .md-collection-products .md-card-product:nth-child(4n) .md-card-product__variant-popover {
-    left: auto;
-    right: 100%;
-    transform: translateX(0.4rem);
-  }
-
-  .md-collection-products .md-card-product:nth-child(4n):hover .md-card-product__variant-popover,
-  .md-collection-products .md-card-product:nth-child(4n):focus-within .md-card-product__variant-popover {
-    transform: translateX(0);
-  }
-
-  /* Vertical list */
+  /* Horizontal list, same as the old below-card popover */
   .md-card-product__variant-list {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: flex-start;
     gap: 0.4rem;
-    overflow: visible;
+    overflow: hidden;
   }
 
   .md-card-product__variant-tile {
-    display: grid;
-    grid-template-columns: 3rem minmax(0, 1fr);
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 0.8rem;
-    width: 100%;
-    min-width: 0;
-    min-height: 4.2rem;
-    padding: 0.45rem;
+    justify-content: center;
+    width: 5.2rem;
+    min-width: 5.2rem;
+    min-height: 6.4rem;
+    padding: 0.3rem;
     border: 1px solid var(--md-collection-border-subtle);
     border-radius: var(--md-collection-radius-sm);
     background: rgb(var(--color-background));
@@ -1861,20 +1853,19 @@
   }
 
   .md-card-product__variant-image {
-    width: 2.8rem;
-    height: 2.8rem;
+    display: block;
+    width: 3.2rem;
+    height: 3.2rem;
     object-fit: contain;
-    margin: 0;
+    margin: 0 0 0.35rem;
   }
 
   .md-card-product__variant-label {
-    font-size: 1.15rem;
-    line-height: 1.2;
+    font-size: 1.05rem;
+    line-height: 1.15;
     font-weight: 500;
-    text-align: left;
-    color: rgba(var(--color-foreground), 0.78);
-    overflow: hidden;
-    text-overflow: ellipsis;
+    text-align: center;
+    color: rgba(var(--color-foreground), 0.7);
     white-space: nowrap;
   }
 }
@@ -1882,7 +1873,7 @@
 /* Stacking: hovered card above neighbours */
 .md-card-product:hover,
 .md-card-product:focus-within {
-  z-index: 40;
+  z-index: 60;
 }
 
 .md-collection-products {
