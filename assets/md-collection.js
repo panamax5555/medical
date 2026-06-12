@@ -325,15 +325,13 @@
     var card = option.closest('.md-card-product');
     if (!card) return;
 
-    var form = dropdown.closest('form');
-
-    // Update hidden input
-    var variantInput = dropdown.querySelector('[data-md-variant-input]');
-    if (variantInput) {
-      variantInput.value = option.getAttribute('data-variant-id');
-    } else if (form) {
-      var hiddenInput = form.querySelector('input[name="id"]');
-      if (hiddenInput) hiddenInput.value = option.getAttribute('data-variant-id');
+    // Update hidden input in the purchase form
+    var purchaseForm = card.querySelector('.md-card-product__purchase');
+    if (purchaseForm) {
+      var hiddenInput = purchaseForm.querySelector('input[name="id"]');
+      if (hiddenInput) {
+        hiddenInput.value = option.getAttribute('data-variant-id');
+      }
     }
 
     // Update trigger UI
@@ -463,9 +461,5 @@
 
   document.addEventListener('keydown', function (e) {
     handleEscapeVariant(e);
-  });
-
-  document.addEventListener('click', function (e) {
-    handleQuantityClick(e);
   });
 })();

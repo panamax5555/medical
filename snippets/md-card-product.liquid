@@ -162,6 +162,13 @@
           </h3>
 
           {%- liquid
+            assign short_description = card_product.metafields.custom.short_description | default: card_product.metafields.custom.kurzbeschreibung | strip
+          -%}
+          {%- if short_description != blank -%}
+            <span class="md-card-product__subtitle">{{ short_description | escape | truncate: 100 }}</span>
+          {%- endif -%}
+
+          {%- liquid
             assign variant_label = ''
             if current_variant.title != blank and current_variant.title != 'Default Title'
               assign variant_label = current_variant.title
@@ -295,9 +302,85 @@
         </div>
       {%- endif -%}
 
-      <form method="post" action="{{ routes.cart_add_url }}" class="md-card-product__purchase">
-        {%- assign variant_image = current_variant.featured_media | default: current_variant.image | default: featured_media -%}
+      {%- if variant_count > 1 -%}
+        <div class="md-card-product__variant-control" data-md-variant-dropdown>
+          {%- liquid
+            assign trigger_size = current_variant.title | replace: 'Default Title', '' | strip
+            assign trigger_vpe = current_variant.metafields.custom.vpe | default: current_variant.metafields.custom.inhalt | default: current_variant.metafields.custom.menge | default: current_variant.metafields.custom.gebinde | default: card_product.metafields.custom.vpe | default: card_product.metafields.custom.inhalt | default: card_product.metafields.custom.menge | default: card_product.metafields.custom.gebinde | strip
 
+            if trigger_vpe != blank and trigger_size != blank
+              assign trigger_label = trigger_vpe | append: ', Größe ' | append: trigger_size
+            elsif trigger_vpe != blank
+              assign trigger_label = trigger_vpe
+            elsif trigger_size != blank
+              assign trigger_label = trigger_size
+            else
+              assign trigger_label = card_product.title | strip
+            endif
+          -%}
+          <button type="button" class="md-card-product__variant-trigger" data-md-variant-trigger aria-expanded="false" aria-haspopup="listbox">
+            <span class="md-card-product__variant-trigger-dot{% if available %} is-available{% endif %}" aria-hidden="true"></span>
+            {%- assign variant_image = current_variant.featured_media | default: current_variant.image | default: featured_media -%}
+            {%- if variant_image -%}
+              <img src="{{ variant_image | image_url: width: 96 }}" srcset="{{ variant_image | image_url: width: 96 }} 1x, {{ variant_image | image_url: width: 192 }} 2x" alt="" class="md-card-product__variant-trigger-image" width="96" height="96" aria-hidden="true">
+            {%- endif -%}
+            <span class="md-card-product__variant-trigger-label" data-md-variant-trigger-label>{{- trigger_label | escape -}}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6" width="10" height="6" fill="none" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="md-card-product__variant-menu" data-md-variant-menu role="listbox">
+            {%- for variant in card_product.variants -%}
+              {%- liquid
+                assign v_size = variant.title | replace: 'Default Title', '' | strip
+                assign v_vpe = variant.metafields.custom.vpe | default: variant.metafields.custom.inhalt | default: variant.metafields.custom.menge | default: variant.metafields.custom.gebinde | default: card_product.metafields.custom.vpe | default: card_product.metafields.custom.inhalt | default: card_product.metafields.custom.menge | default: card_product.metafields.custom.gebinde | strip
+
+                if v_vpe != blank and v_size != blank
+                  assign v_label = v_vpe | append: ', Größe ' | append: v_size
+                elsif v_vpe != blank
+                  assign v_label = v_vpe
+                elsif v_size != blank
+                  assign v_label = v_size
+                else
+                  assign v_label = card_product.title | strip
+                endif
+              -%}
+              <button
+                type="button"
+                class="md-card-product__variant-option{% if variant.id == current_variant.id %} is-active{% endif %}"
+                data-md-variant-option
+                data-variant-id="{{ variant.id }}"
+                data-variant-price="{{ variant.price | money_without_currency | append: ' €' }}"
+                {%- if variant.compare_at_price and variant.compare_at_price > variant.price %}
+                  data-variant-compare-price="{{ variant.compare_at_price | money_without_currency | append: ' €' }}"
+                {%- endif -%}
+                {%- if variant.unit_price_measurement %}
+                  data-variant-unit-price="{{ variant.unit_price | money_without_currency | append: ' €' }}"
+                {%- endif -%}
+                {%- if variant.unit_price_measurement and variant.unit_price_measurement.reference_value != 1 %}
+                  data-variant-unit-ref-value="{{ variant.unit_price_measurement.reference_value }}"
+                {%- endif -%}
+                {%- if variant.unit_price_measurement %}
+                  data-variant-unit-ref-unit="{{ variant.unit_price_measurement.reference_unit }}"
+                {%- endif -%}
+                data-variant-available="{{ variant.available }}"
+                data-variant-title="{{ v_label | escape }}"
+                data-variant-image="{%- if variant.featured_media -%}{{ variant.featured_media | image_url: width: 96 }}{%- elsif variant.image -%}{{ variant.image | image_url: width: 96 }}{%- else -%}{% if featured_media %}{{ featured_media | image_url: width: 96 }}{% endif %}{%- endif -%}"
+                role="option"
+                aria-selected="{% if variant.id == current_variant.id %}true{% else %}false{% endif %}"
+                {% unless variant.available %}disabled{% endunless %}
+              >
+                <span class="md-card-product__variant-option-dot{% if variant.available %} is-available{% endif %}" aria-hidden="true"></span>
+                {%- assign opt_media = variant.featured_media | default: variant.image | default: featured_media -%}
+                {%- if opt_media -%}
+                  <img src="{{ opt_media | image_url: width: 96 }}" srcset="{{ opt_media | image_url: width: 96 }} 1x, {{ opt_media | image_url: width: 192 }} 2x" alt="" class="md-card-product__variant-option-image" width="96" height="96" loading="lazy">
+                {%- endif -%}
+                <span class="md-card-product__variant-option-label">{{- v_label | escape -}}</span>
+              </button>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      <form method="post" action="{{ routes.cart_add_url }}" class="md-card-product__purchase">
         <div class="md-card-product__purchase-price" data-md-purchase-price>
           <span class="md-card-product__purchase-price-current">
             {{- money_price_md -}}
@@ -331,65 +414,7 @@
           </span>
         {%- endif -%}
 
-        {%- if variant_count > 1 -%}
-          <div class="md-card-product__variant-dropdown" data-md-variant-dropdown>
-            <button type="button" class="md-card-product__variant-trigger" data-md-variant-trigger aria-expanded="false" aria-haspopup="listbox">
-              <span class="md-card-product__variant-trigger-dot{% if available %} is-available{% endif %}" aria-hidden="true"></span>
-              {%- if variant_image -%}
-                <img src="{{ variant_image | image_url: width: 48 }}" srcset="{{ variant_image | image_url: width: 48 }} 1x, {{ variant_image | image_url: width: 96 }} 2x" alt="" class="md-card-product__variant-trigger-image" width="48" height="48" aria-hidden="true">
-              {%- endif -%}
-              <span class="md-card-product__variant-trigger-label" data-md-variant-trigger-label>
-                {%- liquid
-                  assign trigger_label = current_variant.title | replace: 'Default Title', '' | strip
-                  if trigger_label == blank
-                    assign trigger_label = current_variant.option1 | replace: 'Default Title', '' | strip
-                  endif
-                -%}
-                {{- trigger_label | default: current_variant.title | escape -}}
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6" width="10" height="6" fill="none" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <div class="md-card-product__variant-menu" data-md-variant-menu role="listbox">
-              {%- for variant in card_product.variants -%}
-                <button
-                  type="button"
-                  class="md-card-product__variant-option{% if variant.id == current_variant.id %} is-active{% endif %}"
-                  data-md-variant-option
-                  data-variant-id="{{ variant.id }}"
-                  data-variant-price="{{ variant.price | money_without_currency | append: ' €' }}"
-                  {%- if variant.compare_at_price and variant.compare_at_price > variant.price %}
-                    data-variant-compare-price="{{ variant.compare_at_price | money_without_currency | append: ' €' }}"
-                  {%- endif -%}
-                  {%- if variant.unit_price_measurement %}
-                    data-variant-unit-price="{{ variant.unit_price | money_without_currency | append: ' €' }}"
-                  {%- endif -%}
-                  {%- if variant.unit_price_measurement and variant.unit_price_measurement.reference_value != 1 %}
-                    data-variant-unit-ref-value="{{ variant.unit_price_measurement.reference_value }}"
-                  {%- endif -%}
-                  {%- if variant.unit_price_measurement %}
-                    data-variant-unit-ref-unit="{{ variant.unit_price_measurement.reference_unit }}"
-                  {%- endif -%}
-                  data-variant-available="{{ variant.available }}"
-                  data-variant-title="{{ variant.title | replace: 'Default Title', '' | strip | escape }}"
-                  data-variant-image="{%- if variant.featured_media -%}{{ variant.featured_media | image_url: width: 48 }}{%- elsif variant.image -%}{{ variant.image | image_url: width: 48 }}{%- else -%}{% if featured_media %}{{ featured_media | image_url: width: 48 }}{% endif %}{%- endif -%}"
-                  role="option"
-                  aria-selected="{% if variant.id == current_variant.id %}true{% else %}false{% endif %}"
-                  {% unless variant.available %}disabled{% endunless %}
-                >
-                  <span class="md-card-product__variant-option-dot{% if variant.available %} is-available{% endif %}" aria-hidden="true"></span>
-                  {%- assign opt_media = variant.featured_media | default: variant.image | default: featured_media -%}
-                  {%- if opt_media -%}
-                    <img src="{{ opt_media | image_url: width: 48 }}" srcset="{{ opt_media | image_url: width: 48 }} 1x, {{ opt_media | image_url: width: 96 }} 2x" alt="" class="md-card-product__variant-option-image" width="48" height="48" loading="lazy">
-                  {%- endif -%}
-                  <span class="md-card-product__variant-option-label">{{- variant.title | replace: 'Default Title', '' | strip | truncate: 24 -}}</span>
-                </button>
-              {%- endfor -%}
-            </div>
-          </div>
-          <input type="hidden" name="id" value="{{ current_variant.id }}" data-md-variant-input>
-        {%- else -%}
-          <input type="hidden" name="id" value="{{ current_variant.id }}">
-        {%- endif -%}
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
 
         <div class="md-card-product__quantity">
           <button type="button" class="md-card-product__quantity-btn" data-md-quantity-minus aria-label="Menge verringern">&minus;</button>
