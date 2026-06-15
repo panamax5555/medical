@@ -136,7 +136,8 @@
         "from_price_html": "Alkaen {{ price }}",
         "regular_price": "Normaalihinta",
         "sale_price": "Alennushinta",
-        "unit_price": "Yksikköhinta"
+        "unit_price": "Yksikköhinta",
+        "unit_content": "Content"
       },
       "share": "Jaa tämä tuote",
       "sold_out": "Loppuunmyyty",

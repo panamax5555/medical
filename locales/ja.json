@@ -137,7 +137,8 @@
         "from_price_html": "{{ price }}から",
         "regular_price": "通常価格",
         "sale_price": "セール価格",
-        "unit_price": "単価"
+        "unit_price": "単価",
+        "unit_content": "Content"
       },
       "share": "この商品を共有する",
       "sold_out": "売り切れ",

@@ -137,7 +137,8 @@
         "from_price_html": "De {{ price }}",
         "regular_price": "Preço normal",
         "sale_price": "Preço promocional",
-        "unit_price": "Preço unitário"
+        "unit_price": "Preço unitário",
+        "unit_content": "Content"
       },
       "share": "Compartilhar o produto",
       "sold_out": "Esgotado",

@@ -136,7 +136,8 @@
         "from_price_html": "Från {{ price }}",
         "regular_price": "Ordinarie pris",
         "sale_price": "Försäljningspris",
-        "unit_price": "Enhetspris"
+        "unit_price": "Enhetspris",
+        "unit_content": "Content"
       },
       "share": "Dela den här produkten",
       "sold_out": "Slutsåld",

@@ -137,7 +137,8 @@
         "from_price_html": "Từ {{ price }}",
         "regular_price": "Giá thông thường",
         "sale_price": "Giá ưu đãi",
-        "unit_price": "Đơn giá"
+        "unit_price": "Đơn giá",
+        "unit_content": "Content"
       },
       "share": "Chia sẻ sản phẩm này",
       "sold_out": "Đã bán hết",

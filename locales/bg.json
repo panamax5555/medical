@@ -136,7 +136,8 @@
         "from_price_html": "От {{ price }}",
         "regular_price": "Обичайна цена",
         "sale_price": "Цена при разпродажба",
-        "unit_price": "Единична цена"
+        "unit_price": "Единична цена",
+        "unit_content": "Content"
       },
       "share": "Споделяне на този продукт",
       "unavailable": "Неналично",

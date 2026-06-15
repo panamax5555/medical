@@ -137,7 +137,8 @@
         "from_price_html": "Legalacsonyabb ár: {{ price }}",
         "regular_price": "Normál ár",
         "sale_price": "Akciós ár",
-        "unit_price": "Egységár"
+        "unit_price": "Egységár",
+        "unit_content": "Content"
       },
       "share": "A termék megosztása",
       "sold_out": "Elfogyott",

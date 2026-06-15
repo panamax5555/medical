@@ -145,7 +145,8 @@
         "from_price_html": "От {{ price }}",
         "regular_price": "Обычная цена",
         "sale_price": "Цена со скидкой",
-        "unit_price": "Цена за единицу"
+        "unit_price": "Цена за единицу",
+        "unit_content": "Content"
       },
       "pickup_availability": {
         "view_store_info": "Сведения о магазине",

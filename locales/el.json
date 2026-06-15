@@ -137,7 +137,8 @@
         "from_price_html": "Από {{ price }}",
         "regular_price": "Κανονική τιμή",
         "sale_price": "Τιμή έκπτωσης",
-        "unit_price": "Τιμή μονάδας"
+        "unit_price": "Τιμή μονάδας",
+        "unit_content": "Content"
       },
       "share": "Κοινοποιήστε αυτό το προϊόν",
       "sold_out": "Εξαντλήθηκε",

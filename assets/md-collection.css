@@ -753,8 +753,11 @@
     overflow: hidden;
   }
 
+  .md-collection[data-md-view="list"] .md-card-product__variant-chips {
+    justify-content: flex-start;
+  }
+
   /* Hide grid-only elements in list view */
-  .md-collection[data-md-view="list"] .md-card-product__variant-popover,
   .md-collection[data-md-view="list"] .md-card-product__media-nav,
   .md-collection[data-md-view="list"] .md-card-product__media-pagination,
   .md-collection[data-md-view="list"] .md-card-product__watchlist,
@@ -824,165 +827,6 @@
     font-weight: 700;
     color: var(--md-collection-success);
     margin-top: 0.6rem;
-  }
-
-  /* Variant dropdown - moved to middle column in list view */
-  .md-collection[data-md-view="list"] .md-card-product__variant-control {
-    margin-top: auto;
-    padding-top: 1.2rem;
-    width: 100%;
-    max-width: 52rem;
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-control[data-md-variant-dropdown] {
-    position: relative;
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-trigger {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    width: 100%;
-    padding: 0.6rem 0.8rem;
-    min-height: 4.6rem;
-    border: 1px solid var(--md-collection-border-muted);
-    border-radius: var(--md-collection-radius-sm);
-    background: rgb(var(--color-background));
-    color: rgb(var(--color-foreground));
-    font-size: var(--md-collection-font-sm);
-    text-align: left;
-    cursor: pointer;
-    transition: border-color 0.15s;
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-trigger:hover {
-    border-color: rgba(var(--color-foreground), 0.35);
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-trigger[aria-expanded="true"] {
-    border-color: rgba(var(--color-foreground), 0.35);
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-trigger svg {
-    margin-left: auto;
-    flex-shrink: 0;
-    opacity: 0.5;
-    transition: transform 0.2s;
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-trigger[aria-expanded="true"] svg {
-    transform: rotate(180deg);
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-trigger-dot {
-    width: 0.8rem;
-    height: 0.8rem;
-    border-radius: 50%;
-    background: rgba(var(--color-foreground), 0.2);
-    flex-shrink: 0;
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-trigger-dot.is-available {
-    background: var(--md-collection-success);
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-trigger-image {
-    width: 3.8rem;
-    height: 3.8rem;
-    object-fit: contain;
-    border-radius: var(--md-collection-radius-sm);
-    flex-shrink: 0;
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-trigger-label {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    z-index: 80;
-    max-height: 34rem;
-    overflow-y: auto;
-    background: rgb(var(--color-background));
-    border: 1px solid var(--md-collection-border-muted);
-    border-radius: var(--md-collection-radius-sm);
-    box-shadow: 0 0.4rem 1.2rem rgba(var(--color-foreground), 0.08);
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-0.2rem);
-    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-menu.is-open {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-option {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    width: 100%;
-    min-height: 5.8rem;
-    padding: 0.8rem;
-    border: 0;
-    border-bottom: 1px solid var(--md-collection-border-subtle);
-    background: rgb(var(--color-background));
-    color: rgb(var(--color-foreground));
-    font-size: var(--md-collection-font-sm);
-    text-align: left;
-    cursor: pointer;
-    transition: background-color 0.1s;
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-option:last-child {
-    border-bottom: 0;
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-option:hover {
-    background: rgba(var(--color-foreground), 0.03);
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-option.is-active {
-    background: rgba(var(--color-foreground), 0.05);
-    font-weight: 600;
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-option:disabled {
-    opacity: 0.4;
-    cursor: default;
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-option-dot {
-    width: 0.7rem;
-    height: 0.7rem;
-    border-radius: 50%;
-    background: rgba(var(--color-foreground), 0.2);
-    flex-shrink: 0;
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-option-dot.is-available {
-    background: var(--md-collection-success);
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-option-image {
-    width: 4rem;
-    height: 4rem;
-    object-fit: contain;
-    border-radius: var(--md-collection-radius-sm);
-    flex-shrink: 0;
-  }
-
-  .md-collection[data-md-view="list"] .md-card-product__variant-option-label {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   .md-collection[data-md-view="list"] .md-card-product__quantity {
@@ -1100,8 +944,7 @@
 
 /* Grid view: hide purchase area */
 @media screen and (min-width: 750px) {
-  .md-collection[data-md-view="grid"] .md-card-product__purchase,
-  .md-collection[data-md-view="grid"] .md-card-product__variant-control {
+  .md-collection[data-md-view="grid"] .md-card-product__purchase {
     display: none;
   }
 }
@@ -2324,98 +2167,71 @@
   }
 }
 
-/* Variant hint: count only, in text flow */
-.md-card-product__variant-hint {
-  margin-top: var(--md-collection-space-sm);
+/* Variant chips — inline variant selectors */
+.md-card-product__variant-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+  min-height: 2.4rem;
 }
 
-.md-card-product__variant-count {
-  font-size: var(--md-collection-font-xs);
-  color: rgba(var(--color-foreground), 0.5);
+.md-card-product__variant-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.7rem;
+  min-height: 2.8rem;
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: rgba(var(--color-foreground), 0.75);
+  background: rgba(var(--color-foreground), 0.05);
+  border: 1px solid var(--md-collection-border-subtle);
+  border-radius: var(--md-collection-radius-sm);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color 0.15s, background-color 0.15s, color 0.15s;
 }
 
-/* Desktop: variant popover slides out to the right */
-@media screen and (min-width: 990px) {
-  .md-card-product__variant-popover {
-    position: absolute;
-    left: 100%;
-    top: 0;
-    bottom: auto;
-    width: 13rem;
-    max-width: 14rem;
-    z-index: 50;
-    background: rgb(var(--color-background));
-    border: 1px solid var(--md-collection-border-subtle);
-    padding: 0.7rem;
-    box-shadow: 0 0.8rem 2rem rgba(var(--color-foreground), 0.10);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transform: translateX(-0.4rem);
-    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
-  }
+.md-card-product__variant-chip:hover,
+.md-card-product__variant-chip:focus-visible {
+  color: rgb(var(--color-foreground));
+  border-color: var(--md-collection-border-muted);
+  background: rgba(var(--color-foreground), 0.08);
+}
 
-  .md-card-product:hover .md-card-product__variant-popover,
-  .md-card-product:focus-within .md-card-product__variant-popover {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transform: translateX(0);
-  }
+.md-card-product__variant-chip.is-active {
+  color: rgb(var(--color-foreground));
+  font-weight: 600;
+  border-color: var(--md-collection-success);
+  background: var(--md-collection-success-subtle);
+}
 
-  /* Vertical list */
-  .md-card-product__variant-list {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: stretch;
-    gap: 0.45rem;
-    overflow: visible;
-  }
+.md-card-product__variant-chip.is-unavailable {
+  opacity: 0.4;
+  color: rgba(var(--color-foreground), 0.4);
+  text-decoration: line-through;
+}
 
-  .md-card-product__variant-tile {
-    display: grid;
-    grid-template-columns: 3rem minmax(0, 1fr);
-    align-items: center;
-    gap: 0.7rem;
-    width: 100%;
-    min-width: 0;
-    min-height: 4.2rem;
-    padding: 0.45rem 0.55rem;
-    border: 1px solid var(--md-collection-border-subtle);
-    border-radius: var(--md-collection-radius-sm);
-    background: rgb(var(--color-background));
-    text-decoration: none;
-    color: inherit;
-    box-sizing: border-box;
-    transition: border-color 0.15s ease, background-color 0.15s ease;
-  }
+.md-card-product__variant-chip--more {
+  font-weight: 600;
+  color: rgba(var(--color-foreground), 0.55);
+}
 
-  .md-card-product__variant-tile:hover,
-  .md-card-product__variant-tile:focus-visible {
-    border-color: var(--md-collection-border-muted);
-    background: rgba(var(--color-foreground), 0.025);
-  }
+.md-card-product__variant-chip-img {
+  display: block;
+  width: 1.8rem;
+  height: 1.8rem;
+  object-fit: contain;
+  border-radius: 0.2rem;
+  flex-shrink: 0;
+}
 
-  .md-card-product__variant-image {
-    display: block;
-    width: 2.8rem;
-    height: 2.8rem;
-    object-fit: contain;
-    margin: 0;
-  }
-
-  .md-card-product__variant-label {
-    font-size: 1.25rem;
-    line-height: 1.15;
-    font-weight: 600;
-    text-align: left;
-    color: rgba(var(--color-foreground), 0.78);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+.md-card-product__variant-chip-label {
+  line-height: 1.2;
 }
 
 /* Stacking: hovered card above neighbours */
@@ -2434,13 +2250,6 @@
 
 .md-collection .collection {
   overflow: visible;
-}
-
-/* Mobile: hide popover entirely, show count only */
-@media screen and (max-width: 989px) {
-  .md-card-product__variant-popover {
-    display: none;
-  }
 }
 
 /* ==========================================================================

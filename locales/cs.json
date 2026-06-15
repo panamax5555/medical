@@ -145,7 +145,8 @@
         "from_price_html": "Od {{ price }}",
         "regular_price": "Běžná cena",
         "sale_price": "Výprodejová cena",
-        "unit_price": "Jednotková cena"
+        "unit_price": "Jednotková cena",
+        "unit_content": "Content"
       },
       "pickup_availability": {
         "view_store_info": "Zobrazit informace o obchodě",

@@ -136,7 +136,8 @@
         "from_price_html": "Başlangıç fiyatı: {{ price }}",
         "regular_price": "Normal fiyat",
         "sale_price": "İndirimli fiyat",
-        "unit_price": "Birim fiyat"
+        "unit_price": "Birim fiyat",
+        "unit_content": "Content"
       },
       "share": "Bu ürünü paylaş",
       "sold_out": "Tükendi",

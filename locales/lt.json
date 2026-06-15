@@ -146,7 +146,8 @@
         "from_price_html": "Nuo {{ price }}",
         "regular_price": "Įprasta kaina",
         "sale_price": "Išpardavimo kaina",
-        "unit_price": "Vieneto kaina"
+        "unit_price": "Vieneto kaina",
+        "unit_content": "Content"
       },
       "pickup_availability": {
         "view_store_info": "Žiūrėti parduotuvės informaciją",

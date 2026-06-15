@@ -145,7 +145,8 @@
         "from_price_html": "Od {{ price }}",
         "regular_price": "Cena regularna",
         "sale_price": "Cena promocyjna",
-        "unit_price": "Cena jednostkowa"
+        "unit_price": "Cena jednostkowa",
+        "unit_content": "Content"
       },
       "pickup_availability": {
         "view_store_info": "Wyświetl informacje o sklepie",

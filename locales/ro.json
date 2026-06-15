@@ -145,7 +145,8 @@
         "from_price_html": "Începând cu {{ price }}",
         "regular_price": "Preț obișnuit",
         "sale_price": "Preț redus",
-        "unit_price": "Preț unitar"
+        "unit_price": "Preț unitar",
+        "unit_content": "Content"
       },
       "pickup_availability": {
         "view_store_info": "Vizualizați informațiile despre magazin",

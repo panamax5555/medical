@@ -137,7 +137,8 @@
         "from_price_html": "来自 {{ price }}",
         "regular_price": "常规价格",
         "sale_price": "促销价",
-        "unit_price": "单价"
+        "unit_price": "单价",
+        "unit_content": "Content"
       },
       "share": "分享此产品",
       "sold_out": "售罄",

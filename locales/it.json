@@ -137,7 +137,8 @@
         "from_price_html": "Da {{ price }}",
         "regular_price": "Prezzo di listino",
         "sale_price": "Prezzo scontato",
-        "unit_price": "Prezzo unitario"
+        "unit_price": "Prezzo unitario",
+        "unit_content": "Content"
       },
       "share": "Condividi questo prodotto",
       "sold_out": "Esaurito",

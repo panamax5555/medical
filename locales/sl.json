@@ -146,7 +146,8 @@
         "from_price_html": "Od {{ price }}",
         "regular_price": "Redna cena",
         "sale_price": "Znižana cena",
-        "unit_price": "Cena na enoto"
+        "unit_price": "Cena na enoto",
+        "unit_content": "Content"
       },
       "pickup_availability": {
         "view_store_info": "Prikaži podatke o trgovini",

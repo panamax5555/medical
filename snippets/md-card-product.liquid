@@ -293,138 +293,72 @@
           {%- endif -%}
 
           {%- if show_variant_hint and variant_count > 1 -%}
-            <div class="md-card-product__variant-hint">
-              <div class="md-card-product__variant-count">{{ variant_count }} Packgr&ouml;&szlig;en</div>
+            {%- liquid
+              assign first_option_name = card_product.options_with_values[0].name | downcase
+              assign chip_type = 'pack'
+              if first_option_name == 'größe' or first_option_name == 'groesse' or first_option_name == 'size'
+                assign chip_type = 'size'
+              endif
+
+              assign variant_has_images = false
+              assign last_img_id = blank
+              for v in card_product.variants
+                assign v_img = v.featured_media | default: v.image
+                assign v_img_id = v_img.id | default: 0
+                if forloop.first
+                  assign last_img_id = v_img_id
+                else
+                  if v_img_id != last_img_id
+                    assign variant_has_images = true
+                    break
+                  endif
+                endif
+              endfor
+
+              assign chip_limit = 6
+              assign chip_count = 0
+            -%}
+            <div class="md-card-product__variant-chips" data-md-chip-type="{{ chip_type }}">
+              {%- for variant in card_product.variants -%}
+                {%- assign chip_count = chip_count | plus: 1 -%}
+                {%- if chip_count > chip_limit -%}
+                  {%- assign extra_count = card_product.variants_count | minus: chip_limit -%}
+                  <a href="{{ product_url }}" class="md-card-product__variant-chip md-card-product__variant-chip--more">+{{ extra_count }}</a>
+                  {%- break -%}
+                {%- endif -%}
+                {%- liquid
+                  assign chip_label = variant.option1 | strip
+                  if chip_label == blank or chip_label == 'Default Title'
+                    assign chip_label = variant.metafields.custom.vpe | default: variant.metafields.custom.inhalt | default: variant.title | strip
+                  endif
+                  if chip_label == blank
+                    assign chip_label = variant.title | strip
+                  endif
+
+                  assign chip_url = product_url | append: '?variant=' | append: variant.id
+
+                  assign chip_class = 'md-card-product__variant-chip'
+                  if variant.id == current_variant.id
+                    assign chip_class = chip_class | append: ' is-active'
+                  endif
+                  unless variant.available
+                    assign chip_class = chip_class | append: ' is-unavailable'
+                  endunless
+                -%}
+                <a href="{{ chip_url }}" class="{{ chip_class }}">
+                  {%- if variant_has_images -%}
+                    {%- assign chip_img = variant.featured_media | default: variant.image -%}
+                    {%- if chip_img -%}
+                      <img src="{{ chip_img | image_url: width: 32 }}" alt="" class="md-card-product__variant-chip-img" width="32" height="32" loading="lazy">
+                    {%- endif -%}
+                  {%- endif -%}
+                  <span class="md-card-product__variant-chip-label">{{ chip_label | escape }}</span>
+                </a>
+              {%- endfor -%}
             </div>
           {%- endif -%}
         </div>
 
-      {%- if show_variant_hint and variant_count > 1 -%}
-        <div class="md-card-product__variant-popover">
-          <div class="md-card-product__variant-list">
-            {%- for variant in card_product.variants limit: 6 -%}
-              {%- liquid
-                assign tile_media = variant.featured_media | default: variant.image | default: featured_media
-                assign variant_label_clean = ''
-
-                if variant.title != blank and variant.title != 'Default Title'
-                  assign variant_label_clean = variant.title | strip
-                elsif variant.option1 != blank and variant.option1 != 'Default Title'
-                  assign variant_label_clean = variant.option1 | strip
-                endif
-
-                if variant_label_clean == blank
-                  if variant.metafields.custom.vpe != blank
-                    assign variant_label_clean = variant.metafields.custom.vpe | strip
-                  elsif variant.metafields.custom.inhalt != blank
-                    assign variant_label_clean = variant.metafields.custom.inhalt | strip
-                  elsif variant.metafields.custom.menge != blank
-                    assign variant_label_clean = variant.metafields.custom.menge | strip
-                  elsif variant.metafields.custom.gebinde != blank
-                    assign variant_label_clean = variant.metafields.custom.gebinde | strip
-                  else
-                    assign variant_label_clean = card_product.title | strip
-                  endif
-                endif
-              -%}
-              <a href="{{ product_url }}?variant={{ variant.id }}" class="md-card-product__variant-tile" title="{{ variant_label_clean | escape }}">
-                {%- if tile_media -%}
-                  <img
-                    src="{{ tile_media | image_url: width: 80 }}"
-                    srcset="{{ tile_media | image_url: width: 80 }} 1x, {{ tile_media | image_url: width: 160 }} 2x"
-                    alt="{{ variant_label_clean | escape }}"
-                    class="md-card-product__variant-image"
-                    width="80"
-                    height="80"
-                    loading="lazy"
-                  >
-                {%- endif -%}
-                <span class="md-card-product__variant-label">
-                  {{- variant_label_clean | truncate: 24 -}}
-                </span>
-              </a>
-            {%- endfor -%}
-          </div>
-        </div>
-      {%- endif -%}
-
-      {%- if variant_count > 1 -%}
-        <div class="md-card-product__variant-control" data-md-variant-dropdown>
-          {%- liquid
-            assign trigger_size = current_variant.title | replace: 'Default Title', '' | strip
-            assign trigger_vpe = current_variant.metafields.custom.vpe | default: current_variant.metafields.custom.inhalt | default: current_variant.metafields.custom.menge | default: current_variant.metafields.custom.gebinde | default: card_product.metafields.custom.vpe | default: card_product.metafields.custom.inhalt | default: card_product.metafields.custom.menge | default: card_product.metafields.custom.gebinde | strip
-
-            if trigger_vpe != blank and trigger_size != blank
-              assign trigger_label = trigger_vpe | append: ', Größe ' | append: trigger_size
-            elsif trigger_vpe != blank
-              assign trigger_label = trigger_vpe
-            elsif trigger_size != blank
-              assign trigger_label = trigger_size
-            else
-              assign trigger_label = card_product.title | strip
-            endif
-          -%}
-          <button type="button" class="md-card-product__variant-trigger" data-md-variant-trigger aria-expanded="false" aria-haspopup="listbox">
-            <span class="md-card-product__variant-trigger-dot{% if available %} is-available{% endif %}" aria-hidden="true"></span>
-            {%- assign variant_image = current_variant.featured_media | default: current_variant.image | default: featured_media -%}
-            {%- if variant_image -%}
-              <img src="{{ variant_image | image_url: width: 96 }}" srcset="{{ variant_image | image_url: width: 96 }} 1x, {{ variant_image | image_url: width: 192 }} 2x" alt="" class="md-card-product__variant-trigger-image" width="96" height="96" aria-hidden="true">
-            {%- endif -%}
-            <span class="md-card-product__variant-trigger-label" data-md-variant-trigger-label>{{- trigger_label | escape -}}</span>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6" width="10" height="6" fill="none" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="md-card-product__variant-menu" data-md-variant-menu role="listbox">
-            {%- for variant in card_product.variants -%}
-              {%- liquid
-                assign v_size = variant.title | replace: 'Default Title', '' | strip
-                assign v_vpe = variant.metafields.custom.vpe | default: variant.metafields.custom.inhalt | default: variant.metafields.custom.menge | default: variant.metafields.custom.gebinde | default: card_product.metafields.custom.vpe | default: card_product.metafields.custom.inhalt | default: card_product.metafields.custom.menge | default: card_product.metafields.custom.gebinde | strip
-
-                if v_vpe != blank and v_size != blank
-                  assign v_label = v_vpe | append: ', Größe ' | append: v_size
-                elsif v_vpe != blank
-                  assign v_label = v_vpe
-                elsif v_size != blank
-                  assign v_label = v_size
-                else
-                  assign v_label = card_product.title | strip
-                endif
-              -%}
-              <button
-                type="button"
-                class="md-card-product__variant-option{% if variant.id == current_variant.id %} is-active{% endif %}"
-                data-md-variant-option
-                data-variant-id="{{ variant.id }}"
-                data-variant-price="{{ variant.price | money_without_currency | append: ' €' }}"
-                {%- if variant.compare_at_price and variant.compare_at_price > variant.price %}
-                  data-variant-compare-price="{{ variant.compare_at_price | money_without_currency | append: ' €' }}"
-                {%- endif -%}
-                {%- if variant.unit_price_measurement %}
-                  data-variant-unit-price="{{ variant.unit_price | money_without_currency | append: ' €' }}"
-                {%- endif -%}
-                {%- if variant.unit_price_measurement and variant.unit_price_measurement.reference_value != 1 %}
-                  data-variant-unit-ref-value="{{ variant.unit_price_measurement.reference_value }}"
-                {%- endif -%}
-                {%- if variant.unit_price_measurement %}
-                  data-variant-unit-ref-unit="{{ variant.unit_price_measurement.reference_unit }}"
-                {%- endif -%}
-                data-variant-available="{{ variant.available }}"
-                data-variant-title="{{ v_label | escape }}"
-                data-variant-image="{%- if variant.featured_media -%}{{ variant.featured_media | image_url: width: 96 }}{%- elsif variant.image -%}{{ variant.image | image_url: width: 96 }}{%- else -%}{% if featured_media %}{{ featured_media | image_url: width: 96 }}{% endif %}{%- endif -%}"
-                role="option"
-                aria-selected="{% if variant.id == current_variant.id %}true{% else %}false{% endif %}"
-                {% unless variant.available %}disabled{% endunless %}
-              >
-                <span class="md-card-product__variant-option-dot{% if variant.available %} is-available{% endif %}" aria-hidden="true"></span>
-                {%- assign opt_media = variant.featured_media | default: variant.image | default: featured_media -%}
-                {%- if opt_media -%}
-                  <img src="{{ opt_media | image_url: width: 96 }}" srcset="{{ opt_media | image_url: width: 96 }} 1x, {{ opt_media | image_url: width: 192 }} 2x" alt="" class="md-card-product__variant-option-image" width="96" height="96" loading="lazy">
-                {%- endif -%}
-                <span class="md-card-product__variant-option-label">{{- v_label | escape -}}</span>
-              </button>
-            {%- endfor -%}
-          </div>
-        </div>
-      {%- endif -%}
       </div>
 
       <form method="post" action="{{ routes.cart_add_url }}" class="md-card-product__purchase">

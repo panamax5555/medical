@@ -8,7 +8,8 @@
   - show_badges: {Boolean} Renders 'Sale' and 'Sold Out' tags if the product matches the condition (optional)
   - price_class: {String} Adds a price class to the price element (optional)
   - show_compare_at_price: {Boolean} Renders the compare at price if the product matches the condition (optional)
-
+  - show_unit_content: {Boolean} Renders the unit content line (Inhalt: X Stück) below the unit price (optional)
+ 
   Usage:
   {% render 'price', product: product %}
 {% endcomment %}
@@ -110,6 +111,29 @@
       </div>
       {%- if product.selected_or_first_available_variant.unit_price_measurement -%}
         {% render 'unit-price', price: product.selected_or_first_available_variant.unit_price, measurement: product.selected_or_first_available_variant.unit_price_measurement %}
+      {%- endif -%}
+      {%- if show_unit_content and product.selected_or_first_available_variant.unit_price_measurement -%}
+        {%- liquid
+          assign measurement = product.selected_or_first_available_variant.unit_price_measurement
+          assign content_qty = measurement.quantity_value
+          assign content_qty_floor = content_qty | floor
+          assign content_qty_diff = content_qty | minus: content_qty_floor
+
+          if measurement.measured_type == 'count'
+            assign content_unit = 'Stück'
+          else
+            assign content_unit = measurement.quantity_unit
+          endif
+        -%}
+        <span class="unit-content caption">
+          {{- 'products.product.price.unit_content' | t -}}:&#32;
+          {%- if content_qty_diff == 0 -%}
+            {{- content_qty_floor }}
+          {%- else -%}
+            {{- content_qty }}
+          {%- endif -%}
+          {{- content_unit -}}
+        </span>
       {%- endif -%}
     </div>
     {%- if show_badges -%}

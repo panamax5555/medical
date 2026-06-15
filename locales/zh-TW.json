@@ -137,7 +137,8 @@
         "from_price_html": "從 {{ price }} 起",
         "regular_price": "定價",
         "sale_price": "售價",
-        "unit_price": "單價"
+        "unit_price": "單價",
+        "unit_content": "Content"
       },
       "share": "分享產品",
       "sold_out": "售罄",

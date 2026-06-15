@@ -137,7 +137,8 @@
         "from_price_html": "{{ price }}에서",
         "regular_price": "정가",
         "sale_price": "할인가",
-        "unit_price": "단가"
+        "unit_price": "단가",
+        "unit_content": "Content"
       },
       "share": "이 제품 공유",
       "sold_out": "품절",
