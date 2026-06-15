@@ -6,6 +6,7 @@
   assign active_blocks = section.blocks | where: 'type', 'category'
 -%}
 
+{% if active_blocks.size > 0 or request.design_mode %}
 <div class="md-home-cat-section">
   <div class="md-home-cat-inner">
     {% if heading != blank %}
@@ -67,7 +68,7 @@
             {% endif %}
           </div>
         {% endfor %}
-      {% else %}
+      {% elsif request.design_mode %}
         <div class="md-home-cat-empty">
           Kategoriebl&ouml;cke im Theme-Editor hinzuf&uuml;gen
         </div>
@@ -75,11 +76,12 @@
     </div>
   </div>
 </div>
+{% endif %}
 
 {% schema %}
 {
   "name": "MD Home Kategorie-Grid",
-  "class": "md-home-cat-section",
+  "class": "md-home-category-grid-section",
   "settings": [
     {
       "type": "text",
@@ -138,72 +140,7 @@
         "show_description": false,
         "description": ""
       },
-      "blocks": [
-        {
-          "type": "category",
-          "settings": {
-            "title": "Einmalhandschuhe",
-            "text": "",
-            "link": ""
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "title": "Desinfektion",
-            "text": "",
-            "link": ""
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "title": "Pflegebedarf",
-            "text": "",
-            "link": ""
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "title": "Hygienepapier",
-            "text": "",
-            "link": ""
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "title": "Reinigung",
-            "text": "",
-            "link": ""
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "title": "Arbeitsschutz",
-            "text": "",
-            "link": ""
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "title": "Gastronomiebedarf",
-            "text": "",
-            "link": ""
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "title": "Verpackung & Verbrauchsmaterial",
-            "text": "",
-            "link": ""
-          }
-        }
-      ]
+      "blocks": []
     }
   ]
 }

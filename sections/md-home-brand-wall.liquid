@@ -5,6 +5,7 @@
   assign active_blocks = section.blocks | where: 'type', 'brand'
 -%}
 
+{% if active_blocks.size > 0 or request.design_mode %}
 <div class="md-home-brand-section">
   <div class="md-home-brand-inner">
     {% if heading != blank %}
@@ -57,7 +58,7 @@
             {% endif %}
           </div>
         {% endfor %}
-      {% else %}
+      {% elsif request.design_mode %}
         <div class="md-home-brand-empty">
           Markenbl&ouml;cke im Theme-Editor hinzuf&uuml;gen
         </div>
@@ -65,11 +66,12 @@
     </div>
   </div>
 </div>
+{% endif %}
 
 {% schema %}
 {
   "name": "MD Home Marken-Wall",
-  "class": "md-home-brand-section",
+  "class": "md-home-brand-wall-section",
   "settings": [
     {
       "type": "text",
@@ -108,44 +110,7 @@
       "settings": {
         "heading": "Marken im Sortiment"
       },
-      "blocks": [
-        {
-          "type": "brand",
-          "settings": {
-            "name": "HARTMANN"
-          }
-        },
-        {
-          "type": "brand",
-          "settings": {
-            "name": "B. Braun"
-          }
-        },
-        {
-          "type": "brand",
-          "settings": {
-            "name": "MaiMed"
-          }
-        },
-        {
-          "type": "brand",
-          "settings": {
-            "name": "Meditrade"
-          }
-        },
-        {
-          "type": "brand",
-          "settings": {
-            "name": "Abena"
-          }
-        },
-        {
-          "type": "brand",
-          "settings": {
-            "name": "Tork"
-          }
-        }
-      ]
+      "blocks": []
     }
   ]
 }

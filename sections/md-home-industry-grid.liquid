@@ -5,6 +5,7 @@
   assign active_blocks = section.blocks | where: 'type', 'industry'
 -%}
 
+{% if active_blocks.size > 0 or request.design_mode %}
 <div class="md-home-ind-section">
   <div class="md-home-ind-inner">
     {% if heading != blank %}
@@ -63,7 +64,7 @@
             {% endif %}
           </div>
         {% endfor %}
-      {% else %}
+      {% elsif request.design_mode %}
         <div class="md-home-ind-empty">
           Einsatzbereich-Bl&ouml;cke im Theme-Editor hinzuf&uuml;gen
         </div>
@@ -71,11 +72,12 @@
     </div>
   </div>
 </div>
+{% endif %}
 
 {% schema %}
 {
   "name": "MD Home Einsatzbereiche",
-  "class": "md-home-ind-section",
+  "class": "md-home-industry-grid-section",
   "settings": [
     {
       "type": "text",
@@ -120,50 +122,7 @@
       "settings": {
         "heading": "Lösungen nach Einsatzbereich"
       },
-      "blocks": [
-        {
-          "type": "industry",
-          "settings": {
-            "title": "Pflegeeinrichtungen",
-            "text": ""
-          }
-        },
-        {
-          "type": "industry",
-          "settings": {
-            "title": "Arztpraxen",
-            "text": ""
-          }
-        },
-        {
-          "type": "industry",
-          "settings": {
-            "title": "Gastronomie",
-            "text": ""
-          }
-        },
-        {
-          "type": "industry",
-          "settings": {
-            "title": "Gebäudereinigung",
-            "text": ""
-          }
-        },
-        {
-          "type": "industry",
-          "settings": {
-            "title": "Industrie & Werkstatt",
-            "text": ""
-          }
-        },
-        {
-          "type": "industry",
-          "settings": {
-            "title": "Einrichtungen & Vereine",
-            "text": ""
-          }
-        }
-      ]
+      "blocks": []
     }
   ]
 }
