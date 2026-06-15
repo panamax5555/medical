@@ -345,6 +345,7 @@
                     assign chip_class = chip_class | append: ' is-unavailable'
                   endunless
                 -%}
+                {%- unless variant.available %}{%- continue -%}{% endunless -%}
                 <a href="{{ chip_url }}" class="{{ chip_class }}">
                   {%- if variant_has_images -%}
                     {%- assign chip_img = variant.featured_media | default: variant.image -%}
