@@ -60,7 +60,7 @@
       endif
 
       assign raw_unit = current_variant.unit_price_measurement.quantity_unit | downcase | strip
-      if raw_unit == 'ct' or raw_unit == 'pcs' or raw_unit == 'piece' or raw_unit == 'pieces' or raw_unit == 'stk' or raw_unit == 'stück'
+      if raw_unit == 'ct' or raw_unit == 'pcs' or raw_unit == 'piece' or raw_unit == 'pieces' or raw_unit == 'stk' or raw_unit == 'stück' or raw_unit == 'item' or raw_unit == 'items' or raw_unit == 'each' or raw_unit == 'ea' or raw_unit == 'unit' or raw_unit == 'units'
         assign content_unit = 'Stück'
       else
         assign content_unit = current_variant.unit_price_measurement.quantity_unit | strip
