@@ -2150,14 +2150,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 1.2rem;
-    min-height: 3.8rem;
+    margin-top: 1.4rem;
+    min-height: 5rem;
   }
 
   .md-collection[data-md-view="list"] .md-card-product__brand-logo img {
     display: block;
-    max-width: 13rem;
-    max-height: 3.8rem;
+    max-width: 16rem;
+    max-height: 5rem;
     width: auto;
     height: auto;
     object-fit: contain;
