@@ -2151,13 +2151,13 @@
     justify-content: center;
     align-items: center;
     margin-top: 1.2rem;
-    min-height: 3.2rem;
+    min-height: 3.8rem;
   }
 
   .md-collection[data-md-view="list"] .md-card-product__brand-logo img {
     display: block;
-    max-width: 12rem;
-    max-height: 3.2rem;
+    max-width: 13rem;
+    max-height: 3.8rem;
     width: auto;
     height: auto;
     object-fit: contain;
