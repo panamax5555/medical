@@ -2140,6 +2140,30 @@
   box-shadow: 0 0 0 0.2rem rgba(var(--color-foreground), 0.15);
 }
 
+/* Brand logo — hidden by default, visible only in list view */
+.md-card-product__brand-logo {
+  display: none;
+}
+
+@media screen and (min-width: 750px) {
+  .md-collection[data-md-view="list"] .md-card-product__brand-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.2rem;
+    min-height: 3.2rem;
+  }
+
+  .md-collection[data-md-view="list"] .md-card-product__brand-logo img {
+    display: block;
+    max-width: 12rem;
+    max-height: 3.2rem;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+}
+
 /* Mobile: hide nav arrows, smaller media */
 @media screen and (max-width: 989px) {
   .md-card-product__media-nav {

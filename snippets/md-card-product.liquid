@@ -149,6 +149,37 @@
             {%- endfor -%}
           </div>
         {%- endif -%}
+
+        {%- liquid
+          assign brand_logo_src = blank
+          assign brand_name = card_product.vendor | escape
+
+          assign brand_metaobject = card_product.metafields.custom.brand.value
+          if brand_metaobject != blank
+            if brand_metaobject.name != blank
+              assign brand_name = brand_metaobject.name | escape
+            endif
+            if brand_metaobject.logo != blank
+              assign brand_logo_src = brand_metaobject.logo | image_url: width: 200
+            endif
+          endif
+
+          if brand_logo_src == blank and card_product.metafields.custom.brand_logo.value != blank
+            assign brand_logo_src = card_product.metafields.custom.brand_logo.value | image_url: width: 200
+          endif
+        -%}
+
+        {%- if brand_logo_src != blank -%}
+          <div class="md-card-product__brand-logo">
+            <img
+              src="{{ brand_logo_src }}"
+              alt="{{ brand_name }}"
+              width="200"
+              height="50"
+              loading="lazy"
+            >
+          </div>
+        {%- endif -%}
       </div>
 
       <div class="md-card-product__info">
