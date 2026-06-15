@@ -817,8 +817,10 @@
   }
 
   .md-collection[data-md-view="list"] .md-card-product__purchase-unit-price {
-    font-size: var(--md-collection-font-sm);
-    color: rgba(var(--color-foreground), 0.6);
+    font-size: 1.1rem;
+    line-height: 1.25;
+    font-weight: 400;
+    color: rgba(var(--color-foreground), 0.55);
   }
 
   .md-collection[data-md-view="list"] .md-card-product__purchase-inventory {
@@ -2068,26 +2070,6 @@
   letter-spacing: 0.04em;
 }
 
-/* Variant / description hint with green dot */
-.md-card-product__description {
-  font-size: var(--md-collection-font-base);
-  color: rgba(var(--color-foreground), 0.55);
-  line-height: 1.35;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.md-card-product__description::before {
-  content: '';
-  display: inline-block;
-  width: 0.7rem;
-  height: 0.7rem;
-  border-radius: 50%;
-  background: var(--md-collection-success);
-  flex-shrink: 0;
-}
-
 /* Inventory status */
 .md-card-product__inventory {
   font-size: var(--md-collection-font-md);
@@ -2155,16 +2137,12 @@
 
 /* Unit price (base price) */
 .md-card-product__unit-price {
-  font-size: var(--md-collection-font-sm);
-  color: rgba(var(--color-foreground), 0.6);
+  font-size: 1.1rem;
+  line-height: 1.25;
+  font-weight: 400;
+  color: rgba(var(--color-foreground), 0.55);
   display: block;
   margin-top: 0.3rem;
-}
-
-@media screen and (min-width: 750px) {
-  .md-card-product__unit-price {
-    font-size: var(--md-collection-font-base);
-  }
 }
 
 /* Variant chips — inline variant selectors */

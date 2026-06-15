@@ -46,7 +46,7 @@
 
     assign unit_price_md = ''
     if show_unit_price and current_variant.unit_price_measurement
-      assign unit_price_md = current_variant.unit_price | money_without_currency | append: ' €'
+      assign unit_price_md = current_variant.unit_price | unit_price_with_measurement: current_variant.unit_price_measurement
     endif
 
     assign variant_count = card_product.variants_count
@@ -215,26 +215,6 @@
             <span class="md-card-product__subtitle">{{ short_description | escape | truncate: 100 }}</span>
           {%- endif -%}
 
-          {%- liquid
-            assign variant_label = ''
-            if current_variant.title != blank and current_variant.title != 'Default Title'
-              assign variant_label = current_variant.title
-            elsif current_variant.option1 != blank and current_variant.option1 != 'Default Title'
-              assign variant_label = current_variant.option1
-            elsif card_product.metafields.custom.gebinde != blank
-              assign variant_label = card_product.metafields.custom.gebinde
-            elsif card_product.metafields.custom.vpe != blank
-              assign variant_label = card_product.metafields.custom.vpe
-            elsif card_product.metafields.custom.unit != blank
-              assign variant_label = card_product.metafields.custom.unit
-            elsif card_product.metafields.custom.inhalt != blank
-              assign variant_label = card_product.metafields.custom.inhalt
-            endif
-          -%}
-          {%- if variant_label != '' -%}
-            <span class="md-card-product__description">{{ variant_label | escape }}</span>
-          {%- endif -%}
-
           {%- if show_rating -%}
             {%- if card_product.metafields.reviews.rating.value != blank -%}
               {%- liquid
@@ -271,14 +251,7 @@
             </span>
 
             {%- if unit_price_md != '' -%}
-              <span class="md-card-product__unit-price">
-                {{ unit_price_md }}
-                /
-                {%- if current_variant.unit_price_measurement.reference_value != 1 -%}
-                  {{- current_variant.unit_price_measurement.reference_value }}
-                {%- endif -%}
-                {{- current_variant.unit_price_measurement.reference_unit -}}
-              </span>
+              <span class="md-card-product__unit-price">{{ unit_price_md }}</span>
             {%- endif -%}
           </div>
 
@@ -375,14 +348,7 @@
         <div class="md-card-product__purchase-meta">
           <span class="md-card-product__tax-note">inkl. MwSt. | <a href="/pages/versand-lieferung" class="md-card-product__tax-link">zzgl. Versand</a></span>
           {%- if unit_price_md != '' -%}
-            <span class="md-card-product__purchase-unit-price">
-              {{ unit_price_md }}
-              /
-              {%- if current_variant.unit_price_measurement.reference_value != 1 -%}
-                {{- current_variant.unit_price_measurement.reference_value }}
-              {%- endif -%}
-              {{- current_variant.unit_price_measurement.reference_unit -}}
-            </span>
+            <span class="md-card-product__purchase-unit-price">{{ unit_price_md }}</span>
           {%- endif -%}
         </div>
 
