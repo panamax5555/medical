@@ -64,14 +64,140 @@
     },
     "md-home-brand-wall": {
       "type": "md-home-brand-wall",
+      "blocks": {
+        "brand_WkrBzP": {
+          "type": "brand",
+          "name": "Henry Schein",
+          "settings": {
+            "name": "Henry Schein",
+            "link": ""
+          }
+        },
+        "brand_8V9CPr": {
+          "type": "brand",
+          "name": "Tana",
+          "settings": {
+            "name": "Tana",
+            "link": ""
+          }
+        },
+        "brand_bVkbEN": {
+          "type": "brand",
+          "name": "Dreiturm",
+          "settings": {
+            "name": "Dreiturm",
+            "link": ""
+          }
+        },
+        "brand_tBL6Vb": {
+          "type": "brand",
+          "name": "KIEHL",
+          "settings": {
+            "name": "KIEHL",
+            "link": ""
+          }
+        },
+        "brand_rRaQBW": {
+          "type": "brand",
+          "name": "DR. SCHNELL",
+          "settings": {
+            "name": "DR. SCHNELL",
+            "link": ""
+          }
+        },
+        "brand_bRayUh": {
+          "type": "brand",
+          "name": "REINEX",
+          "settings": {
+            "name": "REINEX",
+            "link": ""
+          }
+        },
+        "brand_kEjwwc": {
+          "type": "brand",
+          "name": "Deiss",
+          "settings": {
+            "name": "DEISS",
+            "link": ""
+          }
+        },
+        "brand_YttDE8": {
+          "type": "brand",
+          "name": "Remesco",
+          "settings": {
+            "name": "Remesco",
+            "link": ""
+          }
+        },
+        "brand_AaiW77": {
+          "type": "brand",
+          "name": "Fripa",
+          "settings": {
+            "name": "Fripa",
+            "link": ""
+          }
+        },
+        "brand_4WqV3k": {
+          "type": "brand",
+          "name": "HeatPaxx",
+          "settings": {
+            "name": "HeatPaxx",
+            "link": ""
+          }
+        },
+        "brand_JNUhQX": {
+          "type": "brand",
+          "name": "Meditrade",
+          "settings": {
+            "name": "Meditrade",
+            "link": ""
+          }
+        },
+        "brand_N9FiYW": {
+          "type": "brand",
+          "name": "MaiMed",
+          "settings": {
+            "name": "MaiMed",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "brand_WkrBzP",
+        "brand_8V9CPr",
+        "brand_bVkbEN",
+        "brand_tBL6Vb",
+        "brand_rRaQBW",
+        "brand_bRayUh",
+        "brand_kEjwwc",
+        "brand_YttDE8",
+        "brand_AaiW77",
+        "brand_4WqV3k",
+        "brand_JNUhQX",
+        "brand_N9FiYW"
+      ],
       "settings": {
         "heading": "Marken im Sortiment"
       }
     },
     "md-home-industry-grid": {
       "type": "md-home-industry-grid",
+      "blocks": {
+        "industry_Ahadzg": {
+          "type": "industry",
+          "disabled": true,
+          "settings": {
+            "title": "Einsatzbereich-Titel",
+            "text": "Beschreibungstext",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "industry_Ahadzg"
+      ],
       "settings": {
-        "heading": "L\u00f6sungen nach Einsatzbereich"
+        "heading": "Lösungen nach Einsatzbereich"
       }
     },
     "featured_collection": {
