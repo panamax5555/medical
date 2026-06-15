@@ -189,11 +189,9 @@ if (!customElements.get('product-info')) {
           updateSourceFromDestination('price');
           updateSourceFromDestination('Sku', ({ classList }) => classList.contains('hidden'));
           updateSourceFromDestination('Inventory', ({ innerText }) => innerText === '');
-          updateSourceFromDestination('Volume');
 
           this.updateQuantityRules(this.sectionId, html);
           this.querySelector(`#Quantity-Rules-${this.dataset.section}`)?.classList.remove('hidden');
-          this.querySelector(`#Volume-Note-${this.dataset.section}`)?.classList.remove('hidden');
 
           this.productForm?.toggleSubmitButton(
             html.getElementById(`ProductSubmitButton-${this.sectionId}`)?.hasAttribute('disabled') ?? true,
@@ -232,7 +230,7 @@ if (!customElements.get('product-info')) {
       setUnavailable() {
         this.productForm?.toggleSubmitButton(true, window.variantStrings.unavailable);
 
-        const selectors = ['price', 'Inventory', 'Sku', 'Volume-Note', 'Volume', 'Quantity-Rules']
+        const selectors = ['price', 'Inventory', 'Sku', 'Quantity-Rules']
           .map((id) => `#${id}-${this.dataset.section}`)
           .join(', ');
         document.querySelectorAll(selectors).forEach(({ classList }) => classList.add('hidden'));
