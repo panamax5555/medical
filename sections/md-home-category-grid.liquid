@@ -1,0 +1,210 @@
+{{ 'md-home-category-grid.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign heading = section.settings.heading | default: 'Direkt zum Bedarf'
+  assign show_description = section.settings.show_description
+  assign active_blocks = section.blocks | where: 'type', 'category'
+-%}
+
+<div class="md-home-cat-section">
+  <div class="md-home-cat-inner">
+    {% if heading != blank %}
+      <h2 class="md-home-cat-heading">{{ heading | escape }}</h2>
+    {% endif %}
+
+    {% if show_description and section.settings.description != blank %}
+      <p class="md-home-cat-desc">{{ section.settings.description | escape }}</p>
+    {% endif %}
+
+    <div class="md-home-cat-grid">
+      {% if active_blocks.size > 0 %}
+        {% for block in active_blocks %}
+          {%- liquid
+            assign image = block.settings.image
+            assign title = block.settings.title | default: block.settings.title
+            assign text = block.settings.text
+            assign link = block.settings.link
+          -%}
+          <div class="md-home-cat-card-wrap" {{ block.shopify_attributes }}>
+            {% if link != blank %}
+              <a href="{{ link }}" class="md-home-cat-card" aria-label="{{ title | escape }}">
+            {% else %}
+              <div class="md-home-cat-card">
+            {% endif %}
+              <div class="md-home-cat-card__image-wrap">
+                {% if image != blank %}
+                  {{
+                    image
+                    | image_url: width: 200
+                    | image_tag:
+                      widths: '100, 200',
+                      sizes: '(max-width: 749px) 48px, 48px',
+                      loading: 'lazy',
+                      alt: image.alt | default: title
+                  }}
+                {% else %}
+                  <div class="md-home-cat-card__placeholder">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                      <line x1="3" y1="9" x2="21" y2="9"/>
+                      <line x1="9" y1="21" x2="9" y2="9"/>
+                    </svg>
+                  </div>
+                {% endif %}
+              </div>
+
+              {% if title != blank %}
+                <h3 class="md-home-cat-card__title">{{ title | escape }}</h3>
+              {% endif %}
+
+              {% if text != blank %}
+                <p class="md-home-cat-card__desc">{{ text | escape }}</p>
+              {% endif %}
+            {% if link != blank %}
+              </a>
+            {% else %}
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="md-home-cat-empty">
+          Kategoriebl&ouml;cke im Theme-Editor hinzuf&uuml;gen
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "MD Home Kategorie-Grid",
+  "class": "md-home-cat-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Direkt zum Bedarf",
+      "label": "Überschrift"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "default": false,
+      "label": "Beschreibung anzeigen"
+    },
+    {
+        "type": "textarea",
+        "id": "description",
+        "default": "Beschreibungstext",
+        "label": "Beschreibung"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Kategorie",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Bild / Icon (optional)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Kategorie-Titel",
+          "label": "Titel"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "default": "Beschreibungstext",
+          "label": "Beschreibung (optional)"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "MD Home Kategorie-Grid",
+      "settings": {
+        "heading": "Direkt zum Bedarf",
+        "show_description": false,
+        "description": ""
+      },
+      "blocks": [
+        {
+          "type": "category",
+          "settings": {
+            "title": "Einmalhandschuhe",
+            "text": "",
+            "link": ""
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Desinfektion",
+            "text": "",
+            "link": ""
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Pflegebedarf",
+            "text": "",
+            "link": ""
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Hygienepapier",
+            "text": "",
+            "link": ""
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Reinigung",
+            "text": "",
+            "link": ""
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Arbeitsschutz",
+            "text": "",
+            "link": ""
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Gastronomiebedarf",
+            "text": "",
+            "link": ""
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Verpackung & Verbrauchsmaterial",
+            "text": "",
+            "link": ""
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

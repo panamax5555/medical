@@ -1,0 +1,156 @@
+/* ==========================================================================
+   Medical-Deal Homepage Brand Wall
+   Dawn base: 1rem = 10px at body_scale=100
+   Prefix: md-home-brand-
+   ========================================================================== */
+
+/* Section-scoped custom properties */
+.md-home-brand-section {
+  --md-home-brand-bg: rgb(var(--color-background));
+  --md-home-brand-card-bg: rgb(var(--color-background));
+  --md-home-brand-text: var(--md-header-brand-charcoal, #1f2933);
+  --md-home-brand-border: rgba(var(--color-foreground), 0.08);
+  --md-home-brand-hover-border: var(--md-header-brand-petrol, #1f6f78);
+  --md-home-brand-radius: var(--md-header-radius-sm, 0.2rem);
+  --md-home-brand-gap: var(--md-header-space-5xl, 2.4rem);
+  --md-home-brand-card-gap: var(--md-header-space-2xl, 1.5rem);
+  --md-home-brand-logo-height: 8rem;
+}
+
+.md-home-brand-section {
+  background: var(--md-home-brand-bg);
+  padding-top: 2.4rem;
+  padding-bottom: 3.2rem;
+}
+
+.md-home-brand-inner {
+  max-width: var(--md-header-max-width, 1400px);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media screen and (min-width: 990px) {
+  .md-home-brand-inner {
+    padding: 0 1.5rem;
+  }
+}
+
+/* Section heading */
+.md-home-brand-heading {
+  font-size: var(--md-header-font-title, 1.8rem);
+  font-weight: var(--md-header-weight-semibold, 600);
+  color: var(--md-home-brand-text);
+  margin: 0 0 2rem;
+  text-align: center;
+}
+
+@media screen and (min-width: 750px) {
+  .md-home-brand-heading {
+    font-size: var(--md-header-font-logo-desktop, 2.2rem);
+    margin: 0 0 2.8rem;
+  }
+}
+
+/* Grid */
+.md-home-brand-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+@media screen and (min-width: 750px) {
+  .md-home-brand-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--md-home-brand-card-gap);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .md-home-brand-grid {
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--md-home-brand-gap);
+  }
+}
+
+/* Card */
+.md-home-brand-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--md-home-brand-card-bg);
+  border: 1px solid var(--md-home-brand-border);
+  border-radius: var(--md-home-brand-radius);
+  padding: 1.6rem 1rem;
+  text-decoration: none;
+  color: var(--md-home-brand-text);
+  transition: border-color 0.2s ease;
+}
+
+a.md-home-brand-card:hover {
+  border-color: var(--md-home-brand-hover-border);
+}
+
+a.md-home-brand-card:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
+  outline-offset: 0.2rem;
+  box-shadow: 0 0 0 0.3rem rgb(var(--color-background)),
+    0 0 0.5rem 0.4rem rgba(var(--color-foreground), 0.3);
+}
+
+/* Logo wrapper */
+.md-home-brand-card__logo-wrap {
+  width: 100%;
+  height: var(--md-home-brand-logo-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.8rem;
+}
+
+.md-home-brand-card__logo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Placeholder when no logo */
+.md-home-brand-card__placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--md-header-rail-bg, #f4f6f7);
+  border-radius: var(--md-home-brand-radius);
+}
+
+.md-home-brand-card__placeholder svg {
+  width: 3rem;
+  height: 3rem;
+  color: rgba(var(--color-foreground), 0.3);
+}
+
+/* Brand name */
+.md-home-brand-card__name {
+  font-size: var(--md-header-font-xs, 1.1rem);
+  font-weight: var(--md-header-weight-medium, 500);
+  line-height: 1.3;
+  text-align: center;
+  color: var(--md-home-brand-text);
+}
+
+@media screen and (min-width: 750px) {
+  .md-home-brand-card__name {
+    font-size: var(--md-header-font-sm, 1.2rem);
+  }
+}
+
+/* Empty state */
+.md-home-brand-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1rem;
+  color: rgba(var(--color-foreground), 0.4);
+  font-size: var(--md-header-font-md, 1.4rem);
+}

@@ -1,0 +1,169 @@
+/* ==========================================================================
+   Medical-Deal Homepage Category Grid
+   Dawn base: 1rem = 10px at body_scale=100
+   Prefix: md-home-cat-
+   ========================================================================== */
+
+/* Section-scoped custom properties */
+.md-home-cat-section {
+  --md-home-cat-bg: #f4f8fa;
+  --md-home-cat-card-bg: rgb(var(--color-background));
+  --md-home-cat-text: var(--md-header-brand-charcoal, #1f2933);
+  --md-home-cat-accent: var(--md-header-brand-petrol, #1f6f78);
+  --md-home-cat-accent-muted: var(--md-header-brand-ice, #d9e8ec);
+  --md-home-cat-border: rgba(var(--color-foreground), 0.08);
+  --md-home-cat-placeholder-bg: var(--md-header-rail-bg, #f4f6f7);
+  --md-home-cat-radius: var(--md-header-radius-sm, 0.2rem);
+  --md-home-cat-gap: var(--md-header-space-5xl, 2.4rem);
+  --md-home-cat-card-gap: var(--md-header-space-2xl, 1.5rem);
+}
+
+.md-home-cat-section {
+  background: var(--md-home-cat-bg);
+  padding-top: 2.4rem;
+  padding-bottom: 3.2rem;
+}
+
+.md-home-cat-inner {
+  max-width: var(--md-header-max-width, 1400px);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media screen and (min-width: 990px) {
+  .md-home-cat-inner {
+    padding: 0 1.5rem;
+  }
+}
+
+/* Section heading */
+.md-home-cat-heading {
+  font-size: var(--md-header-font-title, 1.8rem);
+  font-weight: var(--md-header-weight-semibold, 600);
+  color: var(--md-home-cat-text);
+  margin: 0 0 2rem;
+  text-align: center;
+}
+
+@media screen and (min-width: 750px) {
+  .md-home-cat-heading {
+    font-size: var(--md-header-font-logo-desktop, 2.2rem);
+    margin: 0 0 2.8rem;
+  }
+}
+
+/* Grid */
+.md-home-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+@media screen and (min-width: 750px) {
+  .md-home-cat-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--md-home-cat-card-gap);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .md-home-cat-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--md-home-cat-gap);
+  }
+}
+
+/* Card */
+.md-home-cat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: var(--md-home-cat-card-bg);
+  border: 1px solid var(--md-home-cat-border);
+  border-radius: var(--md-home-cat-radius);
+  padding: 1.6rem 1rem;
+  text-decoration: none;
+  color: var(--md-home-cat-text);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  text-align: center;
+}
+
+.md-home-cat-card:hover {
+  border-color: var(--md-home-cat-accent);
+  box-shadow: 0 2px 8px rgba(var(--color-shadow), 0.08);
+}
+
+.md-home-cat-card:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
+  outline-offset: 0.2rem;
+  box-shadow: 0 0 0 0.3rem rgb(var(--color-background)),
+    0 0 0.5rem 0.4rem rgba(var(--color-foreground), 0.3);
+}
+
+/* Card image */
+.md-home-cat-card__image-wrap {
+  width: 4.8rem;
+  height: 4.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  background: var(--md-home-cat-accent-muted);
+  overflow: hidden;
+}
+
+.md-home-cat-card__image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Placeholder icon when no image set */
+.md-home-cat-card__placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.md-home-cat-card__placeholder svg {
+  width: 2.4rem;
+  height: 2.4rem;
+  color: var(--md-home-cat-accent);
+  opacity: 0.6;
+}
+
+/* Card title */
+.md-home-cat-card__title {
+  font-size: var(--md-header-font-sm, 1.2rem);
+  font-weight: var(--md-header-weight-semibold, 600);
+  line-height: 1.3;
+  margin: 0 0 0.4rem;
+  color: var(--md-home-cat-text);
+}
+
+@media screen and (min-width: 750px) {
+  .md-home-cat-card__title {
+    font-size: var(--md-header-font-base, 1.3rem);
+  }
+}
+
+/* Card description */
+.md-home-cat-card__desc {
+  font-size: var(--md-header-font-xs, 1.1rem);
+  color: rgba(var(--color-foreground), 0.55);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Empty state */
+.md-home-cat-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1rem;
+  color: rgba(var(--color-foreground), 0.4);
+  font-size: var(--md-header-font-md, 1.4rem);
+}

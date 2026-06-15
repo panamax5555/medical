@@ -54,6 +54,26 @@
         "padding_bottom": 32
       }
     },
+    "md-home-category-grid": {
+      "type": "md-home-category-grid",
+      "settings": {
+        "heading": "Direkt zum Bedarf",
+        "show_description": false,
+        "description": ""
+      }
+    },
+    "md-home-brand-wall": {
+      "type": "md-home-brand-wall",
+      "settings": {
+        "heading": "Marken im Sortiment"
+      }
+    },
+    "md-home-industry-grid": {
+      "type": "md-home-industry-grid",
+      "settings": {
+        "heading": "L\u00f6sungen nach Einsatzbereich"
+      }
+    },
     "featured_collection": {
       "type": "featured-collection",
       "disabled": true,
@@ -86,6 +106,9 @@
   },
   "order": [
     "md-home-promo-stage",
+    "md-home-category-grid",
+    "md-home-brand-wall",
+    "md-home-industry-grid",
     "featured_collection"
   ]
 }

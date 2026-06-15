@@ -1,0 +1,152 @@
+{{ 'md-home-brand-wall.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign heading = section.settings.heading | default: 'Marken im Sortiment'
+  assign active_blocks = section.blocks | where: 'type', 'brand'
+-%}
+
+<div class="md-home-brand-section">
+  <div class="md-home-brand-inner">
+    {% if heading != blank %}
+      <h2 class="md-home-brand-heading">{{ heading | escape }}</h2>
+    {% endif %}
+
+    <div class="md-home-brand-grid">
+      {% if active_blocks.size > 0 %}
+        {% for block in active_blocks %}
+          {%- liquid
+            assign logo = block.settings.logo
+            assign name = block.settings.name
+            assign link = block.settings.link
+          -%}
+          <div class="md-home-brand-card-wrap" {{ block.shopify_attributes }}>
+            {% if link != blank %}
+              <a href="{{ link }}" class="md-home-brand-card" aria-label="{{ name | escape }}">
+            {% else %}
+              <div class="md-home-brand-card">
+            {% endif %}
+              <div class="md-home-brand-card__logo-wrap">
+                {% if logo != blank %}
+                  {{
+                    logo
+                    | image_url: width: 300
+                    | image_tag:
+                      widths: '150, 300',
+                      sizes: '(max-width: 749px) 150px, 300px',
+                      loading: 'lazy',
+                      alt: logo.alt | default: name
+                  }}
+                {% else %}
+                  <div class="md-home-brand-card__placeholder">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="2" y="2" width="20" height="20" rx="2" ry="2"/>
+                      <circle cx="12" cy="8" r="3"/>
+                      <path d="M3 21v-2a4 4 0 0 1 4 -4h10a4 4 0 0 1 4 4v2"/>
+                    </svg>
+                  </div>
+                {% endif %}
+              </div>
+
+              {% if name != blank %}
+                <span class="md-home-brand-card__name">{{ name | escape }}</span>
+              {% endif %}
+            {% if link != blank %}
+              </a>
+            {% else %}
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="md-home-brand-empty">
+          Markenbl&ouml;cke im Theme-Editor hinzuf&uuml;gen
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "MD Home Marken-Wall",
+  "class": "md-home-brand-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Marken im Sortiment",
+      "label": "Überschrift"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Marke",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Markenlogo"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "default": "Markenname",
+          "label": "Markenname"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "MD Home Marken-Wall",
+      "settings": {
+        "heading": "Marken im Sortiment"
+      },
+      "blocks": [
+        {
+          "type": "brand",
+          "settings": {
+            "name": "HARTMANN"
+          }
+        },
+        {
+          "type": "brand",
+          "settings": {
+            "name": "B. Braun"
+          }
+        },
+        {
+          "type": "brand",
+          "settings": {
+            "name": "MaiMed"
+          }
+        },
+        {
+          "type": "brand",
+          "settings": {
+            "name": "Meditrade"
+          }
+        },
+        {
+          "type": "brand",
+          "settings": {
+            "name": "Abena"
+          }
+        },
+        {
+          "type": "brand",
+          "settings": {
+            "name": "Tork"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

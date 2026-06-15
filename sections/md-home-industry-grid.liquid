@@ -1,0 +1,170 @@
+{{ 'md-home-industry-grid.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign heading = section.settings.heading | default: 'Lösungen nach Einsatzbereich'
+  assign active_blocks = section.blocks | where: 'type', 'industry'
+-%}
+
+<div class="md-home-ind-section">
+  <div class="md-home-ind-inner">
+    {% if heading != blank %}
+      <h2 class="md-home-ind-heading">{{ heading | escape }}</h2>
+    {% endif %}
+
+    <div class="md-home-ind-grid">
+      {% if active_blocks.size > 0 %}
+        {% for block in active_blocks %}
+          {%- liquid
+            assign image = block.settings.image
+            assign title = block.settings.title | default: block.settings.title
+            assign text = block.settings.text
+            assign link = block.settings.link
+          -%}
+          <div class="md-home-ind-card-wrap" {{ block.shopify_attributes }}>
+            {% if link != blank %}
+              <a href="{{ link }}" class="md-home-ind-card" aria-label="{{ title | escape }}">
+            {% else %}
+              <div class="md-home-ind-card">
+            {% endif %}
+              <div class="md-home-ind-card__image-wrap">
+                {% if image != blank %}
+                  {{
+                    image
+                    | image_url: width: 600
+                    | image_tag:
+                      widths: '300, 600',
+                      sizes: '(max-width: 749px) 100vw, (max-width: 989px) 50vw, 33vw',
+                      loading: 'lazy',
+                      alt: image.alt | default: title
+                  }}
+                {% else %}
+                  <div class="md-home-ind-card__placeholder">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                      <polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="md-home-ind-card__body">
+                {% if title != blank %}
+                  <h3 class="md-home-ind-card__title">{{ title | escape }}</h3>
+                {% endif %}
+
+                {% if text != blank %}
+                  <p class="md-home-ind-card__text">{{ text | escape }}</p>
+                {% endif %}
+              </div>
+            {% if link != blank %}
+              </a>
+            {% else %}
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="md-home-ind-empty">
+          Einsatzbereich-Bl&ouml;cke im Theme-Editor hinzuf&uuml;gen
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "MD Home Einsatzbereiche",
+  "class": "md-home-ind-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Lösungen nach Einsatzbereich",
+      "label": "Überschrift"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "industry",
+      "name": "Einsatzbereich",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Bild (optional)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Einsatzbereich-Titel",
+          "label": "Titel"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "default": "Beschreibungstext",
+          "label": "Text (optional)"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "MD Home Einsatzbereiche",
+      "settings": {
+        "heading": "Lösungen nach Einsatzbereich"
+      },
+      "blocks": [
+        {
+          "type": "industry",
+          "settings": {
+            "title": "Pflegeeinrichtungen",
+            "text": ""
+          }
+        },
+        {
+          "type": "industry",
+          "settings": {
+            "title": "Arztpraxen",
+            "text": ""
+          }
+        },
+        {
+          "type": "industry",
+          "settings": {
+            "title": "Gastronomie",
+            "text": ""
+          }
+        },
+        {
+          "type": "industry",
+          "settings": {
+            "title": "Gebäudereinigung",
+            "text": ""
+          }
+        },
+        {
+          "type": "industry",
+          "settings": {
+            "title": "Industrie & Werkstatt",
+            "text": ""
+          }
+        },
+        {
+          "type": "industry",
+          "settings": {
+            "title": "Einrichtungen & Vereine",
+            "text": ""
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
