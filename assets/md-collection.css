@@ -506,26 +506,7 @@
 
 /* Filter button — visible only on mobile */
 .md-collection-toolbar__filter-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: var(--md-collection-font-sm);
-  font-weight: 500;
-  padding: 0.55rem 1rem;
-  border: 1px solid var(--md-collection-border-muted);
-  border-radius: var(--md-collection-radius-sm);
-  background: rgb(var(--color-background));
-  color: rgb(var(--color-foreground));
-  cursor: pointer;
-  min-height: 3.4rem;
-  transition: background-color 0.15s, border-color 0.15s;
-  white-space: nowrap;
-  margin-bottom: var(--md-collection-space-sm);
-}
-
-.md-collection-toolbar__filter-btn:hover {
-  background: rgba(var(--color-foreground), 0.05);
-  border-color: rgba(var(--color-foreground), 0.25);
+  display: none;
 }
 
 .md-collection-toolbar__filter-btn svg {
@@ -535,11 +516,6 @@
   opacity: 0.7;
 }
 
-@media screen and (min-width: 990px) {
-  .md-collection-toolbar__filter-btn {
-    display: none;
-  }
-}
 
 /* Desktop horizontal filters — visible only on desktop */
 .md-collection-desktop-filters {
@@ -758,8 +734,6 @@
   }
 
   /* Hide grid-only elements in list view */
-  .md-collection[data-md-view="list"] .md-card-product__media-nav,
-  .md-collection[data-md-view="list"] .md-card-product__media-pagination,
   .md-collection[data-md-view="list"] .md-card-product__watchlist,
   .md-collection[data-md-view="list"] .md-card-product__prices,
   .md-collection[data-md-view="list"] .md-card-product__inventory,
@@ -920,7 +894,7 @@
 
   @media screen and (min-width: 990px) {
     .md-collection[data-md-view="list"] .md-card-product__inner {
-      grid-template-columns: minmax(20rem, 24rem) minmax(0, 1fr) minmax(25rem, 28rem);
+      grid-template-columns: minmax(20rem, 24rem) minmax(0, 1fr) minmax(22rem, 22rem);
       gap: 2.6rem;
     }
 
@@ -1436,24 +1410,7 @@
    Filter Drawer — mobile only
    ========================================================================== */
 .md-collection-filters-drawer {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: min(92vw, 40rem);
-  height: 100%;
-  z-index: calc(var(--md-header-z-drawer, 10) + 1);
-  background: rgb(var(--color-background));
-  transform: translateX(100%);
-  transition: transform 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-@media screen and (min-width: 990px) {
-  .md-collection-filters-drawer {
-    display: none;
-  }
+  display: none;
 }
 
 .md-collection-filters-drawer.is-open {
@@ -1720,24 +1677,7 @@
    Filter Overlay
    ========================================================================== */
 .md-collection-filters-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: var(--md-header-z-drawer, 10);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-@media screen and (min-width: 990px) {
-  .md-collection-filters-overlay {
-    display: none;
-  }
-}
-
-.md-collection-filters-overlay.is-open {
-  opacity: 1;
-  pointer-events: auto;
+  display: none;
 }
 
 /* ==========================================================================
@@ -1863,7 +1803,7 @@
 /* Media: image track with scroll-snap */
 .md-card-product__media {
   position: relative;
-  margin: 0 0 var(--md-collection-space-lg);
+  margin: 0 0 calc(var(--md-collection-space-lg) + 0.9rem);
   overflow: visible;
 }
 
@@ -1947,13 +1887,17 @@
   border-color: var(--md-collection-border-muted);
 }
 
-/* Pagination dots */
+/* Pagination dots — absolutely positioned below media */
 .md-card-product__media-pagination {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1.6rem;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0.7rem;
-  margin-top: 0.9rem;
+  margin-top: 0;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
