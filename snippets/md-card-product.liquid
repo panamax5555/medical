@@ -49,6 +49,34 @@
       assign unit_price_md = current_variant.unit_price | unit_price_with_measurement: current_variant.unit_price_measurement
     endif
 
+    assign unit_content_md = ''
+    if show_unit_price and current_variant.unit_price_measurement
+      assign content_qty_val = current_variant.unit_price_measurement.quantity_value | floor
+      assign content_qty_diff = current_variant.unit_price_measurement.quantity_value | minus: content_qty_val
+      if content_qty_diff > 0
+        assign content_qty_display = current_variant.unit_price_measurement.quantity_value | append: ''
+      else
+        assign content_qty_display = content_qty_val | append: ''
+      endif
+
+      assign raw_unit = current_variant.unit_price_measurement.quantity_unit | downcase | strip
+      if raw_unit == 'ct' or raw_unit == 'pcs' or raw_unit == 'piece' or raw_unit == 'pieces' or raw_unit == 'stk' or raw_unit == 'stück'
+        assign content_unit = 'Stück'
+      else
+        assign content_unit = current_variant.unit_price_measurement.quantity_unit | strip
+      endif
+
+      assign content_packaging = 'Box'
+      assign packaging_meta = current_variant.metafields.custom.verpackungseinheit | default: card_product.metafields.custom.verpackungseinheit | default: current_variant.metafields.custom.packaging | default: card_product.metafields.custom.packaging | strip
+      if packaging_meta != blank
+        assign content_packaging = packaging_meta
+      endif
+
+      if content_qty_display != '0' and content_qty_display != '1' and content_qty_display != ''
+        assign unit_content_md = 'Inhalt: ' | append: content_qty_display | append: ' ' | append: content_unit | append: ' / ' | append: content_packaging
+      endif
+    endif
+
     assign variant_count = card_product.variants_count
     assign product_images = card_product.images
   -%}
@@ -253,6 +281,9 @@
             {%- if unit_price_md != '' -%}
               <span class="md-card-product__unit-price">{{ unit_price_md }}</span>
             {%- endif -%}
+            {%- if unit_content_md != '' -%}
+              <span class="md-card-product__unit-content">{{ unit_content_md }}</span>
+            {%- endif -%}
           </div>
 
           {%- if show_inventory -%}
@@ -349,6 +380,9 @@
           <span class="md-card-product__tax-note">inkl. MwSt. | <a href="/pages/versand-lieferung" class="md-card-product__tax-link">zzgl. Versand</a></span>
           {%- if unit_price_md != '' -%}
             <span class="md-card-product__purchase-unit-price">{{ unit_price_md }}</span>
+          {%- endif -%}
+          {%- if unit_content_md != '' -%}
+            <span class="md-card-product__purchase-unit-content">{{ unit_content_md }}</span>
           {%- endif -%}
         </div>
 

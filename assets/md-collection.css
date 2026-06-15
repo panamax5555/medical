@@ -823,6 +823,14 @@
     color: rgba(var(--color-foreground), 0.55);
   }
 
+  .md-collection[data-md-view="list"] .md-card-product__purchase-unit-content {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: var(--md-collection-font-sm);
+    color: rgba(var(--color-foreground), 0.62);
+    line-height: 1.25;
+  }
+
   .md-collection[data-md-view="list"] .md-card-product__purchase-inventory {
     display: block;
     font-size: var(--md-collection-font-md);
@@ -2143,6 +2151,14 @@
   color: rgba(var(--color-foreground), 0.55);
   display: block;
   margin-top: 0.3rem;
+}
+
+.md-card-product__unit-content {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: var(--md-collection-font-sm);
+  color: rgba(var(--color-foreground), 0.62);
+  line-height: 1.25;
 }
 
 /* Variant chips — inline variant selectors */
