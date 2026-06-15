@@ -151,21 +151,35 @@
         {%- endif -%}
 
         {%- liquid
+          assign brand_logo = blank
           assign brand_logo_src = blank
-          assign brand_name = card_product.vendor | escape
+          assign brand_name = card_product.vendor | default: card_product.title | escape
 
-          assign brand_metaobject = card_product.metafields.custom.brand.value
+          assign brand_metaobject = card_product.metafields.custom.brand_ref.value
+          if brand_metaobject == blank
+            assign brand_metaobject = card_product.metafields.custom.brand.value
+          endif
+
           if brand_metaobject != blank
-            if brand_metaobject.name != blank
+            if brand_metaobject.name.value != blank
+              assign brand_name = brand_metaobject.name.value | escape
+            elsif brand_metaobject.name != blank
               assign brand_name = brand_metaobject.name | escape
             endif
-            if brand_metaobject.logo != blank
-              assign brand_logo_src = brand_metaobject.logo | image_url: width: 200
+
+            if brand_metaobject.logo.value != blank
+              assign brand_logo = brand_metaobject.logo.value
+            elsif brand_metaobject.logo != blank
+              assign brand_logo = brand_metaobject.logo
             endif
           endif
 
-          if brand_logo_src == blank and card_product.metafields.custom.brand_logo.value != blank
-            assign brand_logo_src = card_product.metafields.custom.brand_logo.value | image_url: width: 200
+          if brand_logo == blank and card_product.metafields.custom.brand_logo.value != blank
+            assign brand_logo = card_product.metafields.custom.brand_logo.value
+          endif
+
+          if brand_logo != blank
+            assign brand_logo_src = brand_logo | image_url: width: 200
           endif
         -%}
 
