@@ -1,0 +1,246 @@
+/* ==========================================================================
+   Medical-Deal Wishlist Page
+   Dawn base: 1rem = 10px at body_scale=100
+   Prefix: md-wishlist-
+   ========================================================================== */
+
+.md-wishlist-page {
+  --md-wishlist-bg: rgb(var(--color-background));
+  --md-wishlist-text: var(--md-header-brand-charcoal, #1f2933);
+  --md-wishlist-accent: var(--md-header-brand-petrol, #1f6f78);
+  --md-wishlist-border: rgba(var(--color-foreground), 0.08);
+  --md-wishlist-radius: var(--md-header-radius-sm, 0.2rem);
+  --md-wishlist-gap: var(--md-header-space-5xl, 2.4rem);
+  --md-wishlist-card-gap: var(--md-header-space-2xl, 1.5rem);
+}
+
+.md-wishlist-page {
+  background: var(--md-wishlist-bg);
+  padding-top: 2.4rem;
+  padding-bottom: 4.8rem;
+}
+
+.md-wishlist-page__inner {
+  max-width: var(--md-header-max-width, 1400px);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media screen and (min-width: 990px) {
+  .md-wishlist-page__inner {
+    padding: 0 1.5rem;
+  }
+}
+
+/* Heading */
+.md-wishlist-page__heading {
+  font-size: var(--md-header-font-title, 1.8rem);
+  font-weight: var(--md-header-weight-semibold, 600);
+  color: var(--md-wishlist-text);
+  margin: 0 0 2rem;
+}
+
+@media screen and (min-width: 750px) {
+  .md-wishlist-page__heading {
+    font-size: var(--md-header-font-logo-desktop, 2.2rem);
+    margin: 0 0 2.8rem;
+  }
+}
+
+/* Grid */
+.md-wishlist-page__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+@media screen and (min-width: 750px) {
+  .md-wishlist-page__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--md-wishlist-card-gap);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .md-wishlist-page__grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--md-wishlist-gap);
+  }
+}
+
+/* Card */
+.md-wishlist-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--md-wishlist-bg);
+  border: 1px solid var(--md-wishlist-border);
+  border-radius: var(--md-wishlist-radius);
+  overflow: hidden;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.md-wishlist-card__image-wrap {
+  display: block;
+  width: 100%;
+  height: 18rem;
+  overflow: hidden;
+  background: var(--md-header-rail-bg, #f4f6f7);
+  text-decoration: none;
+}
+
+@media screen and (min-width: 750px) {
+  .md-wishlist-card__image-wrap {
+    height: 20rem;
+  }
+}
+
+.md-wishlist-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.md-wishlist-card__placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.md-wishlist-card__placeholder svg {
+  width: 3.6rem;
+  height: 3.6rem;
+  color: rgba(var(--color-foreground), 0.15);
+}
+
+/* Card body */
+.md-wishlist-card__body {
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.md-wishlist-card__title {
+  font-size: var(--md-header-font-sm, 1.2rem);
+  font-weight: var(--md-header-weight-medium, 500);
+  line-height: 1.3;
+  color: var(--md-wishlist-text);
+  text-decoration: none;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0 0 0.4rem;
+}
+
+.md-wishlist-card__title:hover {
+  color: var(--md-wishlist-accent);
+}
+
+.md-wishlist-card__price {
+  font-size: var(--md-header-font-md, 1.4rem);
+  font-weight: var(--md-header-weight-semibold, 600);
+  color: var(--md-wishlist-text);
+  margin: 0 0 1rem;
+}
+
+/* Card actions */
+.md-wishlist-card__actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: auto;
+}
+
+.md-wishlist-card__view-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 0.6rem 1rem;
+  font-size: var(--md-header-font-xs, 1.1rem);
+  font-weight: var(--md-header-weight-medium, 500);
+  color: rgb(var(--color-background));
+  background: var(--md-wishlist-accent);
+  border: 1px solid var(--md-wishlist-accent);
+  border-radius: var(--md-wishlist-radius);
+  text-decoration: none;
+  text-align: center;
+  transition: background 0.15s;
+}
+
+.md-wishlist-card__view-btn:hover {
+  background: var(--md-header-brand-petrol-dark, #245e66);
+}
+
+.md-wishlist-card__remove-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1rem;
+  font-size: var(--md-header-font-xs, 1.1rem);
+  font-weight: var(--md-header-weight-medium, 500);
+  color: var(--md-wishlist-text);
+  background: transparent;
+  border: 1px solid var(--md-wishlist-border);
+  border-radius: var(--md-wishlist-radius);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  font-family: inherit;
+}
+
+.md-wishlist-card__remove-btn:hover {
+  background: rgba(var(--color-foreground), 0.06);
+  border-color: var(--md-header-brand-charcoal, #1f2933);
+}
+
+/* Empty state */
+.md-wishlist-page__empty {
+  text-align: center;
+  padding: 4rem 1rem;
+}
+
+.md-wishlist-page__empty-icon {
+  width: 4.8rem;
+  height: 4.8rem;
+  color: var(--md-wishlist-accent);
+  opacity: 0.3;
+  margin: 0 auto 1.6rem;
+}
+
+.md-wishlist-page__empty-title {
+  font-size: var(--md-header-font-lg, 1.5rem);
+  font-weight: var(--md-header-weight-semibold, 600);
+  color: var(--md-wishlist-text);
+  margin: 0 0 0.8rem;
+}
+
+.md-wishlist-page__empty-text {
+  font-size: var(--md-header-font-sm, 1.2rem);
+  color: rgba(var(--color-foreground), 0.55);
+  line-height: 1.5;
+  margin: 0 0 2rem;
+  max-width: 36rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.md-wishlist-page__empty-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2.4rem;
+  font-size: var(--md-header-font-sm, 1.2rem);
+  font-weight: var(--md-header-weight-medium, 500);
+  color: rgb(var(--color-background));
+  background: var(--md-wishlist-accent);
+  border: none;
+  border-radius: var(--md-wishlist-radius);
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.md-wishlist-page__empty-btn:hover {
+  background: var(--md-header-brand-petrol-dark, #245e66);
+}

@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "main": {
+      "type": "md-wishlist-page",
+      "settings": {
+        "heading": "Merkzettel"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
