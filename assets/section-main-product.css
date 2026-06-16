@@ -1529,6 +1529,10 @@ a.product__text {
   outline-offset: 0.2rem;
 }
 
+.md-product-wishlist.is-active svg {
+  fill: currentColor;
+}
+
 @media screen and (min-width: 750px) {
   .md-product-wishlist {
     width: auto;

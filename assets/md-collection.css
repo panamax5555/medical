@@ -1816,6 +1816,10 @@
   color: var(--md-header-brand-petrol, #1f6f78);
 }
 
+.md-card-wishlist.is-active svg {
+  fill: currentColor;
+}
+
 .md-card-wishlist svg {
   width: 1.8rem;
   height: 1.8rem;
