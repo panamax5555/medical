@@ -267,37 +267,3 @@
   background: rgba(var(--color-foreground), 0.06);
   border-color: var(--md-header-brand-charcoal, #1f2933);
 }
-
-/* Card wishlist heart button */
-.md-card-wishlist {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.8rem;
-  height: 2.8rem;
-  padding: 0;
-  margin: 0;
-  background: transparent;
-  border: none;
-  border-radius: 50%;
-  color: rgba(var(--color-foreground), 0.35);
-  cursor: pointer;
-  font-family: inherit;
-  transition: color 0.15s, background 0.15s;
-}
-
-.md-card-wishlist:hover {
-  color: var(--md-header-brand-petrol, #1f6f78);
-  background: rgba(var(--color-foreground), 0.06);
-}
-
-.md-card-wishlist.is-active {
-  color: var(--md-header-brand-petrol, #1f6f78);
-}
-
-.md-card-wishlist svg {
-  width: 1.8rem;
-  height: 1.8rem;
-  flex-shrink: 0;
-  pointer-events: none;
-}

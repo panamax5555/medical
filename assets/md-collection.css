@@ -676,6 +676,7 @@
     gap: 2rem;
     align-items: stretch;
     height: auto;
+    position: relative;
   }
 
   .md-collection[data-md-view="list"] .md-card-product__media {
@@ -734,11 +735,19 @@
   }
 
   /* Hide grid-only elements in list view */
-  .md-collection[data-md-view="list"] .md-card-product__watchlist,
   .md-collection[data-md-view="list"] .md-card-product__prices,
   .md-collection[data-md-view="list"] .md-card-product__inventory,
   .md-collection[data-md-view="list"] .md-card-product__unit-price {
     display: none;
+  }
+
+  .md-collection[data-md-view="list"] .md-card-product__watchlist {
+    position: absolute;
+    top: -0.2rem;
+    right: auto;
+    left: calc(20rem + 1rem);
+    z-index: 1;
+    display: block;
   }
 
   /* Purchase box */
@@ -1778,6 +1787,40 @@
   top: var(--md-collection-space-lg);
   right: var(--md-collection-space-sm);
   z-index: 1;
+}
+
+/* Card wishlist heart button */
+.md-card-wishlist {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  color: rgba(var(--color-foreground), 0.35);
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.15s, background 0.15s;
+}
+
+.md-card-wishlist:hover {
+  color: var(--md-header-brand-petrol, #1f6f78);
+  background: rgba(var(--color-foreground), 0.06);
+}
+
+.md-card-wishlist.is-active {
+  color: var(--md-header-brand-petrol, #1f6f78);
+}
+
+.md-card-wishlist svg {
+  width: 1.8rem;
+  height: 1.8rem;
+  flex-shrink: 0;
+  pointer-events: none;
 }
 
 /* Link wrapper (title link only) */
