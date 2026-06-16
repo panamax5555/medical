@@ -83,11 +83,23 @@
 
   <div class="md-card-product">
     <div class="md-card-product__inner">
-      {%- if show_variant_hint and variant_count > 1 -%}
-        <div class="md-card-product__watchlist">
-          {% comment %} Reserved for watchlist toggle {% endcomment %}
-        </div>
-      {%- endif -%}
+      <div class="md-card-product__watchlist">
+        <button
+          type="button"
+          class="md-card-wishlist"
+          aria-label="Zum Merkzettel hinzuf&uuml;gen: {{ card_product.title | escape }}"
+          data-product-id="{{ card_product.id }}"
+          data-product-handle="{{ card_product.handle }}"
+          data-product-title="{{ card_product.title | escape }}"
+          data-product-url="{{ card_product.url }}"
+          data-product-image="{% if card_product.featured_image %}{{ card_product.featured_image | image_url: width: 400 }}{% endif %}"
+          data-product-price="{{ card_product.price | money }}"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </button>
+      </div>
 
       <div class="md-card-product__media" data-md-card-media>
         <a href="{{ product_url }}" class="md-card-product__media-link" aria-label="{{ card_product.title | escape }}">

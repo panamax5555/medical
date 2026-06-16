@@ -34,50 +34,111 @@
     }
   }
 
-  function initProductButtons() {
-    var buttons = document.querySelectorAll('.md-product-wishlist');
-    if (!buttons.length) return;
+  function getCurrentVariantId(btn) {
+    var form = btn.closest('form');
+    if (!form) return null;
+    var input = form.querySelector('input[name="id"]');
+    if (!input) return null;
+    return input.value || null;
+  }
 
-    buttons.forEach(function (btn) {
-      var productId = btn.getAttribute('data-product-id');
-      var productTitle = btn.getAttribute('data-product-title') || '';
+  function getWishlistItemFromButton(btn) {
+    var productId = btn.getAttribute('data-product-id') || '';
+    var baseUrl = btn.getAttribute('data-product-url') || '';
+    var variantId = getCurrentVariantId(btn);
+    var id = variantId || productId;
+    var url = baseUrl;
+    if (variantId) {
+      url = baseUrl.indexOf('?') > -1 ? baseUrl + '&variant=' + variantId : baseUrl + '?variant=' + variantId;
+    }
+    return {
+      id: id,
+      productId: productId,
+      variantId: variantId || '',
+      handle: btn.getAttribute('data-product-handle') || '',
+      title: btn.getAttribute('data-product-title') || '',
+      url: url,
+      image: btn.getAttribute('data-product-image') || '',
+      price: btn.getAttribute('data-product-price') || ''
+    };
+  }
 
-      function updateButtonState() {
-        var inWishlist = isInWishlist(productId);
-        var span = btn.querySelector('span');
-        if (inWishlist) {
-          if (span) span.textContent = 'Von Merkliste entfernen';
-          btn.classList.add('is-active');
-          btn.setAttribute('aria-label', 'Von Merkliste entfernen: ' + productTitle);
-        } else {
-          if (span) span.textContent = 'Zur Merkliste hinzuf\u00fcgen';
-          btn.classList.remove('is-active');
-          btn.setAttribute('aria-label', 'Zur Merkliste hinzuf\u00fcgen: ' + productTitle);
-        }
+  function updateProductButtonState(btn) {
+    var currentId = getCurrentVariantId(btn) || btn.getAttribute('data-product-id') || '';
+    var inWishlist = isInWishlist(currentId);
+    var productTitle = btn.getAttribute('data-product-title') || '';
+
+    if (btn.classList.contains('md-card-wishlist')) {
+      if (inWishlist) {
+        btn.classList.add('is-active');
+        btn.setAttribute('aria-label', 'Vom Merkzettel entfernen: ' + productTitle);
+      } else {
+        btn.classList.remove('is-active');
+        btn.setAttribute('aria-label', 'Zum Merkzettel hinzuf\u00fcgen: ' + productTitle);
       }
+    } else {
+      var span = btn.querySelector('span');
+      if (inWishlist) {
+        if (span) span.textContent = 'Von Merkliste entfernen';
+        btn.classList.add('is-active');
+        btn.setAttribute('aria-label', 'Von Merkliste entfernen: ' + productTitle);
+      } else {
+        if (span) span.textContent = 'Zur Merkliste hinzuf\u00fcgen';
+        btn.classList.remove('is-active');
+        btn.setAttribute('aria-label', 'Zur Merkliste hinzuf\u00fcgen: ' + productTitle);
+      }
+    }
+  }
 
-      updateButtonState();
+  function handleButtonClick(btn, event) {
+    event.preventDefault();
+    event.stopPropagation();
 
-      btn.addEventListener('click', function () {
-        if (isInWishlist(productId)) {
-          var items = getWishlist().filter(function (p) { return p.id !== productId; });
-          saveWishlist(items);
-        } else {
-          var items = getWishlist();
-          items.push({
-            id: btn.getAttribute('data-product-id') || '',
-            handle: btn.getAttribute('data-product-handle') || '',
-            title: btn.getAttribute('data-product-title') || '',
-            url: btn.getAttribute('data-product-url') || '',
-            image: btn.getAttribute('data-product-image') || '',
-            price: btn.getAttribute('data-product-price') || ''
-          });
-          saveWishlist(items);
-        }
-        updateButtonState();
-        updateBadge();
+    var item = getWishlistItemFromButton(btn);
+    var existingIndex = -1;
+
+    getWishlist().forEach(function (p, i) {
+      if (p.id === item.id) existingIndex = i;
+    });
+
+    if (existingIndex > -1) {
+      var items = getWishlist();
+      items.splice(existingIndex, 1);
+      saveWishlist(items);
+    } else {
+      var items = getWishlist();
+      items.push(item);
+      saveWishlist(items);
+    }
+
+    updateProductButtonState(btn);
+    updateBadge();
+  }
+
+  function initProductButtons() {
+    var allButtons = document.querySelectorAll('.md-product-wishlist, .md-card-wishlist');
+    if (!allButtons.length) return;
+
+    allButtons.forEach(function (btn) {
+      updateProductButtonState(btn);
+
+      btn.addEventListener('click', function (event) {
+        handleButtonClick(btn, event);
       });
     });
+
+    var productPageBtn = document.querySelector('.md-product-wishlist');
+    if (productPageBtn) {
+      var productForm = productPageBtn.closest('form');
+      if (productForm) {
+        var variantInput = productForm.querySelector('input[name="id"]');
+        if (variantInput) {
+          variantInput.addEventListener('change', function () {
+            updateProductButtonState(productPageBtn);
+          });
+        }
+      }
+    }
   }
 
   function initWishlistPage() {
@@ -175,15 +236,33 @@
     });
   }
 
+  function initClearButton() {
+    var clearBtn = document.querySelector('.md-wishlist-page__clear');
+    if (!clearBtn) return;
+
+    clearBtn.addEventListener('click', function () {
+      saveWishlist([]);
+      var grid = document.querySelector('.md-wishlist-page__grid');
+      var empty = document.querySelector('.md-wishlist-page__empty');
+      var hasProducts = document.querySelector('.md-wishlist-page__has-products');
+      if (grid) grid.innerHTML = '';
+      if (empty) empty.style.display = 'block';
+      if (hasProducts) hasProducts.style.display = 'none';
+      updateBadge();
+    });
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () {
       updateBadge();
       initProductButtons();
       initWishlistPage();
+      initClearButton();
     });
   } else {
     updateBadge();
     initProductButtons();
     initWishlistPage();
+    initClearButton();
   }
 })();
