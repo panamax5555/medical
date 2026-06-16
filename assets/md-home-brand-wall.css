@@ -14,7 +14,7 @@
   --md-home-brand-radius: var(--md-header-radius-sm, 0.2rem);
   --md-home-brand-gap: var(--md-header-space-5xl, 2.4rem);
   --md-home-brand-card-gap: var(--md-header-space-2xl, 1.5rem);
-  --md-home-brand-logo-height: 8rem;
+  --md-home-brand-logo-height: 6.4rem;
 }
 
 .md-home-brand-section {
@@ -87,6 +87,12 @@
   transition: border-color 0.2s ease;
 }
 
+@media screen and (min-width: 990px) {
+  .md-home-brand-card {
+    padding: 1.2rem 0.8rem;
+  }
+}
+
 a.md-home-brand-card:hover {
   border-color: var(--md-home-brand-hover-border);
 }
@@ -105,7 +111,7 @@ a.md-home-brand-card:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 0.8rem;
+  margin-bottom: 1rem;
 }
 
 .md-home-brand-card__logo-wrap img {
@@ -121,28 +127,29 @@ a.md-home-brand-card:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--md-header-rail-bg, #f4f6f7);
+  background: rgba(var(--color-foreground), 0.04);
   border-radius: var(--md-home-brand-radius);
 }
 
 .md-home-brand-card__placeholder svg {
-  width: 3rem;
-  height: 3rem;
-  color: rgba(var(--color-foreground), 0.3);
+  width: 2.6rem;
+  height: 2.6rem;
+  color: rgba(var(--color-foreground), 0.18);
 }
 
 /* Brand name */
 .md-home-brand-card__name {
-  font-size: var(--md-header-font-xs, 1.1rem);
-  font-weight: var(--md-header-weight-medium, 500);
-  line-height: 1.3;
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.25;
   text-align: center;
   color: var(--md-home-brand-text);
 }
 
 @media screen and (min-width: 750px) {
   .md-home-brand-card__name {
-    font-size: var(--md-header-font-sm, 1.2rem);
+    font-size: 1.4rem;
   }
 }
 

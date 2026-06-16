@@ -62,6 +62,15 @@
         "description": ""
       }
     },
+    "md-home-product-rail": {
+      "type": "md-home-product-rail",
+      "settings": {
+        "heading": "H\u00e4ufig gekauft",
+        "show_description": false,
+        "description": "",
+        "product_limit": 4
+      }
+    },
     "md-home-brand-wall": {
       "type": "md-home-brand-wall",
       "blocks": {
@@ -233,6 +242,7 @@
   "order": [
     "md-home-promo-stage",
     "md-home-category-grid",
+    "md-home-product-rail",
     "md-home-brand-wall",
     "md-home-industry-grid",
     "featured_collection"

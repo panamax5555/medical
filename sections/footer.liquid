@@ -37,16 +37,31 @@
           {% if section.settings.company_description != blank %}
             <p class="md-footer-brand__text">{{ section.settings.company_description | escape }}</p>
           {% endif %}
-          {% if section.settings.company_address != blank or section.settings.company_email != blank or section.settings.company_phone != blank %}
+          {%- liquid
+            assign footer_addr = shop.address
+            assign footer_company = footer_addr.company | default: shop.name
+            assign footer_email = shop.email
+            assign footer_phone = shop.phone | default: footer_addr.phone
+          -%}
+          {% if footer_company != blank or footer_addr.street != blank or footer_addr.zip != blank or footer_addr.city != blank or footer_addr.country != blank or footer_email != blank or footer_phone != blank %}
             <p class="md-footer-brand__contact">
-              {% if section.settings.company_address != blank %}
-                {{ section.settings.company_address | escape }}<br>
+              {% if footer_company != blank %}
+                {{ footer_company | escape }}<br>
               {% endif %}
-              {% if section.settings.company_email != blank %}
-                <a href="mailto:{{ section.settings.company_email | escape }}">{{ section.settings.company_email | escape }}</a><br>
+              {% if footer_addr.street != blank %}
+                {{ footer_addr.street | escape }}<br>
               {% endif %}
-              {% if section.settings.company_phone != blank %}
-                <a href="tel:{{ section.settings.company_phone | replace: ' ', '' | escape }}">{{ section.settings.company_phone | escape }}</a>
+              {% if footer_addr.zip != blank or footer_addr.city != blank %}
+                {{ footer_addr.zip | escape }}{% if footer_addr.city != blank %} {{ footer_addr.city | escape }}{% endif %}<br>
+              {% endif %}
+              {% if footer_addr.country != blank %}
+                {{ footer_addr.country | escape }}<br>
+              {% endif %}
+              {% if footer_email != blank %}
+                <a href="mailto:{{ footer_email | escape }}">{{ footer_email | escape }}</a><br>
+              {% endif %}
+              {% if footer_phone != blank %}
+                <a href="tel:{{ footer_phone | replace: ' ', '' | escape }}">{{ footer_phone | escape }}</a>
               {% endif %}
             </p>
           {% endif %}
@@ -171,24 +186,6 @@
       "label": "Unternehmensbeschreibung"
     },
     {
-      "type": "text",
-      "id": "company_address",
-      "default": "Kieler Straße 407, 22525 Hamburg",
-      "label": "Adresse"
-    },
-    {
-      "type": "text",
-      "id": "company_email",
-      "default": "info@medical-deal.de",
-      "label": "E-Mail"
-    },
-    {
-      "type": "text",
-      "id": "company_phone",
-      "default": "+49 176 72042448",
-      "label": "Telefon"
-    },
-    {
       "type": "header",
       "content": "Sortiment"
     },
@@ -295,9 +292,6 @@
         "show_logo": true,
         "footer_logo": "",
         "company_description": "Ihr Partner für Hygieneartikel, Pflegebedarf und gewerbliche Versorgung.",
-        "company_address": "Kieler Straße 407, 22525 Hamburg",
-        "company_email": "info@medical-deal.de",
-        "company_phone": "+49 176 72042448",
         "heading_assortment": "Sortiment",
         "menu_assortment": "",
         "heading_service": "Service",

@@ -1,0 +1,149 @@
+{{ 'md-home-product-rail.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign heading = section.settings.heading | default: 'Häufig gekauft'
+  assign show_description = section.settings.show_description
+  assign collection = section.settings.collection
+  assign product_limit = section.settings.product_limit | default: 4
+  assign button_label = section.settings.button_label
+  assign button_link = section.settings.button_link
+  assign products_to_show = blank
+
+  if collection != blank
+    if product_limit > collection.all_products_count
+      assign product_limit = collection.all_products_count
+    endif
+    assign products_to_show = collection.products | slice: 0, product_limit
+  endif
+-%}
+
+{% if products_to_show != blank and products_to_show.size > 0 %}
+<div class="md-home-pr-section">
+  <div class="md-home-pr-inner">
+    <div class="md-home-pr-header">
+      {% if heading != blank %}
+        <h2 class="md-home-pr-heading">{{ heading | escape }}</h2>
+      {% endif %}
+      {% if button_label != blank and button_link != blank %}
+        <a href="{{ button_link }}" class="md-home-pr-btn">
+          {{ button_label | escape }}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+      {% endif %}
+    </div>
+
+    {% if show_description and section.settings.description != blank %}
+      <p class="md-home-pr-desc">{{ section.settings.description | escape }}</p>
+    {% endif %}
+
+    <div class="md-home-pr-grid">
+      {% for product in products_to_show %}
+        {%- assign lazy_load = true -%}
+        {%- if forloop.index <= 2 -%}
+          {%- assign lazy_load = false -%}
+        {%- endif -%}
+        {% render 'md-card-product',
+          card_product: product,
+          show_vendor: false,
+          show_rating: false,
+          show_inventory: false,
+          show_unit_price: true,
+          show_variant_hint: false,
+          lazy_load: lazy_load,
+          section_id: section.id
+        %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% elsif request.design_mode %}
+<div class="md-home-pr-section">
+  <div class="md-home-pr-inner">
+    {% if heading != blank %}
+      <h2 class="md-home-pr-heading">
+        {{ heading | escape }}
+      </h2>
+    {% endif %}
+    <div class="md-home-pr-grid">
+      <div class="md-home-pr-empty">
+        {% if collection == blank %}
+          Kollektion im Theme-Editor ausw&auml;hlen
+        {% else %}
+          Diese Kollektion enth&auml;lt keine Produkte
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "MD Home Product-Rail",
+  "class": "md-home-product-rail-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Häufig gekauft",
+      "label": "Überschrift"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "default": false,
+      "label": "Beschreibung anzeigen"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "default": "Beschreibungstext",
+      "label": "Beschreibung"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Kollektion"
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "min": 4,
+      "max": 12,
+      "step": 4,
+      "default": 4,
+      "label": "Produktanzahl"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "default": "Alle anzeigen",
+      "label": "Button-Text",
+      "info": "Optional: Button neben der Überschrift"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button-Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "MD Home Product-Rail",
+      "settings": {
+        "heading": "Häufig gekauft",
+        "show_description": false,
+        "description": "",
+        "product_limit": 4
+      }
+    }
+  ]
+}
+{% endschema %}

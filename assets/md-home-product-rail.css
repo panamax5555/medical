@@ -1,0 +1,122 @@
+/* ==========================================================================
+   Medical-Deal Homepage Product Rail
+   Dawn base: 1rem = 10px at body_scale=100
+   Prefix: md-home-pr-
+   ========================================================================== */
+
+.md-home-pr-section {
+  --md-home-pr-bg: rgb(var(--color-background));
+  --md-home-pr-text: var(--md-header-brand-charcoal, #1f2933);
+  --md-home-pr-gap: var(--md-header-space-5xl, 2.4rem);
+  --md-home-pr-card-gap: var(--md-header-space-2xl, 1.5rem);
+}
+
+.md-home-pr-section {
+  background: var(--md-home-pr-bg);
+  padding-top: 2.4rem;
+  padding-bottom: 3.2rem;
+}
+
+.md-home-pr-inner {
+  max-width: var(--md-header-max-width, 1400px);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media screen and (min-width: 990px) {
+  .md-home-pr-inner {
+    padding: 0 1.5rem;
+  }
+}
+
+/* Header row: heading + optional button */
+.md-home-pr-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 2rem;
+}
+
+.md-home-pr-heading {
+  font-size: var(--md-header-font-title, 1.8rem);
+  font-weight: var(--md-header-weight-semibold, 600);
+  color: var(--md-home-pr-text);
+  margin: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .md-home-pr-heading {
+    font-size: var(--md-header-font-logo-desktop, 2.2rem);
+  }
+  .md-home-pr-header {
+    margin: 0 0 2.8rem;
+  }
+}
+
+.md-home-pr-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: var(--md-header-font-sm, 1.2rem);
+  font-weight: var(--md-header-weight-medium, 500);
+  color: var(--md-header-brand-petrol, #1f6f78);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.md-home-pr-btn:hover {
+  color: var(--md-header-brand-petrol-dark, #245e66);
+}
+
+.md-home-pr-btn:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
+  outline-offset: 0.2rem;
+}
+
+/* Arrow icon */
+.md-home-pr-btn svg {
+  width: 1.6rem;
+  height: 1.6rem;
+  flex-shrink: 0;
+}
+
+/* Description */
+.md-home-pr-desc {
+  font-size: var(--md-header-font-sm, 1.2rem);
+  color: rgba(var(--color-foreground), 0.55);
+  line-height: 1.5;
+  margin: -0.8rem 0 2rem;
+}
+
+/* Grid */
+.md-home-pr-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+@media screen and (min-width: 750px) {
+  .md-home-pr-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--md-home-pr-card-gap);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .md-home-pr-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--md-home-pr-gap);
+  }
+}
+
+/* Empty state */
+.md-home-pr-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1rem;
+  color: rgba(var(--color-foreground), 0.4);
+  font-size: var(--md-header-font-md, 1.4rem);
+}
