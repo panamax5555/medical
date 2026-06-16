@@ -1,15 +1,14 @@
 {{ 'md-wishlist.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'md-wishlist.js' | asset_url }}" defer="defer"></script>
 
 <div class="md-wishlist-page">
   <div class="md-wishlist-page__inner">
     <h1 class="md-wishlist-page__heading">{{ section.settings.heading | default: 'Merkzettel' | escape }}</h1>
 
-    <div class="md-wishlist-page__has-products">
+    <div class="md-wishlist-page__has-products" style="display: none;">
       <div class="md-wishlist-page__grid"></div>
     </div>
 
-    <div class="md-wishlist-page__empty" style="display: none;">
+    <div class="md-wishlist-page__empty">
       <div class="md-wishlist-page__empty-icon">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
