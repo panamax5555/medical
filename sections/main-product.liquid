@@ -344,6 +344,21 @@
                   section_id: section.id,
                   show_pickup_availability: true
                 -%}
+              {%- when 'wishlist' -%}
+                <button
+                  type="button"
+                  class="md-product-wishlist button"
+                  aria-label="Zur Merkliste hinzuf&uuml;gen: {{ product.title | escape }}"
+                  data-product-id="{{ product.id }}"
+                  data-product-handle="{{ product.handle }}"
+                  data-product-title="{{ product.title | escape }}"
+                  data-product-url="{{ product.url }}"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                  </svg>
+                  <span>Zur Merkliste hinzuf&uuml;gen</span>
+                </button>
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
                   <div class="rating-wrapper">
@@ -786,6 +801,11 @@
           "info": "t:sections.main-product.blocks.buy_buttons.settings.show_gift_card_recipient.info"
         }
       ]
+    },
+    {
+      "type": "wishlist",
+      "name": "Merkliste",
+      "limit": 1
     },
     {
       "type": "description",
